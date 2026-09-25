@@ -1,0 +1,399 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>if(localStorage.getItem('bigbites_theme') === 'dark') document.documentElement.classList.add('dark-mode');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - bigbites</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo.avif">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional"></noscript>
+    <link rel="preload" as="style" href="../assets/css/style.bundle.min.css?v=26">
+<link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=26">
+    <!-- Component Loader -->
+    <script defer src="../assets/js/config.js"></script>
+    <script defer src="../assets/js/loader.min.js?v=26"></script>
+
+<style id="inline-loader-css">
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--clr-background, #fdfbf7);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+  opacity: 1;
+  visibility: visible;
+}
+.page-loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.loader-logo.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.loader-bar-track {
+  width: 150px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--clr-primary, #E31B23);
+  border-radius: 4px;
+  animation: loader-fill 2s ease-in-out infinite;
+}
+@keyframes loader-fill {
+  0% { width: 0%; transform: translateX(-100%); }
+  50% { width: 100%; transform: translateX(0); }
+  100% { width: 0%; transform: translateX(100%); }
+}
+.page-loader.complete .loader-bar-fill {
+  animation: none;
+  width: 100%;
+  transition: width 0.2s ease;
+}
+html.dark-mode .page-loader {
+  background: #121212 !important;
+}
+html.dark-mode .loader-bar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+.loader-spinner { display: none; }
+.page-loader.spinner-mode { gap: 0; }
+.page-loader.spinner-mode .loader-bar-track,
+.page-loader.spinner-mode .loader-logo { display: none; }
+.page-loader.spinner-mode .loader-spinner {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 69, 184, 0.2);
+  border-top-color: var(--clr-primary, #E31B23);
+  border-radius: 50%;
+  animation: loader-spin 0.8s linear infinite;
+}
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <div class="loader-spinner"></div>
+</div>
+
+    <div id="navbar-placeholder" style="height: 70px; width: 100%; flex-shrink: 0;"></div>
+<main>
+        <section class="cart-page" style="padding: 2.5rem 0; background-color: var(--clr-background); min-height: 70vh;">
+            <div class="container">
+                <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem;">Checkout</h2>
+                </div>
+                               <style>
+                    .checkout-input {
+                        padding: 1rem 1.2rem; border: 1px solid #e0e0e0; border-radius: 12px; outline: none; font-family: var(--ff-body); font-size: 1rem; transition: border-color 0.3s; background: #fafafa; width: 100%; box-sizing: border-box;
+                    }
+                    .checkout-input:focus {
+                        border-color: var(--clr-primary);
+                        background: #fff;
+                        box-shadow: 0 0 0 4px rgba(167, 2, 1, 0.1);
+                    }
+                    .checkout-grid {
+                        display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+                    }
+                    .payment-label {
+                        display: flex;
+                        align-items: center;
+                        padding: 1rem 0.5rem;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        background: #fff;
+                        flex-direction: column;
+                        justify-content: center;
+                        gap: 0.5rem;
+                    }
+                    .payment-label:hover {
+                        border-color: var(--clr-primary); background: #fffbfb;
+                    }
+                    .payment-label:has(input:checked) {
+                        border-color: var(--clr-primary); background: #fffbfb; box-shadow: 0 4px 10px rgba(167, 2, 1, 0.08);
+                    }
+                    .payment-label input[type="radio"] {
+                        accent-color: var(--clr-primary);
+                        transform: scale(1.2);
+                        flex-shrink: 0;
+                        margin: 0;
+                    }
+                    .payment-label > span {
+                        font-weight: 600; color: inherit; font-size: 0.95rem;
+                        white-space: normal;
+                        text-align: center;
+                        flex: none;
+                        line-height: 1.2;
+                        padding-left: 0;
+                    }
+                    .field-label {
+                        display: block; font-size: 0.9rem; font-weight: 600; color: var(--clr-text-secondary, #555); margin-bottom: 0.5rem; text-align: left;
+                    }
+                    .checkout-details-box {
+                        background: #fff;
+                        border: 1px solid var(--clr-border);
+                        border-radius: var(--border-radius-lg);
+                        padding: 2.5rem;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+                        display: flex;
+                        flex-direction: column;
+                        border-radius: 20px;
+                    }
+                    @media (max-width: 600px) {
+                        .checkout-grid { grid-template-columns: 1fr; }
+                        #payment-methods-container { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+                        .payment-label > span { font-size: 0.85rem; }
+                        .payment-label input[type="radio"] { transform: scale(1.1); }
+                    }
+                    html.dark-mode #payment-instructions {
+                        background: #2a2a2a !important;
+                        color: #ddd !important;
+                    }
+                    html.dark-mode .checkout-summary-box span {
+                        color: #fff !important;
+                    }
+                </style>
+                <form id="checkout-form" class="cart-grid-wrapper" style="align-items: start;">
+                    
+                    <div class="checkout-form-sections" style="display: flex; flex-direction: column; gap: 2rem; width: 100%;">
+                        <!-- Guest Checkout Banner -->
+                        <div id="checkout-auth-banner" style="background: rgba(167, 2, 1, 0.05); border: 1px solid var(--clr-primary); padding: 1.5rem; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.2rem; color: var(--clr-text-primary);">Guest Checkout</h4>
+                                <p style="margin: 0; font-size: 0.95rem; opacity: 0.8; color: var(--clr-text-primary);">Login to save your address and checkout information.</p>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <a href="profile.html" class="btn btn-outline-primary" style="border: 1px solid var(--clr-primary); color: #fff; border-radius: 50px; padding: 0.6rem 1.5rem; font-weight: 600; text-decoration: none;">Sign In</a>
+                                <a href="profile.html" class="btn btn-primary" style="border-radius: 50px; padding: 0.6rem 1.5rem; font-weight: 600; text-decoration: none;">Register</a>
+                            </div>
+                        </div>
+
+                        <!-- Customer Details -->
+                        <div class="checkout-details-box">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid var(--clr-border); padding-bottom: 0.8rem; text-align: left;">Customer Details</h3>
+                            <div class="checkout-grid">
+                                <div style="grid-column: 1 / -1;">
+                                    <label for="cust-name" class="field-label">Full Name</label>
+                                    <input type="text" id="cust-name" class="checkout-input" placeholder="e.g. John Doe" required>
+                                </div>
+                                <div>
+                                    <label for="cust-phone" class="field-label">Phone Number</label>
+                                    <input type="tel" id="cust-phone" class="checkout-input" placeholder="0300 1234567" required>
+                                </div>
+                                <div>
+                                    <label for="cust-email" class="field-label">Email Address</label>
+                                    <input type="email" id="cust-email" class="checkout-input" placeholder="name@example.com" required>
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label for="cust-address" class="field-label">Delivery Address</label>
+                                    <textarea id="cust-address" class="checkout-input" placeholder="House/Apartment #, Street, etc." required rows="2" style="resize: none;"></textarea>
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                        <label for="cust-city" class="field-label" style="margin-bottom: 0;">City / Area</label>
+                                        <a href="#" onclick="event.preventDefault(); if(window._tl_openLocationModal) window._tl_openLocationModal();" style="font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; text-decoration: none;">Edit Location</a>
+                                    </div>
+                                    <input type="text" id="cust-city" class="checkout-input" placeholder="e.g. DC Colony, Gujranwala" required>
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label for="cust-notes" class="field-label">Additional Order Notes (Optional)</label>
+                                    <textarea id="cust-notes" class="checkout-input" placeholder="Any special instructions?" rows="2" style="resize: none;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Details -->
+                        <div class="checkout-details-box">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid var(--clr-border); padding-bottom: 0.8rem;">Payment Details</h3>
+                            <div id="payment-methods-container" style="display:flex; gap:1rem; flex-wrap:nowrap;">
+                                <label class="payment-label" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-align:center;">
+                                    <input type="radio" name="payment_method" value="Cash on Delivery" checked>
+                                    <span style="font-weight: 600;">Cash on Delivery</span>
+                                </label>
+                                <label class="payment-label" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-align:center;">
+                                    <input type="radio" name="payment_method" value="Wallet">
+                                    <span style="font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:0.2rem;">
+                                        Wallet
+                                        <span id="wallet-balance-display" style="font-size:0.8rem; background:rgba(167,2,1,0.1); color:var(--clr-primary); padding:0.1rem 0.4rem; border-radius:4px; display:none;"></span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div id="payment-instructions" style="margin-top: 1.5rem; padding: 1.2rem; background: #f8f9fa; border-left: 4px solid var(--clr-primary); border-radius: 8px; color: var(--clr-text-secondary, #555); display: none; font-size: 0.95rem; line-height: 1.5;">
+                                <!-- Dynamic instructions injected here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="checkout-summary-box" style="padding: 2.5rem; border-radius: 20px; position: sticky; top: 100px; width: 100%; display: flex; flex-direction: column;">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid var(--clr-border); padding-bottom: 0.8rem;">Order Summary</h3>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1.2rem; color: var(--clr-text-secondary, #555); font-size: 1.1rem;">
+                            <span>Subtotal</span>
+                            <span class="subtotal-val" style="font-weight: 600; color: var(--clr-text-primary, #333);">Rs 0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; color: var(--clr-text-secondary, #555); font-size: 1.1rem; border-bottom: 1px dashed #ddd; padding-bottom: 1.5rem;">
+                            <span>Delivery Fee</span>
+                            <span style="font-weight: 600; color: var(--clr-text-primary, #333);">Rs 12</span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 2.5rem; font-size: 1.6rem; font-weight: 800;">
+                            <span>Total</span>
+                            <span class="total-val" style="color: var(--clr-primary);">Rs 0</span>
+                        </div>
+                        
+                        <div style="display:flex; gap:1rem; margin-top:1.5rem; justify-content:center;">
+                            <a href="cart.html" class="btn" style="flex:1; text-align: center; border-radius: 50px; padding: 1.2rem; font-size: 1.15rem; font-weight: 600; color: #777; border: 1px solid var(--clr-border); text-decoration: none;">Back to Cart</a>
+                            <button type="submit" class="btn btn-primary" style="flex:1; border-radius: 50px; padding: 1.2rem; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(167, 2, 1, 0.3);">Place Order</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script defer src="../assets/js/menu-data.js"></script>
+    <script defer src="../assets/js/search.js"></script>
+    <script defer src="../assets/js/script.bundle.min.js?v=26"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            // Handle Auth Banner and Auto-fill
+            if (isLoggedIn) {
+                const authBanner = document.getElementById('checkout-auth-banner');
+                if(authBanner) authBanner.style.display = 'none';
+
+                const pName    = localStorage.getItem('profileName')  || '';
+                const pEmail   = localStorage.getItem('profileEmail') || '';
+                const pPhone   = localStorage.getItem('profilePhone') || '';
+                const pAddress = localStorage.getItem('profileAddress') || '';
+                
+                if(pName)    document.getElementById('cust-name').value    = pName;
+                if(pEmail)   document.getElementById('cust-email').value   = pEmail;
+                if(pPhone)   document.getElementById('cust-phone').value   = pPhone;
+                if(pAddress) document.getElementById('cust-address').value = pAddress;
+            }
+
+            // Wallet Balance Display Logic
+            const walletBalance = 2500; // Hardcoded from Profile page sync
+            window.userWalletBalance = walletBalance; // Expose for script.bundle.min.js?v=26
+            
+            const walletDisplay = document.getElementById('wallet-balance-display');
+            if (isLoggedIn) {
+                walletDisplay.textContent = 'Rs ' + walletBalance.toLocaleString();
+                walletDisplay.style.display = 'inline-block';
+            }
+
+            // Delivery vs Pickup Logic based on header
+            function applyCheckoutPageLocationLogic() {
+                const locType = localStorage.getItem('tl_location_type') || 'delivery';
+                const locName = localStorage.getItem('tl_location_name') || 'Select Location';
+                const locArea = localStorage.getItem('tl_location_area');
+                let cityStr = locName;
+                if(locArea) cityStr += ` (${locArea})`;
+                
+                const cityField = document.getElementById('cust-city');
+                const addrField = document.getElementById('cust-address');
+                const feeRow = document.querySelector('.checkout-summary-box > div:nth-of-type(2)');
+                
+                if (locType === 'outlet') {
+                    // Hide address field, set city to outlet name
+                    if(addrField) {
+                        addrField.parentElement.style.display = 'none';
+                        addrField.required = false;
+                    }
+                    
+                    if(cityField) {
+                        cityField.value = locName;
+                        cityField.placeholder = 'Selected Pickup Location';
+                        cityField.readOnly = true;
+                        cityField.parentElement.querySelector('label').textContent = 'Pickup At *';
+                    }
+                    
+                    // Hide delivery fee row
+                    if (feeRow && feeRow.textContent.includes('Delivery Fee')) {
+                        feeRow.style.display = 'none';
+                    }
+                    
+                    // Force re-render of totals without delivery fee
+                    if(window.CartManager && window.CartManager.updateUI) {
+                        setTimeout(() => window.CartManager.updateUI(), 50);
+                    }
+                } else {
+                    // Delivery logic
+                    if(addrField) {
+                        addrField.parentElement.style.display = 'block';
+                        addrField.required = true;
+                    }
+                    
+                    if(cityField) {
+                        cityField.value = cityStr;
+                        cityField.readOnly = false;
+                        cityField.parentElement.querySelector('label').textContent = 'City / Area *';
+                    }
+                    
+                    // Show delivery fee row
+                    if (feeRow && feeRow.textContent.includes('Delivery Fee')) {
+                        feeRow.style.display = 'flex';
+                    }
+                    
+                    // Force re-render of totals with delivery fee
+                    if(window.CartManager && window.CartManager.updateUI) {
+                        setTimeout(() => window.CartManager.updateUI(), 50);
+                    }
+                }
+                
+                // Dynamically update payment method text
+                const codRadio = document.querySelector('input[name="payment_method"][value="Cash on Delivery"], input[name="payment_method"][value="Cash at Pickup"]');
+                if (codRadio) {
+                    codRadio.value = locType === 'outlet' ? 'Cash at Pickup' : 'Cash on Delivery';
+                    const codLabel = codRadio.nextElementSibling;
+                    if (codLabel) {
+                        codLabel.textContent = locType === 'outlet' ? 'Cash at Pickup' : 'Cash on Delivery';
+                    }
+                }
+            }
+            
+            applyCheckoutPageLocationLogic();
+            
+            // Listen for changes from the top navbar location selector
+            window.addEventListener('tl_location_changed', () => {
+                applyCheckoutPageLocationLogic();
+            });
+
+        });
+    </script>
+</body>
+</html>
+
+

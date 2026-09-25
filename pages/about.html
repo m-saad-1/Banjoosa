@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>if(localStorage.getItem('bigbites_theme') === 'dark') document.documentElement.classList.add('dark-mode');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - bigbites</title>
+    <link rel="icon" type="image/avif" href="../assets/images/logo.avif">
+    <meta name="description" content="Our history, mission, and the values that make bigbites a benchmark.">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional"></noscript>
+    <link rel="preload" as="style" href="../assets/css/style.bundle.min.css?v=26">
+<link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=26">
+    <!-- Component Loader -->
+    <script defer src="../assets/js/config.js"></script>
+    <script defer src="../assets/js/loader.min.js?v=26"></script>
+
+<style id="inline-loader-css">
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--clr-background, #fdfbf7);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+  opacity: 1;
+  visibility: visible;
+}
+.page-loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.loader-logo.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.loader-bar-track {
+  width: 150px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--clr-primary, #E31B23);
+  border-radius: 4px;
+  animation: loader-fill 2s ease-in-out infinite;
+}
+@keyframes loader-fill {
+  0% { width: 0%; transform: translateX(-100%); }
+  50% { width: 100%; transform: translateX(0); }
+  100% { width: 0%; transform: translateX(100%); }
+}
+.page-loader.complete .loader-bar-fill {
+  animation: none;
+  width: 100%;
+  transition: width 0.2s ease;
+}
+html.dark-mode .page-loader {
+  background: #121212 !important;
+}
+html.dark-mode .loader-bar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+.loader-spinner { display: none; }
+.page-loader.spinner-mode { gap: 0; }
+.page-loader.spinner-mode .loader-bar-track,
+.page-loader.spinner-mode .loader-logo { display: none; }
+.page-loader.spinner-mode .loader-spinner {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 69, 184, 0.2);
+  border-top-color: var(--clr-primary, #E31B23);
+  border-radius: 50%;
+  animation: loader-spin 0.8s linear infinite;
+}
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="bigbites" width="80" height="80" decoding="async"/>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  <div class="loader-spinner"></div>
+</div>
+
+    <div id="navbar-placeholder" style="height: 70px; width: 100%; flex-shrink: 0;"></div>
+<main>
+        <!-- About Hero Banner -->
+        <section class="about-hero-section" style="background: var(--clr-primary); padding: 4rem 0 2rem; border-radius: 0; color: white;">
+            <div class="container">
+                <span class="hero-badge" style="background: rgba(255, 255, 255, 0.2); color: white; margin-bottom: 1rem;">Since 2016</span>
+                <h1 class="about-hero-title" style="color: white;">About Us</h1>
+                <p class="about-hero-subtitle" style="color: rgba(255, 255, 255, 0.9); font-weight: 500;">Tradition & Flame-Grilled Authentic Flavors</p>
+            </div>
+        </section>
+
+        <!-- Our Story Section -->
+        <section style="padding: 5rem 0 3.5rem; background-color: var(--clr-background);">
+            <div class="container">
+                <div class="about-content" style="max-width: 1200px; margin: 0 auto;">
+                    <div class="about-grid">
+                        <div class="about-left">
+                            <span class="about-badge">Our Story</span>
+                            <h2 class="about-section-title" style="margin-top: 0.5rem; display: block;">Crafting Delicious Memories</h2>
+                            <p style="font-size: 1.05rem; color: var(--clr-text-secondary, #555); margin: 1.5rem 0; line-height: 1.8;">bigbites was born out of a passion for authentic culinary experiences. From our humble beginnings, we have been dedicated to serving the finest fast food and flame-grilled delights. Every recipe is crafted with a secret blend of herbs and spices, ensuring an explosion of flavor in every bite.</p>
+                            <p style="font-size: 1.05rem; color: var(--clr-text-secondary, #555); margin-bottom: 2rem; line-height: 1.8;">We believe that food brings people together. That's why we create a welcoming environment, use only the freshest locally sourced ingredients, and ensure our staff provides warm, prompt hospitality.</p>
+                            
+                            <!-- Stats Block -->
+                            <div class="about-stats">
+                                <div class="stat-item">
+                                    <div class="stat-number">10+</div>
+                                    <div class="stat-label">Years of Passion</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">50k+</div>
+                                    <div class="stat-label">Happy Guests</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">100%</div>
+                                    <div class="stat-label">Fresh Prepped</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="about-right">
+                            <div class="about-image" style="position: relative;">
+                                <img src="../assets/images/about.avif" alt="About us" style="border-radius: 24px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.1); display: block; position: relative; z-index: 2; height: 600px; object-fit: cover;">
+                                <div style="position: absolute; top: -15px; left: -15px; right: 15px; bottom: 15px; border: 2px solid var(--clr-primary); border-radius: 24px; z-index: 1;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us Section -->
+        <section style="padding: 5rem 0; background-color: var(--clr-background);">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <div><span class="about-badge">Our Values</span></div>
+                <h2 class="about-section-title text-center" style="margin-top: 0.5rem;">Why Choose Us</h2>
+                <p class="about-section-subtitle" style="margin: 0.5rem auto 3rem; text-align: center;">We set ourselves apart by maintaining the highest culinary and service standards.</p>
+                
+                <div class="why-us-grid">
+                    <div class="why-us-card">
+                        <div class="why-us-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>100% Fresh & Safe</h3>
+                        <p>We work with trusted local suppliers daily to bring you pure, premium meat and farm-fresh vegetables under strict hygiene controls.</p>
+                    </div>
+                    <div class="why-us-card">
+                        <div class="why-us-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+                        </div>
+                        <h3>Flaming Taste</h3>
+                        <p>Our grill masters cook items over open flames, locking in juices and providing a signature smoky aroma that keeps guests coming back.</p>
+                    </div>
+                    <div class="why-us-card">
+                        <div class="why-us-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <h3>Swift Preparation</h3>
+                        <p>Your time is valuable. We optimize our kitchen workflows so that your meals are prepared efficiently without compromising quality.</p>
+                    </div>
+                    <div class="why-us-card">
+                        <div class="why-us-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        </div>
+                        <h3>Perfect Packaging</h3>
+                        <p>We package delivery and bigbites orders using thermal containers to guarantee that your food arrives hot, fresh, and structurally perfect.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service & Operational Times Section -->
+        <section style="padding: 5rem 0; background-color: var(--clr-background);">
+            <div class="container" style="max-width: 1200px; margin: 0 auto;">
+                <div style="text-align: center;">
+                    <div><span class="about-badge">Services</span></div>
+                    <h2 class="about-section-title text-center" style="margin-top: 0.5rem;">Delivery & Pick-up Services</h2>
+                    <p class="about-section-subtitle" style="margin: 0.5rem auto 3rem; text-align: center;">How we bring delicious food straight to you, on time and fresh.</p>
+                </div>
+                
+                <div class="info-cards-grid">
+                    <!-- Delivery Card -->
+                    <div class="info-details-card">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                            Home Delivery
+                        </h3>
+                        <ul class="info-list">
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <span><strong>Estimated Delivery Time:</strong> 30 to 45 minutes depending on traffic and order volume.</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8V12L15 15"></path></svg>
+                                <span><strong>Delivery Hours:</strong> Everyday from 11:30 AM to 11:30 PM.</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-7.75 16.3l-.03.04a1 1 0 0 0 1.5 1.33 8 8 0 1 1 12.56 0 1 1 0 0 0 1.5-1.33l-.03-.04A10 10 0 0 0 12 2z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span><strong>Coverage Area:</strong> Delivery service is available within an 8km radius of DC Colony, Gujranwala.</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="12" y1="10" x2="12" y2="10"></line></svg>
+                                <span><strong>Delivery Rates:</strong> Flat Rs 100 delivery fee. Free delivery on all orders above Rs 1000!</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Pick-up Card -->
+                    <div class="info-details-card">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                            Takeaway & Pick-up
+                        </h3>
+                        <ul class="info-list">
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <span><strong>Estimated Prep Time:</strong> Just 15 to 20 minutes from the time you order online.</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+                                <span><strong>Pick-up Hours:</strong> Everyday from 11:00 AM to 12:00 AM.</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                <span><strong>How it Works:</strong> Complete your order online, choose the "Pick-up" option, skip the lines and pick up at the express counter!</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                <span><strong>Deals:</strong> Get an extra 5% discount on checkout for selecting the pick-up option!</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location & Opening Hours Section -->
+        <section style="padding: 5rem 0;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto;">
+                <div style="text-align: center;">
+                    <div><span class="about-badge">Visit Us</span></div>
+                    <h2 class="about-section-title text-center" style="margin-top: 0.5rem;">Location & Contact Details</h2>
+                    <p class="about-section-subtitle" style="margin: 0.5rem auto 3rem; text-align: center;">Find us or get in touch for corporate bookings and catering inquiries.</p>
+                </div>
+                
+                <div class="info-cards-grid" style="align-items: stretch;">
+                    <!-- Left: Details Card -->
+                    <div class="info-details-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 400px;">
+                        <div>
+                            <h3>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"></path></svg>
+                                Contact Details
+                            </h3>
+                            <ul class="info-list">
+                                <li>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-10a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    <span><strong style="display:block; margin-bottom: 0.25rem;">Locations:</strong>
+                                        <ul style="padding-left: 1.2rem; margin: 0.5rem 0; line-height: 1.6; list-style-type: disc;">
+                                            <li>58 Main Shadman Market Rd, Shadman 1, Lahore</li>
+                                        </ul>
+                                    </span>
+                                </li>
+                                <li>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"></path></svg>
+                                    <span><strong>Phone:</strong> +92 3002442483</span>
+                                </li>
+                                <li>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                    <span><strong>Email:</strong> info@bigbites.com</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <h4 style="color: var(--clr-text-primary); font-weight: 600; margin-bottom: 0.5rem; font-size: 1.1rem;">Follow Us</h4>
+                            <div class="social-links-about">
+                                <a href="https://www.instagram.com/bigbites/" target="_blank" rel="noopener" class="social-about-btn instagram" aria-label="Instagram">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                </a>
+                                <a href="https://www.facebook.com/bigbites" target="_blank" rel="noopener" class="social-about-btn facebook" aria-label="Facebook">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                                </a>
+                                <a href="https://www.twitter.com/bigbites" target="_blank" rel="noopener" class="social-about-btn twitter" aria-label="Twitter">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Map Card -->
+                    <div class="info-details-card" style="padding: 0; overflow: hidden; height: 100%; min-height: 400px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.02);">
+                        <iframe title="Map showing bigbites location" src="https://maps.google.com/maps?q=58%20Main%20Shadman%20Market%20Rd,%20Shadman%201,%20Lahore&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0; display: block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script defer src="../assets/js/menu-data.js"></script>
+    <script defer src="../assets/js/search.js?v=2"></script>
+<script defer src="../assets/js/script.bundle.min.js?v=26"></script>
+
+</body>
+</html>
+
+
+
+

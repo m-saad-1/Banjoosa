@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <script>if(localStorage.getItem('bigbites_theme') === 'dark') document.documentElement.classList.add('dark-mode');</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu - bigbites</title>
+<link href="../assets/images/logo.avif" rel="icon" type="image/avif"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=optional" media="print" onload="this.media='all'" rel="stylesheet"/>
+
+<link rel="preload" as="style" href="../assets/css/style.bundle.min.css?v=26">
+<link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=26">
+
+<!-- Component Loader -->
+<script defer="" src="../assets/js/config.js"></script>
+<script defer="" src="../assets/js/loader.min.js?v=26"></script>
+
+<style id="inline-loader-css">
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--clr-background, #fdfbf7);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+  opacity: 1;
+  visibility: visible;
+}
+.page-loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.loader-logo.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.loader-bar-track {
+  width: 150px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--clr-primary, #E31B23);
+  border-radius: 4px;
+  animation: loader-fill 2s ease-in-out infinite;
+}
+@keyframes loader-fill {
+  0% { width: 0%; transform: translateX(-100%); }
+  50% { width: 100%; transform: translateX(0); }
+  100% { width: 0%; transform: translateX(100%); }
+}
+.page-loader.complete .loader-bar-fill {
+  animation: none;
+  width: 100%;
+  transition: width 0.2s ease;
+}
+html.dark-mode .page-loader {
+  background: #121212 !important;
+}
+html.dark-mode .loader-bar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+.loader-spinner { display: none; }
+.page-loader.spinner-mode { gap: 0; }
+.page-loader.spinner-mode .loader-bar-track,
+.page-loader.spinner-mode .loader-logo { display: none; }
+.page-loader.spinner-mode .loader-spinner {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 69, 184, 0.2);
+  border-top-color: var(--clr-primary, #E31B23);
+  border-radius: 50%;
+  animation: loader-spin 0.8s linear infinite;
+}
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="bigbites" width="80" height="80" decoding="async"/>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  <div class="loader-spinner"></div>
+</div>
+<div id="navbar-placeholder" style="height: 70px; width: 100%; flex-shrink: 0;"></div>
+<main>
+<section class="menu" id="cardapio" style="padding-top: 0.5rem;">
+<div class="container">
+<div class="desktop-menu-heading">
+<h2 style="font-size: 2.5rem; font-weight: 800; color: var(--clr-text-primary); text-align: center; margin-bottom: 0.5rem; margin-top: 2rem;">Our Menu</h2>
+<p style="font-size: 1.1rem; color: var(--clr-text-secondary, #666); text-align: center; margin-bottom: 2rem; font-style: italic;">Discover our classic flavors and hand-crafted delicacies.</p>
+</div>
+<!-- Menu Offers Carousel -->
+<div class="hero-image-frame" id="menu-carousel-container" style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y; margin-bottom: 1.5rem; border-radius: 14px;">
+<div class="hero-carousel-track" id="menu-carousel-track" style="display: flex; transition: transform 0.5s ease-in-out; width: 200%; cursor: grab;">
+<img alt="bigbites Offer 1" class="hero-full-img" decoding="async" fetchpriority="high" loading="eager" width="800" height="326" src="../assets/images/offer-1.avif"   style="width: 50%; flex-shrink: 0; pointer-events: none; user-select: none;" />
+<img alt="bigbites Offer 2" class="hero-full-img" decoding="async" loading="lazy" width="800" height="326" src="../assets/images/offer-2.avif"   style="width: 50%; flex-shrink: 0; pointer-events: none; user-select: none;" />
+</div>
+<div class="carousel-indicators" id="menu-indicators" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+<span class="indicator active" data-slide="0" style="width: 10px; height: 10px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 1;"></span>
+<span class="indicator" data-slide="1" style="width: 10px; height: 10px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
+</div>
+</div>
+<div class="category-sticky-wrapper" id="category-sticky-wrapper">
+<div class="category-circles-wrapper" id="category-circles">
+<a class="category-circle-btn active" href="#combos" style="text-decoration:none;">
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-1.avif" width="228"/></div>
+<span class="circle-label">Combos</span>
+</a>
+<a class="category-circle-btn" href="#burgers" style="text-decoration:none;">
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-3.avif" width="228"/></div>
+<span class="circle-label">Burgers</span>
+</a>
+<a class="category-circle-btn" href="#pizzas" style="text-decoration:none;">
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/chicken-pizza.avif" width="228"/></div>
+<span class="circle-label">Pizzas</span>
+</a>
+<a class="category-circle-btn" href="#rolls" style="text-decoration:none;">
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-1.avif" width="228"/></div>
+<span class="circle-label">Rolls</span>
+</a>
+<a class="category-circle-btn" href="#fries" style="text-decoration:none;">
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/cheese-fries.avif" width="228"/></div>
+<span class="circle-label">Fries</span>
+</a>
+<a class="category-circle-btn" href="#drinks" style="text-decoration:none;">
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/mountain-dew.avif" width="228"/></div>
+<span class="circle-label">Drinks</span>
+</a>
+
+</div><!-- /.category-circles-wrapper -->
+</div><!-- /.category-sticky-wrapper -->
+
+<div id="combos" style="display: flex; justify-content: flex-start; align-items: center; margin: 0.5rem 0 1rem; scroll-margin-top: 100px;">
+  <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary); margin: 0; text-align: left;">Combos</h3>
+</div>
+<div class="menu-grid">
+  <div class="product-card" data-category="Combos">
+    <div class="card-image"><img alt="Combo 2" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-2.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Combo 2</h3></div>
+      <p class="card-desc">1x Chicken Pizza, 8x Chicken Wings, 1x 7UP, 2x Dips</p>
+      <div class="card-footer"><span class="price">Rs 1799</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Combos">
+    <div class="card-image"><img alt="Combo 3" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-3.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Combo 3</h3></div>
+      <p class="card-desc">1x Cheeseburger, 6x Chicken Nuggets, 1x Fries, 1x Cheese Dip, 1x Small NEXT Cola</p>
+      <div class="card-footer"><span class="price">Rs 1299</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Combos">
+    <div class="card-image"><img alt="Combo 4" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-4.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Combo 4</h3></div>
+      <p class="card-desc">2x Chicken Pizzas, 6x Chicken Wings, 1x Pepsi, 2x Dips</p>
+      <div class="card-footer"><span class="price">Rs 2299</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="burgers" style="display: flex; justify-content: flex-start; align-items: center; margin: 2rem 0 1rem; scroll-margin-top: 100px;">
+  <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary); margin: 0; text-align: left;">Burgers</h3>
+</div>
+<div class="menu-grid">
+  <div class="product-card" data-category="Burgers">
+    <div class="card-image"><img alt="Spicy Jalapeno Chicken" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-3.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Spicy Jalapeno Chicken</h3></div>
+      <p class="card-desc">Spicy chicken patty with jalapenos.</p>
+      <div class="card-footer"><span class="price">Rs 750</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Burgers">
+    <div class="card-image"><img alt="Smash Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-4.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Smash Burger</h3></div>
+      <p class="card-desc">Thin smashed beef patty with pickles & sauce.</p>
+      <div class="card-footer"><span class="price">Rs 700</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Burgers">
+    <div class="card-image"><img alt="BBQ Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-5.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>BBQ Burger</h3></div>
+      <p class="card-desc">Smoky BBQ sauce with caramelized onions.</p>
+      <div class="card-footer"><span class="price">Rs 800</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Burgers">
+    <div class="card-image"><img alt="Mushroom & Cheese Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-6.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Mushroom & Cheese Burger</h3></div>
+      <p class="card-desc">Sautéed mushrooms with melted cheese.</p>
+      <div class="card-footer"><span class="price">Rs 850</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Burgers">
+    <div class="card-image"><img alt="Tower Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-7.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Tower Burger</h3></div>
+      <p class="card-desc">Triple-stacked patties with all the toppings.</p>
+      <div class="card-footer"><span class="price">Rs 950</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+</div>
+<div id="pizzas" style="display: flex; justify-content: flex-start; align-items: center; margin: 2rem 0 1rem; scroll-margin-top: 100px;">
+  <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary); margin: 0; text-align: left;">Pizzas</h3>
+</div>
+<div class="menu-grid">
+  <div class="product-card" data-category="Pizzas">
+    <div class="card-image"><img alt="Chicken Fajita Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-1.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Chicken Fajita Pizza</h3></div>
+      <p class="card-desc">Spiced fajita chicken with fresh veggies.</p>
+      <div class="card-footer"><span class="price">Rs 1350</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Pizzas">
+    <div class="card-image"><img alt="Tikka Sensation Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-2.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Tikka Sensation Pizza</h3></div>
+      <p class="card-desc">Spicy chicken tikka chunks on a rich base.</p>
+      <div class="card-footer"><span class="price">Rs 1450</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Pizzas">
+    <div class="card-image"><img alt="Pepperoni Classic Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-3.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Pepperoni Classic Pizza</h3></div>
+      <p class="card-desc">Loaded with premium pepperoni slices.</p>
+      <div class="card-footer"><span class="price">Rs 1600</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Pizzas">
+    <div class="card-image"><img alt="Crown Crust pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-4.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Crown Crust pizza</h3></div>
+      <p class="card-desc">Blend of 100% real mozzarella cheese.</p>
+      <div class="card-footer"><span class="price">Rs 1300</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Pizzas">
+    <div class="card-image"><img alt="BBQ Chicken Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-5.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>BBQ Chicken Pizza</h3></div>
+      <p class="card-desc">Grilled chicken with smoky BBQ sauce and onions.</p>
+      <div class="card-footer"><span class="price">Rs 1400</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Pizzas">
+    <div class="card-image"><img alt="Mushroom Delight Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-6.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Mushroom Delight Pizza</h3></div>
+      <p class="card-desc">Loaded with fresh mushrooms and extra cheese.</p>
+      <div class="card-footer"><span class="price">Rs 1350</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Pizzas">
+    <div class="card-image"><img alt="Spicy Veggie Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-7.avif" width="228"/></div>
+    <div class="card-content">
+      <div class="card-header"><h3>Spicy Veggie Pizza</h3></div>
+      <p class="card-desc">Fresh veggies with a spicy kick.</p>
+      <div class="card-footer"><span class="price">Rs 1250</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+    </div>
+  </div>
+</div>
+<div id="rolls" style="display: flex; justify-content: flex-start; align-items: center; margin: 1.5rem 0 1rem; scroll-margin-top: 100px;">
+<h3 style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary); margin: 0; text-align: left;">Rolls</h3>
+</div>
+<div class="menu-grid">
+<div class="product-card">
+<div class="card-image"><img alt="Chicken Roll" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-1.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Chicken Roll</h3></div>
+<p class="card-desc">Crispy chicken wrapped in a soft roll.</p>
+<div class="card-footer">
+<span class="price">Rs 350</span>
+<button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+</div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Special Roll" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-2.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Special Roll</h3></div>
+<p class="card-desc">Loaded special roll with sauce &amp; veggies.</p>
+<div class="card-footer">
+<span class="price">Rs 450</span>
+<button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+</div>
+</div>
+</div>
+</div>
+<div id="fries" style="display: flex; justify-content: flex-start; align-items: center; margin: 1.5rem 0 1rem; scroll-margin-top: 100px;">
+<h3 style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary); margin: 0; text-align: left;">Fries</h3>
+</div>
+<div class="menu-grid">
+<div class="product-card">
+<div class="card-image"><img alt="Cheese Fries" decoding="sync" height="228" fetchpriority="high" src="../assets/images/cheese-fries.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Cheese Fries</h3></div>
+<p class="card-desc">Golden fries topped with melted cheese.</p>
+<div class="card-footer"><span class="price">Rs 350</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Plain Fries" decoding="sync" height="228" fetchpriority="high" src="../assets/images/plain-fries.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Plain Fries</h3></div>
+<p class="card-desc">Classic crispy salted fries.</p>
+<div class="card-footer"><span class="price">Rs 200</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Smoky Fries" decoding="sync" height="228" fetchpriority="high" src="../assets/images/smoky-fries.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Smoky Fries</h3></div>
+<p class="card-desc">Fries with smoky BBQ seasoning.</p>
+<div class="card-footer"><span class="price">Rs 280</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Frizza Fries" decoding="sync" height="228" fetchpriority="high" src="../assets/images/frizza-fries.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Frizza Fries</h3></div>
+<p class="card-desc">Loaded fries with pizza-style toppings.</p>
+<div class="card-footer"><span class="price">Rs 400</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+</div>
+<div id="drinks" style="display: flex; justify-content: flex-start; align-items: center; margin: 1.5rem 0 1rem; scroll-margin-top: 100px;">
+<h3 style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary); margin: 0; text-align: left;">Drinks</h3>
+</div>
+<div class="menu-grid">
+<div class="product-card">
+<div class="card-image"><img alt="Mountain Dew" decoding="sync" height="228" fetchpriority="high" src="../assets/images/mountain-dew.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Mountain Dew</h3></div>
+<p class="card-desc">Refreshing soda.</p>
+<div class="card-footer"><span class="price">Rs 150</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Pepsi" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pepsi.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Pepsi</h3></div>
+<p class="card-desc">Classic cola.</p>
+<div class="card-footer"><span class="price">Rs 150</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Coca-Cola" decoding="sync" height="228" fetchpriority="high" src="../assets/images/coca-cola.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Coca-Cola</h3></div>
+<p class="card-desc">Chilled classic Coca-Cola.</p>
+<div class="card-footer"><span class="price">Rs 120</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Sprite" decoding="sync" height="228" fetchpriority="high" src="../assets/images/sprite.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Sprite</h3></div>
+<p class="card-desc">Cool &amp; refreshing lemon-lime soda.</p>
+<div class="card-footer"><span class="price">Rs 120</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Mineral Water" decoding="sync" height="228" fetchpriority="high" src="../assets/images/mineral-water.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Mineral Water</h3></div>
+<p class="card-desc">Pure chilled Dasani mineral water.</p>
+<div class="card-footer"><span class="price">Rs 80</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+</div>
+<div id="extras" style="display: flex; justify-content: flex-start; align-items: center; margin: 1.5rem 0 1rem; scroll-margin-top: 100px;">
+<h3 style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary); margin: 0; text-align: left;">Extras</h3>
+</div>
+<div class="menu-grid">
+<div class="product-card">
+<div class="card-image"><img alt="Garlic Mayo Dip" decoding="sync" height="228" fetchpriority="high" src="../assets/images/garlic-mayo-dip.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Garlic Mayo Dip</h3></div>
+<p class="card-desc">Delicious garlic mayo dip.</p>
+<div class="card-footer"><span class="price">Rs 80</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Coleslaw" decoding="sync" height="228" fetchpriority="high" src="../assets/images/coleslaw.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Coleslaw</h3></div>
+<p class="card-desc">Fresh side coleslaw.</p>
+<div class="card-footer"><span class="price">Rs 120</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Ranch Sauce" decoding="sync" height="228" fetchpriority="high" src="../assets/images/ranch-sauce.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Ranch Sauce</h3></div>
+<p class="card-desc">Creamy ranch sauce.</p>
+<div class="card-footer"><span class="price">Rs 80</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+<div class="product-card">
+<div class="card-image"><img alt="Siriracha Sauce" decoding="sync" height="228" fetchpriority="high" src="../assets/images/siriracha-sauce.avif" width="228"/></div>
+<div class="card-content">
+<div class="card-header"><h3>Siriracha Sauce</h3></div>
+<p class="card-desc">Spicy siriracha sauce.</p>
+<div class="card-footer"><span class="price">Rs 80</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div>
+</div>
+</div>
+</div>
+
+</div>
+
+</section>
+</main>
+    <script defer src="../assets/js/menu-data.js"></script>
+    <script defer src="../assets/js/search.js?v=2"></script>
+<script defer="" src="../assets/js/script.bundle.min.js?v=26"></script>
+</body>
+</html>
+
+
+

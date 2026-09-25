@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <script>
+    if (localStorage.getItem("bigbites_theme") === "dark") {
+      document.documentElement.classList.add("dark-mode");
+    }
+  </script>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>bigbites - The Real Flavor</title>
+  <link href="./assets/images/logo.avif" rel="icon" type="image/avif" />
+  <meta content="The best fast food and deals. The perfect place to eat well and gather friends." name="description" />
+  <!-- Google Fonts -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=optional"
+    media="print" onload="this.media='all'" rel="stylesheet" />
+
+  <style>
+    :root { --clr-background: #fdfbf7; --clr-primary: #E31B23; --clr-surface: #ffffff; --clr-text-primary: #1e1e1e; }
+    html.dark-mode { --clr-background: #121212; --clr-surface: #1e1e1e; --clr-text-primary: #fdfbf7; }
+    body, html { margin: 0; padding: 0; background-color: var(--clr-background); color: var(--clr-text-primary); font-family: "Inter", sans-serif; }
+    .header { position: fixed; top: 0; width: 100%; height: 70px; background: var(--clr-surface); z-index: 1000; display: flex; align-items: center; }
+
+  </style>
+  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=26">
+  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=26" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=26"></noscript>
+
+  <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload" />
+  <!-- Component Loader -->
+  <script defer="" src="./assets/js/config.js"></script>
+  <script defer="" src="./assets/js/loader.min.js?v=26"></script>
+  <!-- Homepage Top Picks: cards styled exactly like search result cards on mobile -->
+  <style>
+    @media (max-width: 768px) {
+
+      /* Grid: same as search overlay grid */
+      #top-picks-section .menu-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+      }
+
+      /* Card: force column layout — bundle sets row on mobile */
+      #top-picks-section .product-card {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-column: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        background: var(--clr-surface, #fff) !important;
+        border: 1px solid rgba(0, 0, 0, 0.07) !important;
+        border-radius: 14px !important;
+        overflow: hidden !important;
+        cursor: pointer !important;
+        transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+      }
+
+      #top-picks-section .product-card:active {
+        transform: scale(0.97) !important;
+      }
+
+      /* Image wrapper: force square — bundle sets fixed height */
+      #top-picks-section .product-card .card-image {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        flex: none !important;
+        flex-shrink: 0 !important;
+        aspect-ratio: 1 / 1 !important;
+        overflow: hidden !important;
+        background: var(--clr-primary) !important;
+        position: relative !important;
+      }
+
+      #top-picks-section .product-card .card-image img {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: none !important;
+        object-fit: cover !important;
+        display: block !important;
+        transition: transform 0.3s ease !important;
+      }
+
+      /* Content area */
+      #top-picks-section .product-card .card-content {
+        padding: 0.65rem 0.75rem 0.75rem !important;
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.3rem !important;
+        width: auto !important;
+      }
+
+      #top-picks-section .product-card .card-header {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      #top-picks-section .product-card .card-header h3 {
+        font-weight: 700 !important;
+        font-size: 0.9rem !important;
+        color: var(--clr-text-primary, #111) !important;
+        line-height: 1.3 !important;
+        margin: 0 !important;
+        white-space: normal !important;
+      }
+
+      #top-picks-section .product-card .card-desc {
+        font-size: 0.75rem !important;
+        color: #777 !important;
+        line-height: 1.4 !important;
+        margin: 0 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+      }
+
+      #top-picks-section .product-card .card-footer {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-top: auto !important;
+        padding-top: 0.5rem !important;
+        border: none !important;
+        background: transparent !important;
+      }
+
+      #top-picks-section .product-card .price {
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        color: var(--clr-text-primary, #111) !important;
+      }
+
+      #top-picks-section .product-card .btn-primary,
+      #top-picks-section .product-card button {
+        background: var(--clr-primary, #E31B23) !important;
+        color: #fff !important;
+        border: none !important;
+        border-radius: 50px !important;
+        padding: 0.3rem 0.75rem !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        line-height: normal !important;
+        cursor: pointer !important;
+        font-family: inherit !important;
+        transition: opacity 0.2s !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+      }
+
+      #top-picks-section .product-card .btn-primary:hover {
+        opacity: 0.85 !important;
+      }
+    }
+  </style>
+
+  <style id="inline-loader-css">
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      background: var(--clr-background, #fdfbf7);
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .page-loader.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .loader-logo.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .loader-bar-track {
+      width: 150px;
+      height: 4px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .loader-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--clr-primary, #E31B23);
+      border-radius: 4px;
+      animation: loader-fill 2s ease-in-out infinite;
+    }
+
+    @keyframes loader-fill {
+      0% {
+        width: 0%;
+        transform: translateX(-100%);
+      }
+
+      50% {
+        width: 100%;
+        transform: translateX(0);
+      }
+
+      100% {
+        width: 0%;
+        transform: translateX(100%);
+      }
+    }
+
+    .page-loader.complete .loader-bar-fill {
+      animation: none;
+      width: 100%;
+      transition: width 0.2s ease;
+    }
+
+    html.dark-mode .page-loader {
+      background: #121212 !important;
+    }
+
+    html.dark-mode .loader-bar-track {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .loader-spinner {
+      display: none;
+    }
+
+    .page-loader.spinner-mode {
+      gap: 0;
+    }
+
+    .page-loader.spinner-mode .loader-bar-track,
+    .page-loader.spinner-mode .loader-logo {
+      display: none;
+    }
+
+    .page-loader.spinner-mode .loader-spinner {
+      display: block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(139, 69, 184, 0.2);
+      border-top-color: var(--clr-primary, #E31B23);
+      border-radius: 50%;
+      animation: loader-spin 0.8s linear infinite;
+    }
+
+    @keyframes loader-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="page-loader" id="page-loader">
+    <img class="loader-logo" id="loader-logo-img" src="./assets/images/logo.avif" alt="bigbites" width="120" height="80"
+      decoding="async" />
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill"></div>
+    </div>
+    <div class="loader-spinner"></div>
+  </div>
+  <div id="navbar-placeholder" style="height: 70px; width: 100%; flex-shrink: 0;"></div>
+  <main>
+    <h1 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;">bigbites - The Real Flavor</h1>
+    <!-- Hero Section -->
+    <section class="hero refined-hero" id="home">
+      <div class="hero-image-frame" id="hero-carousel-container"
+        style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y;">
+        <div class="hero-carousel-track" id="hero-carousel-track"
+          style="display: flex; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
+          <img id="hero-primary-img" alt="bigbites Hero 1" class="hero-full-img" decoding="async" fetchpriority="high"
+            loading="eager" height="400" src="./assets/images/hero.avif"
+            srcset="./assets/images/hero.avif 400w, ./assets/images/hero.avif 800w, ./assets/images/hero.avif 1200w"
+            sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1200px"
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800" />
+          <img alt="bigbites Hero 2" class="hero-full-img" decoding="async" loading="lazy" height="400"
+            src="./assets/images/offer-1.avif"
+            srcset="./assets/images/offer-1.avif 400w, ./assets/images/offer-1.avif 800w, ./assets/images/offer-1.avif 1200w"
+            sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1200px"
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800" />
+          <img alt="bigbites Hero 3" class="hero-full-img" decoding="async" loading="lazy" height="400"
+            src="./assets/images/offer-2.avif"
+            srcset="./assets/images/offer-2.avif 400w, ./assets/images/offer-2.avif 800w, ./assets/images/offer-2.avif 1200w"
+            sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1200px"
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800" />
+        </div>
+        <div class="carousel-indicators" id="hero-indicators"
+          style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
+          <span class="indicator active" data-slide="0"
+            style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 1;"></span>
+          <span class="indicator" data-slide="1"
+            style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
+          <span class="indicator" data-slide="2"
+            style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
+        </div>
+        <!-- hero order button removed -->
+      </div>
+    </section>
+    <!-- Top Picks Section -->
+    <section class="menu" id="top-picks-section" style="padding-top: 0.5rem; padding-bottom: 1rem;">
+      <div class="container">
+        <!-- Category bar (non-sticky, flows with page) -->
+        <div class="category-circles-wrapper" id="category-circles-home" role="tablist"
+          style="position:static !important;">
+          <a class="category-circle-btn active" href="pages/menu.html#combos" style="text-decoration:none;" role="tab"
+            aria-selected="false">
+            <div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228"
+                src="./assets/images/combo-1.avif" width="228" /></div>
+            <span class="circle-label">Combos</span>
+          </a>
+          <a class="category-circle-btn" href="pages/menu.html#burgers" style="text-decoration:none;" role="tab"
+            aria-selected="false">
+            <div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228"
+                src="./assets/images/burger-1.avif" width="228" /></div>
+            <span class="circle-label">Burgers</span>
+          </a>
+          <a class="category-circle-btn" href="pages/menu.html#pizzas" style="text-decoration:none;" role="tab"
+            aria-selected="false">
+            <div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228"
+                src="./assets/images/pizza-1.avif" width="228" /></div>
+            <span class="circle-label">Pizzas</span>
+          </a>
+          <a class="category-circle-btn" href="pages/menu.html#rolls" style="text-decoration:none;" role="tab"
+            aria-selected="false">
+            <div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228"
+                src="./assets/images/roll-1.avif" width="228" /></div>
+            <span class="circle-label">Rolls</span>
+          </a>
+          <a class="category-circle-btn" href="pages/menu.html#fries" style="text-decoration:none;" role="tab"
+            aria-selected="false">
+            <div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228"
+                src="./assets/images/cheese-fries.avif" width="228" /></div>
+            <span class="circle-label">Fries</span>
+          </a>
+          <a class="category-circle-btn" href="pages/menu.html#drinks" style="text-decoration:none;" role="tab"
+            aria-selected="false">
+            <div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228"
+                src="./assets/images/mountain-dew.avif" width="228" /></div>
+            <span class="circle-label">Drinks</span>
+          </a>
+        </div><!-- /.category-circles-wrapper (homepage, non-sticky) -->
+        <!-- Top Picks heading row -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0 1rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--clr-text-primary); margin: 0;">Top Picks</h2>
+          <a href="pages/menu.html"
+            style="font-size: 0.9rem; font-weight: 600; color: var(--clr-primary); text-decoration: none;">View All
+            &rsaquo;</a>
+        </div>
+        <div class="menu-grid">
+          <!-- Combo 1 -->
+          <div class="product-card" data-category="Combos">
+            <div class="card-image"><img alt="Combo 1" decoding="async" loading="eager" fetchpriority="high" height="228"
+                src="./assets/images/combo-1.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Combo 1</h3>
+              </div>
+              <p class="card-desc">1x Classic Beef Burger, 1x Crispy Chicken Burger, 4x Fried Chicken Pieces, 1x Fries,
+                1x NEXT Cola, 1x Cheese Dip</p>
+              <div class="card-footer">
+                <span class="price">Rs 1499</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Combo 2 -->
+          <div class="product-card" data-category="Combos">
+            <div class="card-image"><img alt="Combo 2" decoding="async" loading="lazy" height="228"
+                src="./assets/images/combo-2.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Combo 2</h3>
+              </div>
+              <p class="card-desc">1x Chicken Pizza, 8x Chicken Wings, 1x 7UP, 2x Dips</p>
+              <div class="card-footer">
+                <span class="price">Rs 1799</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Burger 1 -->
+          <div class="product-card" data-category="Burgers">
+            <div class="card-image"><img alt="Tower Burger" decoding="async" loading="lazy" height="228"
+                src="./assets/images/burger-7.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Tower Burger</h3>
+              </div>
+              <p class="card-desc">Crispy chicken breast with cheese and sauce.</p>
+              <div class="card-footer">
+                <span class="price">Rs 649</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Burger 2 -->
+          <div class="product-card" data-category="Burgers">
+            <div class="card-image"><img alt="Smash Burger" decoding="async" loading="lazy" height="228"
+                src="./assets/images/burger-4.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Smash Burger</h3>
+              </div>
+              <p class="card-desc">Thin smashed beef patty with pickles &amp; sauce.</p>
+              <div class="card-footer">
+                <span class="price">Rs 700</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Burger 3 -->
+          <div class="product-card" data-category="Burgers">
+            <div class="card-image"><img alt="BBQ Burger" decoding="async" loading="lazy" height="228"
+                src="./assets/images/burger-5.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>BBQ Burger</h3>
+              </div>
+              <p class="card-desc">Smoky BBQ sauce with caramelized onions.</p>
+              <div class="card-footer">
+                <span class="price">Rs 800</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Pizza 1 -->
+          <div class="product-card" data-category="Pizzas">
+            <div class="card-image"><img alt="Crown Crust pizza" decoding="async" loading="lazy" height="228" src="./assets/images/pizza-4.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Crown Crust pizza</h3>
+              </div>
+              <p class="card-desc">Blend of 100% real mozzarella cheese.</p>
+              <div class="card-footer">
+                <span class="price">Rs 1300</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Pizza 2 -->
+          <div class="product-card" data-category="Pizzas">
+            <div class="card-image"><img alt="Mushroom Delight Pizza" decoding="async" loading="lazy" height="228" src="./assets/images/pizza-6.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Mushroom Delight Pizza</h3>
+              </div>
+              <p class="card-desc">Loaded with fresh mushrooms and extra cheese.</p>
+              <div class="card-footer">
+                <span class="price">Rs 1600</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Pizza 3 -->
+          <div class="product-card" data-category="Pizzas">
+            <div class="card-image"><img alt="Spicy Veggie Pizza" decoding="async" loading="lazy" height="228" src="./assets/images/pizza-7.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Spicy Veggie Pizza</h3>
+              </div>
+              <p class="card-desc">Loaded with pepperoni, chicken, and extra cheese.</p>
+              <div class="card-footer">
+                <span class="price">Rs 1500</span>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+        </div><!-- /.menu-grid -->
+        <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+          <a href="pages/menu.html" class="btn btn-primary"
+            style="border-radius: 50px; padding: 0.75rem 2.5rem; font-size: 1rem; font-weight: 600; display: inline-block; text-decoration: none;">View
+            Full Menu</a>
+        </div>
+      </div>
+
+    </section>
+    <!-- Install App Section -->
+    <section id="install-app-section" style="padding: 1rem 0 3rem;">
+      <div class="container">
+        <div class="install-app-card"
+          style="background: var(--clr-primary); border-radius: 20px; display: flex; flex-direction: row; overflow: hidden; align-items: center; color: white; padding: 2rem; gap: 2rem;">
+
+          <div class="install-app-mobile-header" style="display: none;">
+            <span style="font-weight: 700; font-size: 1.15rem; color: var(--clr-text-primary);">Mobile App</span>
+            <a href="#" onclick="document.getElementById('app-install-modal').classList.add('active'); return false;"
+              style="font-weight: 600; font-size: 0.9rem; color: var(--clr-primary); text-decoration: none;">Install
+              &rsaquo;</a>
+          </div>
+
+          <div class="install-app-text" style="flex: 1;">
+            <span class="install-badge"
+              style="display: inline-block; background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1rem;">Now
+              Available</span>
+            <h2 style="font-size: 1.8rem; font-weight: 800; margin: 0 0 0.5rem 0; color: white;">Order Faster with the
+              App</h2>
+            <p style="font-size: 0.95rem; margin: 0 0 1.5rem 0; opacity: 0.9; color: #e0e0e0;">Get exclusive deals,
+              real-time tracking, and a seamless ordering experience.</p>
+            <div class="install-app-btns" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+              <a href="#" onclick="alert('App not available yet.'); return false;" aria-label="Download on App Store"
+                style="display: inline-block;">
+                <img src="./assets/images/appstore-btn.avif" alt="App Store" loading="lazy" decoding="async"
+                  style="height: 44px; border-radius: 8px; cursor: pointer; display: block;" width="148" height="44">
+              </a>
+              <a href="#" onclick="alert('App not available yet.'); return false;" aria-label="Get it on Google Play"
+                style="display: inline-block;">
+                <img src="./assets/images/playstore-btn.avif" alt="Google Play" loading="lazy" decoding="async"
+                  style="height: 44px; border-radius: 8px; cursor: pointer; display: block;" width="148" height="44">
+              </a>
+            </div>
+          </div>
+          <div class="install-app-img" style="flex: 1; display: flex; justify-content: flex-end;">
+            <img loading="lazy" decoding="async" src="./assets/images/app-install.avif" alt="bigbites App"
+              style="max-height: 250px; width: auto; object-fit: contain; border-radius: 12px; display: block;"
+              onerror="this.src='./assets/images/offer-1.avif'" width="532" height="250">
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile App Install Modal -->
+      <div class="modal-overlay" id="app-install-modal" style="z-index: 10005;">
+        <div class="modal-sheet"
+          style="max-width: 400px; padding: 2rem; background: var(--clr-surface); border-radius: 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.5rem; margin:0; color:var(--clr-text-primary);">Install App</h3>
+            <button class="icon-btn" onclick="document.getElementById('app-install-modal').classList.remove('active');"
+              style="background:rgba(0,0,0,0.05); border-radius:50%;" aria-label="Close"><svg width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg></button>
+          </div>
+          <p style="margin-bottom: 1.5rem; color:var(--clr-text-primary); line-height: 1.5;">Get exclusive deals,
+            real-time tracking, and a seamless ordering experience right on your phone.</p>
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <a href="#" onclick="alert('App not available yet.'); return false;" aria-label="Download on App Store"
+              style="display: block;">
+              <img src="./assets/images/appstore-btn.avif" alt="App Store" loading="lazy" decoding="async"
+                style="height: 50px; width: auto; border-radius: 8px; cursor: pointer; display: block; margin: 0 auto;"
+                width="165" height="50">
+            </a>
+            <a href="#" onclick="alert('App not available yet.'); return false;" aria-label="Get it on Google Play"
+              style="display: block;">
+              <img src="./assets/images/playstore-btn.avif" alt="Google Play" loading="lazy" decoding="async"
+                style="height: 50px; width: auto; border-radius: 8px; cursor: pointer; display: block; margin: 0 auto;"
+                width="165" height="50">
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        @media (max-width: 768px) {
+          .install-app-card {
+            flex-direction: column !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            gap: 1rem !important;
+            box-shadow: none !important;
+          }
+
+          html.dark-mode .install-app-card {
+            background: transparent !important;
+            border: none !important;
+          }
+
+          .install-app-mobile-header {
+            display: flex !important;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 !important;
+            margin: 0.5rem 0 !important;
+            border: none !important;
+          }
+
+          .install-app-mobile-header span {
+            color: var(--clr-text-primary) !important;
+          }
+
+          .install-app-text {
+            display: none !important;
+          }
+
+          .install-app-img {
+            width: 100% !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border-radius: 20px !important;
+            overflow: hidden !important;
+          }
+
+          html.dark-mode .install-app-img {
+            background: transparent !important;
+          }
+
+          .install-app-img img {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 253px !important;
+            object-fit: cover !important;
+            border-radius: 20px !important;
+          }
+        }
+      </style>
+    </section>
+    <!-- Google Reviews Section -->
+    <section class="reviews-section" id="reviews" style="padding: 2rem 0 2.5rem; background: var(--clr-background);">
+      <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0 0 0.2rem;">Customer Reviews</h2>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="color: var(--clr-star); font-size: 1rem;">★★★★★</span>
+              <span style="font-size: 0.9rem; color: var(--clr-text-primary, #333); font-weight: 600;">4.8 on
+                Google</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <a href="https://g.page/r/bigbites/review" rel="noopener"
+              style="display: flex; align-items: center; gap: 0.4rem; text-decoration: none; color: var(--clr-text-primary, #1a1a1a); font-size: 0.85rem; font-weight: 600;"
+              target="_blank">
+              <svg fill="none" height="18" viewbox="0 0 24 24" width="18">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"></path>
+                <path
+                  d="M17.54 11.1H12v2.8h3.14c-.33 1.6-1.73 2.8-3.14 2.8-1.93 0-3.5-1.57-3.5-3.5S10.07 9.7 12 9.7c.83 0 1.6.3 2.18.78l1.97-1.97C15.1 7.58 13.63 7 12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5c2.97 0 4.9-2.1 4.9-5 0-.33-.04-.65-.1-.95z"
+                  fill="white"></path>
+              </svg>
+              Rate Us
+            </a>
+            <a href="./pages/reviews.html" class="btn btn-outline"
+              style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">All Reviews</a>
+          </div>
+        </div>
+        <div class="reviews-scroll-wrapper"
+          style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+          <!-- Review Card 1 -->
+          <div class="review-card"
+            style="min-width: 280px; max-width: 280px; background: white; border-radius: 16px; padding: 1.25rem; box-shadow: none; flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+              <div
+                style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #e24920, #FF6B6B); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
+                A</div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9rem; color: var(--clr-text-primary);">Ahmed R.</div>
+                <div style="display: flex; gap: 1px;">
+                  <span style="color: var(--clr-star); font-size: 0.8rem;">★★★★★</span>
+                </div>
+              </div>
+              <svg fill="none" height="18" style="margin-left: auto; flex-shrink: 0;" viewbox="0 0 24 24" width="18">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"></path>
+                <path
+                  d="M17.54 11.1H12v2.8h3.14c-.33 1.6-1.73 2.8-3.14 2.8-1.93 0-3.5-1.57-3.5-3.5S10.07 9.7 12 9.7c.83 0 1.6.3 2.18.78l1.97-1.97C15.1 7.58 13.63 7 12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5c2.97 0 4.9-2.1 4.9-5 0-.33-.04-.65-.1-.95z"
+                  fill="white"></path>
+              </svg>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--clr-text-primary, #333); line-height: 1.5; margin: 0;">The
+              burgers here are absolutely amazing! Juicy patties, fresh ingredients, and super fast delivery. Highly
+              recommend the Spicy Zinger!</p>
+            <div class="review-timestamp">2 weeks ago</div>
+          </div>
+          <!-- Review Card 2 -->
+          <div class="review-card"
+            style="min-width: 280px; max-width: 280px; background: white; border-radius: 16px; padding: 1.25rem; box-shadow: none; flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+              <div
+                style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #2196F3, #42A5F5); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
+                S</div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9rem; color: var(--clr-text-primary);">Sara K.</div>
+                <div style="display: flex; gap: 1px;">
+                  <span style="color: var(--clr-star); font-size: 0.8rem;">★★★★★</span>
+                </div>
+              </div>
+              <svg fill="none" height="18" style="margin-left: auto; flex-shrink: 0;" viewbox="0 0 24 24" width="18">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"></path>
+                <path
+                  d="M17.54 11.1H12v2.8h3.14c-.33 1.6-1.73 2.8-3.14 2.8-1.93 0-3.5-1.57-3.5-3.5S10.07 9.7 12 9.7c.83 0 1.6.3 2.18.78l1.97-1.97C15.1 7.58 13.63 7 12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5c2.97 0 4.9-2.1 4.9-5 0-.33-.04-.65-.1-.95z"
+                  fill="white"></path>
+              </svg>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--clr-text-primary, #333); line-height: 1.5; margin: 0;">Best
+              pizza in town! We ordered the BBQ Chicken Pizza and it was incredible. Perfect bigbites, great toppings. Will
+              definitely be back!</p>
+            <div class="review-timestamp">1 month ago</div>
+          </div>
+          <!-- Review Card 3 -->
+          <div class="review-card"
+            style="min-width: 280px; max-width: 280px; background: white; border-radius: 16px; padding: 1.25rem; box-shadow: none; flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+              <div
+                style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #4CAF50, #66BB6A); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
+                M</div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9rem; color: var(--clr-text-primary);">M. Usman</div>
+                <div style="display: flex; gap: 1px;">
+                  <span style="color: var(--clr-star); font-size: 0.8rem;">★★★★★</span>
+                </div>
+              </div>
+              <svg fill="none" height="18" style="margin-left: auto; flex-shrink: 0;" viewbox="0 0 24 24" width="18">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"></path>
+                <path
+                  d="M17.54 11.1H12v2.8h3.14c-.33 1.6-1.73 2.8-3.14 2.8-1.93 0-3.5-1.57-3.5-3.5S10.07 9.7 12 9.7c.83 0 1.6.3 2.18.78l1.97-1.97C15.1 7.58 13.63 7 12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5c2.97 0 4.9-2.1 4.9-5 0-.33-.04-.65-.1-.95z"
+                  fill="white"></path>
+              </svg>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--clr-text-primary, #333); line-height: 1.5; margin: 0;">Family
+              ordered the King Deal 3 and everyone was beyond satisfied. Generous portions, hot food, and great value
+              for money. 10/10!</p>
+            <div class="review-timestamp">3 weeks ago</div>
+          </div>
+          <!-- Review Card 4 -->
+          <div class="review-card"
+            style="min-width: 280px; max-width: 280px; background: white; border-radius: 16px; padding: 1.25rem; box-shadow: none; flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+              <div
+                style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #FF9800, #FFA726); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
+                F</div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9rem; color: var(--clr-text-primary);">Fatima N.</div>
+                <div style="display: flex; gap: 1px;">
+                  <span style="color: var(--clr-star); font-size: 0.8rem;">★★★★☆</span>
+                </div>
+              </div>
+              <svg fill="none" height="18" style="margin-left: auto; flex-shrink: 0;" viewbox="0 0 24 24" width="18">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"></path>
+                <path
+                  d="M17.54 11.1H12v2.8h3.14c-.33 1.6-1.73 2.8-3.14 2.8-1.93 0-3.5-1.57-3.5-3.5S10.07 9.7 12 9.7c.83 0 1.6.3 2.18.78l1.97-1.97C15.1 7.58 13.63 7 12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5c2.97 0 4.9-2.1 4.9-5 0-.33-.04-.65-.1-.95z"
+                  fill="white"></path>
+              </svg>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--clr-text-primary, #333); line-height: 1.5; margin: 0;">The
+              desserts are to die for! Tried the Strawberry Tart and the Brownie — both were absolutely delicious. The
+              portions are very generous too.</p>
+            <div class="review-timestamp">1 month ago</div>
+          </div>
+          <!-- Review Card 5 -->
+          <div class="review-card"
+            style="min-width: 280px; max-width: 280px; background: white; border-radius: 16px; padding: 1.25rem; box-shadow: none; flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;">
+              <div
+                style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #9C27B0, #BA68C8); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
+                Z</div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9rem; color: var(--clr-text-primary);">Zara H.</div>
+                <div style="display: flex; gap: 1px;">
+                  <span style="color: var(--clr-star); font-size: 0.8rem;">★★★★★</span>
+                </div>
+              </div>
+              <svg fill="none" height="18" style="margin-left: auto; flex-shrink: 0;" viewbox="0 0 24 24" width="18">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"></path>
+                <path
+                  d="M17.54 11.1H12v2.8h3.14c-.33 1.6-1.73 2.8-3.14 2.8-1.93 0-3.5-1.57-3.5-3.5S10.07 9.7 12 9.7c.83 0 1.6.3 2.18.78l1.97-1.97C15.1 7.58 13.63 7 12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5c2.97 0 4.9-2.1 4.9-5 0-.33-.04-.65-.1-.95z"
+                  fill="white"></path>
+              </svg>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--clr-text-secondary, #555); line-height: 1.5; margin: 0;">
+              Excellent service and amazing food quality. My go-to place for a quick but satisfying meal. The Classic
+              Beef Burger is unmatched!</p>
+            <div class="review-timestamp">2 months ago</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact-section" style="background: var(--clr-background);">
+      <div class="container">
+        <div class="section-header">
+          <h2>Contact Us</h2>
+          <p>We are always ready to serve you. Get in touch or visit us.</p>
+        </div>
+        <div class="contact-grid-wrapper desktop-two-column-contact">
+          <div class="contact-left-col" style="max-width: 600px; margin: 0 auto;">
+            <div class="contact-info-cards">
+              <div class="contact-card minimal-card glass-panel"
+                style="display: flex; flex-direction: column; padding: 2rem; gap: 1.5rem; width: 100%;">
+                <!-- WhatsApp -->
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                  <div style="text-align: left;">
+                    <h3 style="margin-bottom: 0.2rem; font-size: 1.1rem;">WhatsApp</h3>
+                    <p style="color: var(--clr-primary); font-weight: 600; font-size: 1.05rem;">+92 3002442483</p>
+                  </div>
+                    <a aria-label="WhatsApp" class="contact-icon" href="https://wa.me/923001013556"
+                      style="flex-shrink: 0;" target="_blank">
+                      <img src="./assets/images/whatsapp.avif" alt="WhatsApp" style="width: 48px; height: 48px; object-fit: contain;" />
+                  </a>
+                </div>
+                <!-- Email -->
+                <div
+                  style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; width: 100%;">
+                  <div style="text-align: left;">
+                    <h3 style="margin-bottom: 0.2rem; font-size: 1.1rem;">Email</h3>
+                    <p style="color: var(--clr-primary); font-weight: 600; font-size: 1.05rem;">info@bigbites.com</p>
+                  </div>
+                  <a aria-label="Email" class="contact-icon" href="mailto:info@bigbites.com" style="flex-shrink: 0;">
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" viewbox="0 0 24 24">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </a>
+                </div>
+                <!-- Location -->
+                <div
+                  style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; width: 100%;">
+                  <div style="text-align: left;">
+                    <h3 style="margin-bottom: 0.2rem; font-size: 1.1rem;">Our Locations</h3>
+                    <ul
+                      style="font-size: 1.05rem; color: var(--clr-text-secondary, #444); line-height: 1.6; padding-left: 1.2rem; margin: 0.5rem 0;">
+                      <li>58 Main Shadman Market Rd, Shadman 1, Lahore</li>
+                      
+                    </ul>
+                    <p class="hours-text" style="margin-top: 0.5rem;"><strong>Open Daily:</strong> 11:00 AM – 2:00 AM
+                    </p>
+                  </div>
+                  <div class="contact-icon" style="flex-shrink: 0;">
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" viewbox="0 0 24 24">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Google Map directly below Location card -->
+          <div class="contact-map" style="margin-top: 1rem;">
+            <div id="map-placeholder"
+              style="width:100%; min-height:260px; border-radius:12px; background:var(--clr-surface,#f5f5f5); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; cursor:pointer; border:1px solid var(--clr-border,#e0e0e0);"
+              onclick="window.__loadMap && window.__loadMap(this)" title="Click to load map">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary,#c62828)"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span style="font-size:0.9rem;font-weight:600;color:var(--clr-text-primary);">Shadman, Lahore</span>
+              <a href="https://www.google.com/maps?q=58+Main+Shadman+Market+Rd,+Shadman+1,+Lahore" target="_blank"
+                rel="noopener noreferrer"
+                style="font-size:0.8rem;color:var(--clr-primary,#c62828);text-decoration:none;"
+                onclick="event.stopPropagation()">View on Google Maps ↗</a>
+              <span style="font-size:0.75rem;color:var(--clr-text-secondary,#888);">Tap to load interactive map</span>
+            </div>
+            <script>
+              (function () {
+                var MAP_SRC = 'https://maps.google.com/maps?q=58%20Main%20Shadman%20Market%20Rd,%20Shadman%201,%20Lahore&t=&z=15&ie=UTF8&iwloc=&output=embed';
+                window.__loadMap = function (placeholder) {
+                  if (window.__mapsLoaded) return;
+                  window.__mapsLoaded = true;
+                  var iframe = document.createElement('iframe');
+                  iframe.src = MAP_SRC;
+                  iframe.width = '100%';
+                  iframe.height = '260';
+                  iframe.style.cssText = 'border:0;border-radius:12px;min-height:260px;display:block;';
+                  iframe.allowFullscreen = true;
+                  iframe.referrerPolicy = 'no-referrer-when-downgrade';
+                  iframe.title = 'Map showing bigbites location';
+                  placeholder.parentNode.replaceChild(iframe, placeholder);
+                };
+                if ('IntersectionObserver' in window) {
+                  var obs = new IntersectionObserver(function (entries) {
+                    if (entries[0].isIntersecting) {
+                      var ph = document.getElementById('map-placeholder');
+                      if (ph) window.__loadMap(ph);
+                      obs.disconnect();
+                    }
+                  }, { rootMargin: '200px' });
+                  var el = document.getElementById('map-placeholder');
+                  if (el) obs.observe(el);
+                }
+              })();
+            </script>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!-- ===== Offer Detail Modal ===== -->
+  <div aria-labelledby="offer-modal-name" aria-modal="true" class="modal-overlay" id="offer-modal" role="dialog">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="modal-img-wrap" style="height: auto; max-height: 250px;">
+        <img alt="Offer Image" decoding="async" loading="lazy" height="228" id="offer-modal-img"
+          src="./assets/images/offer-1.avif" style="width: 100%; object-fit: cover;" width="228" />
+      </div>
+      <div class="modal-body" style="padding: 1.5rem;">
+        <span class="modal-category-tag"
+          style="background-color: var(--clr-danger); color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">Special
+          Offer</span>
+        <h2 class="modal-item-name" id="offer-modal-name" style="margin: 0.5rem 0; font-size: 1.5rem;">Family Feast
+          Combo</h2>
+        <div class="offer-items-list"
+          style="margin-bottom: 1.5rem; color: var(--clr-text-secondary, #555); font-size: 0.95rem;">
+          <strong style="color: var(--clr-text-primary);">Includes:</strong>
+          <ul style="margin: 0.5rem 0 0 1.2rem; padding: 0; line-height: 1.6;">
+            <li>2x Banging Smash Burgers</li>
+            <li>2x Crispy Chicken Tenders</li>
+            <li>1x Large French Fries</li>
+            <li>2x Chilled Drinks</li>
+          </ul>
+        </div>
+        <div class="modal-price-row" style="margin-bottom: 1.5rem; display: flex; align-items: flex-end; gap: 1rem;">
+          <span class="modal-price" style="color: var(--clr-danger); font-size: 1.4rem; font-weight: 700;">Rs
+            2500</span>
+        </div>
+        <div class="modal-footer" style="padding: 0; background: transparent; border: none;">
+          <button class="btn btn-primary modal-add-btn" id="offer-modal-add-to-cart"
+            style="width: 100%; border-radius: 50px; font-weight: 600; font-size: 1.05rem;">
+            <svg fill="none" height="20" stroke="currentColor" stroke-width="2.5" style="margin-right: 0.5rem;"
+              viewbox="0 0 24 24" width="20">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            Add Offer to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script defer src="./assets/js/menu-data.js"></script>
+  <script defer src="./assets/js/search.js?v=2"></script>
+  <script defer="" src="./assets/js/script.bundle.min.js?v=26"></script>
+</body>
+
+</html>

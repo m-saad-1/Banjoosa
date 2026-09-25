@@ -1,0 +1,2475 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+    <script>if(localStorage.getItem('bigbites_theme') === 'light') document.documentElement.classList.remove('dark-mode');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management Dashboard - bigbites</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=optional" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="js/demoData.js"></script>
+    <script defer src="js/data.js"></script>
+    <script defer src="js/app.js"></script>
+    <script defer src="js/dashboard.js"></script>
+
+<style id="inline-loader-css">
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--clr-background, #fdfbf7);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+  opacity: 1;
+  visibility: visible;
+}
+.page-loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.loader-logo.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.loader-bar-track {
+  width: 150px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--clr-primary, #E31B23);
+  border-radius: 4px;
+  animation: loader-fill 2s ease-in-out infinite;
+}
+@keyframes loader-fill {
+  0% { width: 0%; transform: translateX(-100%); }
+  50% { width: 100%; transform: translateX(0); }
+  100% { width: 0%; transform: translateX(100%); }
+}
+.page-loader.complete .loader-bar-fill {
+  animation: none;
+  width: 100%;
+  transition: width 0.2s ease;
+}
+html.dark-mode .page-loader {
+  background: #121212 !important;
+}
+html.dark-mode .loader-bar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+.loader-spinner { display: none; }
+.page-loader.spinner-mode { gap: 0; }
+.page-loader.spinner-mode .loader-bar-track,
+.page-loader.spinner-mode .loader-logo { display: none; }
+.page-loader.spinner-mode .loader-spinner {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 69, 184, 0.2);
+  border-top-color: var(--clr-primary, #E31B23);
+  border-radius: 50%;
+  animation: loader-spin 0.8s linear infinite;
+}
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+<body>
+    <script>if ((localStorage.getItem('bigbites_dashboard_mode') || 'simple') === 'simple') { document.body.classList.add('simple-mode'); }</script>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="app-sidebar" id="app-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <img src="../assets/images/logo.avif" alt="bigbites">
+                    <span class="sidebar-brand-text">bigbites</span>
+                </div>
+                <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Collapse sidebar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <!-- MAIN -->
+                <div class="nav-group">
+                    <div class="nav-group-label">Main</div>
+                    <a href="#" class="nav-item active" data-target="view-dashboard">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item" data-target="view-orders">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span>Orders</span>
+                        <span class="nav-badge" id="badge-orders">0</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-pos">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                        <span>POS</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-kds">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                        <span>Kitchen / KDS</span>
+                        <span class="nav-dot hidden" id="dot-kds"></span>
+                    </a>
+                </div>
+
+                <!-- OPERATIONS -->
+                <div class="nav-group">
+                    <div class="nav-group-label">Operations</div>
+                    <a href="#" class="nav-item" data-target="view-menu">
+                        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        <span>Menu</span>
+                    </a>
+                    <a href="#" class="nav-item" data-target="view-content">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>Content &amp; Media</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-inventory">
+                        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        <span>Inventory &amp; Supply</span>
+                        <span class="nav-dot hidden" id="dot-inventory"></span>
+                    </a>
+                    <a href="#" class="nav-item" data-target="view-delivery">
+                        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        <span>Delivery</span>
+                        <span class="nav-badge badge-orange hidden" id="badge-delivery">0</span>
+                    </a>
+                    <a href="#" class="nav-item" data-target="view-reservations">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <span>Reservations</span>
+                        <span class="nav-badge badge-blue hidden" id="badge-reservations">0</span>
+                    </a>
+                    <a href="#" class="nav-item" data-target="view-branches">
+                        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span>Branches</span>
+                    </a>
+                </div>
+
+                <!-- CUSTOMERS -->
+                <div class="nav-group">
+                    <div class="nav-group-label">Customers</div>
+                    <a href="#" class="nav-item" data-target="view-customers">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <span>Customers</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-loyalty">
+                        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <span>Loyalty &amp; Reviews</span>
+                    </a>
+                </div>
+                
+                <!-- GROWTH & ANALYTICS -->
+                <div class="nav-group">
+                    <div class="nav-group-label">Growth &amp; Analytics</div>
+                    <a href="#" class="nav-item advanced-only" data-target="view-marketing">
+                        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <span>Marketing</span>
+                    </a>
+                    <a href="#" class="nav-item" data-target="view-analytics">
+                        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-reports">
+                        <svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                        <span>Reports</span>
+                    </a>
+                </div>
+
+                <!-- ADMINISTRATION -->
+                <div class="nav-group">
+                    <div class="nav-group-label">Administration</div>
+                    <a href="#" class="nav-item advanced-only" data-target="view-hr">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <span>HR &amp; Staff</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-finance">
+                        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        <span>Finance &amp; P&amp;L</span>
+                    </a>
+                </div>
+
+                <!-- SYSTEM & INTEGRATIONS -->
+                <div class="nav-group">
+                    <div class="nav-group-label">System &amp; Integrations</div>
+                    <a href="#" class="nav-item" data-target="view-settings">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-qrmenu">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg>
+                        <span>QR Menu</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-website">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        <span>Website Builder</span>
+                    </a>
+                    <a href="#" class="nav-item advanced-only" data-target="view-integrations">
+                        <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                        <span>Integrations</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <header class="app-header" style="position: relative; z-index: 99999;">
+                <!-- Live Notification Bar -->
+                <div id="live-notification-bar" style="position: absolute; top: -60px; left: 50%; transform: translateX(-50%); background: var(--clr-primary); color: white; border-radius: 20px; padding: 0.35rem 1rem; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                    <span id="live-notif-icon">🔔</span>
+                    <span id="live-notif-text">New notification</span>
+                </div>
+
+                <div class="header-left">
+                    <button class="mobile-toggle" id="mobile-toggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <div class="header-search">
+                        <!-- Hidden fields to trap browser autofill (Chrome ignores display:none) -->
+                        <div style="position: absolute; width: 0; height: 0; overflow: hidden; opacity: 0; pointer-events: none;">
+                            <input type="text" name="email_trap" tabindex="-1" autocomplete="username email">
+                            <input type="password" name="password_trap" tabindex="-1" autocomplete="current-password">
+                        </div>
+                        <input type="search" id="q_dash_search" name="q_dash_search" placeholder="Search orders, customers..." autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <span class="demo-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        Demo Workspace
+                        <style>html.dark-mode .demo-badge { background-color: var(--clr-primary, #E31B23) !important; color: #fff !important; border: none !important; }</style>
+                    </span>
+                    <select id="header-branch-selector" class="branch-selector" style="display: none;">
+                        <!-- Populated by JS -->
+                    </select>
+                    
+                    <label style="position: relative; cursor: pointer; padding: 0.45rem; border-radius: 8px; transition: background 0.2s; display:flex; align-items:center; justify-content:center; margin-right: 0.2rem;" onmouseover="this.style.background='var(--clr-bg-app)'" onmouseout="this.style.background='transparent'" title="Toggle Theme">
+                        <input type="checkbox" id="dark-mode-toggle" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-secondary)" stroke-width="2" class="theme-icon-sun" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-secondary)" stroke-width="2" class="theme-icon-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <style>
+                            #dark-mode-toggle:checked ~ .theme-icon-sun { display: block !important; }
+                            #dark-mode-toggle:checked ~ .theme-icon-moon { display: none !important; }
+                        </style>
+                    </label>
+
+                    <button class="btn btn-outline" style="padding: 0.4rem 0.6rem; display: flex; align-items: center; gap: 0.4rem;" onclick="toggleFullScreenMode()" title="Toggle Full Screen (Kiosk/POS Mode)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        <span class="fs-label" style="font-size: 0.8rem;">Focus</span>
+                    </button>
+                    <script>
+                        function toggleFullScreenMode() {
+                            if (!document.fullscreenElement) {
+                                document.documentElement.requestFullscreen().catch(err => {
+                                    console.log('Error attempting to enable full-screen mode:', err.message);
+                                });
+                                document.body.classList.add('kiosk-mode');
+                            } else {
+                                if (document.exitFullscreen) {
+                                    document.exitFullscreen();
+                                }
+                                document.body.classList.remove('kiosk-mode');
+                            }
+                        }
+                        
+                        document.addEventListener('fullscreenchange', () => {
+                            if (!document.fullscreenElement) {
+                                document.body.classList.remove('kiosk-mode');
+                            }
+                        });
+                    </script>
+
+                    <div style="position: relative;" id="notification-wrapper">
+                        <button id="notification-btn" style="position: relative; background: none; border: none; cursor: pointer; padding: 0.45rem; border-radius: 8px; transition: background 0.2s; display:flex; align-items:center; justify-content:center;" onmouseover="this.style.background='var(--clr-bg-app)'" onmouseout="this.style.background='transparent'" onclick="document.getElementById('notification-dropdown').style.display = document.getElementById('notification-dropdown').style.display === 'none' ? 'block' : 'none';">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-secondary)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                            <span class="notif-badge" id="notif-badge">2</span>
+                        </button>
+                        
+                        <!-- Notification Dropdown -->
+                        <div id="notification-dropdown" style="display: none; position: absolute; top: 120%; right: 0; width: 320px; background: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 999999; overflow: hidden;">
+                            <div style="padding: 1rem; border-bottom: 1px solid var(--clr-border); display: flex; justify-content: space-between; align-items: center; background: var(--clr-bg-app);">
+                                <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--clr-text-primary);">Notifications</h4>
+                                <span class="badge badge-warning" style="font-size: 0.7rem;">2 New</span>
+                            </div>
+                            <div style="max-height: 320px; overflow-y: auto;">
+                                <div style="padding: 1rem; border-bottom: 1px solid var(--clr-border); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--clr-bg-app)'" onmouseout="this.style.background='transparent'">
+                                    <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                                        <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(233, 41, 14, 0.1); color: var(--clr-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.25rem;">New Online Order</div>
+                                            <div style="font-size: 0.8rem; color: var(--clr-text-secondary); line-height: 1.3;">Order #10485 received via website (Rs. 1,450).</div>
+                                            <div style="font-size: 0.7rem; color: var(--clr-text-muted); margin-top: 0.35rem;">Just now</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding: 1rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--clr-bg-app)'" onmouseout="this.style.background='transparent'">
+                                    <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                                        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--clr-danger-bg); color: var(--clr-danger); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.25rem; color: var(--clr-danger);">Low Stock Alert</div>
+                                            <div style="font-size: 0.8rem; color: var(--clr-text-secondary); line-height: 1.3;">Burger Buns (ING-BUN) is running critically low.</div>
+                                            <div style="font-size: 0.7rem; color: var(--clr-text-muted); margin-top: 0.35rem;">15 mins ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding: 0.75rem; border-top: 1px solid var(--clr-border); text-align: center; background: var(--clr-bg-app);">
+                                <a href="#" style="font-size: 0.8rem; color: var(--clr-primary); text-decoration: none; font-weight: 600;">Mark all as read</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- VIEW: DASHBOARD (Phase 2) -->
+                <div id="view-dashboard" class="view-section active">
+                    <!-- UNIFIED DASHBOARD CONTENT -->
+                    <div>
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                    <h1 class="page-title">Overview</h1>
+                    <p class="page-subtitle">Welcome back! Here's what's happening at bigbites today.</p>
+                </div>
+
+                <!-- AI Insights -->
+                <div class="card ai-insight" style="margin-bottom: 1.5rem; padding: 1rem 1.5rem;">
+                    <div class="ai-insight-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                        AI Insight
+                    </div>
+                    <p style="color: var(--clr-text-secondary); margin: 0; font-size: 0.95rem;">
+                        Friday evening orders are projected to be 23% higher than your weekly average. <br>
+                        <strong>Recommendation:</strong> Increase kitchen staffing between 7 PM and 10 PM.
+                    </p>
+                </div>
+
+                <!-- KPI Row -->
+                <div class="dashboard-grid">
+                    <div class="card kpi-card col-span-4">
+                        <div class="kpi-header">
+                            <span>Today's Revenue</span>
+                            <div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        </div>
+                        <div class="kpi-value" id="kpi-revenue">Rs. 0</div>
+                        <div class="kpi-trend">
+                            <span class="trend-up"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> +18.4%</span>
+                            <span class="trend-text">vs yesterday</span>
+                        </div>
+                    </div>
+                    <div class="card kpi-card col-span-4">
+                        <div class="kpi-header">
+                            <span>Today's Orders</span>
+                            <div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+                        </div>
+                        <div class="kpi-value" id="kpi-orders">0</div>
+                        <div class="kpi-trend">
+                            <span class="trend-up"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> +12.1%</span>
+                            <span class="trend-text">vs yesterday</span>
+                        </div>
+                    </div>
+                    <div class="card kpi-card col-span-4">
+                        <div class="kpi-header">
+                            <span>Avg Order Value</span>
+                            <div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 12l-4-4-4 4"></path><path d="M12 16V8"></path></svg></div>
+                        </div>
+                        <div class="kpi-value" id="kpi-aov">Rs. 0</div>
+                        <div class="kpi-trend">
+                            <span class="trend-up"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> +5.2%</span>
+                            <span class="trend-text">vs yesterday</span>
+                        </div>
+                    </div>
+                    <div class="card kpi-card col-span-4">
+                        <div class="kpi-header">
+                            <span>Pending Orders</span>
+                            <div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                        </div>
+                        <div class="kpi-value" id="kpi-pending">0</div>
+                        <div class="kpi-trend">
+                            <span class="trend-down"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg> -2.1%</span>
+                            <span class="trend-text">vs yesterday</span>
+                        </div>
+                    </div>
+                    <div class="card kpi-card col-span-4" style="--kpi-accent: var(--clr-info);">
+                        <div class="kpi-header">
+                            <span>Active Deliveries</span>
+                            <div class="kpi-icon" style="color: var(--clr-info);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>
+                        </div>
+                        <div class="kpi-value" id="kpi-active-deliveries" style="color: var(--clr-info);">0</div>
+                        <div class="kpi-trend">
+                            <span class="trend-up"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> Live</span>
+                            <span class="trend-text">on the road</span>
+                        </div>
+                    </div>
+                    <div class="card kpi-card col-span-4" style="--kpi-accent: var(--clr-success);">
+                        <div class="kpi-header">
+                            <span>New Customers</span>
+                            <div class="kpi-icon" style="color: var(--clr-success);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+                        </div>
+                        <div class="kpi-value" id="kpi-new-customers" style="color: var(--clr-success);">0</div>
+                        <div class="kpi-trend">
+                            <span class="trend-up"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> +9.3%</span>
+                            <span class="trend-text">vs yesterday</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="dashboard-grid">
+                    <div class="card col-span-8">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Sales Overview</h3>
+                            <div class="chart-actions">
+                                <select id="sales-duration-filter" onchange="updateSalesChart(this.value)">
+                                    <option value="today">Today</option>
+                                    <option value="7days" selected>Last 7 Days</option>
+                                    <option value="30days">Last 30 Days</option>
+                                    <option value="3months">Last 3 Months</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card col-span-4">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Sales by Channel</h3>
+                        </div>
+                        <div class="chart-container" style="display: flex; align-items: center; justify-content: center; height: 260px;">
+                            <canvas id="channelChart" style="max-height: 240px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Snapshot -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="chart-header" style="margin-bottom: 1rem;">
+                        <h3 class="chart-title">Order Snapshot</h3>
+                        <button class="btn btn-outline" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;" onclick="document.querySelector('.nav-item[data-target=\'view-orders\']').click()">Go to Orders &rarr;</button>
+                    </div>
+                    <div class="snapshot-grid">
+                        <div class="snapshot-item">
+                            <div class="snapshot-value" style="color: var(--clr-primary);">12</div>
+                            <div class="snapshot-label">New Orders</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-value" style="color: var(--clr-warning);">8</div>
+                            <div class="snapshot-label">Preparing</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-value" style="color: var(--clr-success);">4</div>
+                            <div class="snapshot-label">Ready</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-value" style="color: var(--clr-info);">5</div>
+                            <div class="snapshot-label">Out for Delivery</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-value" style="color: var(--clr-text-secondary);">148</div>
+                            <div class="snapshot-label">Completed</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-value" style="color: var(--clr-danger);">2</div>
+                            <div class="snapshot-label">Cancelled</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Type Breakdown -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                  <div class="chart-header" style="margin-bottom: 1rem;">
+                    <h3 class="chart-title">Order Type Breakdown</h3>
+                    <span style="font-size: 0.85rem; color: var(--clr-text-secondary);">Today</span>
+                  </div>
+                  <div class="snapshot-grid">
+                    <div class="snapshot-item">
+                      <div class="snapshot-value" style="color: #8b5cf6;" id="snap-dinein">31</div>
+                      <div class="snapshot-label">Dine-in</div>
+                    </div>
+                    <div class="snapshot-item">
+                      <div class="snapshot-value" style="color: var(--clr-warning);" id="snap-takeaway">18</div>
+                      <div class="snapshot-label">Takeaway</div>
+                    </div>
+                    <div class="snapshot-item">
+                      <div class="snapshot-value" style="color: var(--clr-primary);" id="snap-delivery">35</div>
+                      <div class="snapshot-label">Delivery</div>
+                    </div>
+                    <div class="snapshot-item">
+                      <div class="snapshot-value" style="color: var(--clr-success);" id="snap-website">42%</div>
+                      <div class="snapshot-label">Via Website</div>
+                    </div>
+                    <div class="snapshot-item">
+                      <div class="snapshot-value" style="color: var(--clr-text-secondary);" id="snap-pos-src">26%</div>
+                      <div class="snapshot-label">Via POS</div>
+                    </div>
+                    <div class="snapshot-item">
+                      <div class="snapshot-value" style="color: var(--clr-info);" id="snap-other-src">32%</div>
+                      <div class="snapshot-label">Other Channels</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Alerts & Action Center -->
+                <div class="card advanced-only" style="margin-bottom: 1.5rem;">
+                  <div class="chart-header" style="margin-bottom: 1rem;">
+                    <h3 class="chart-title">⚠ Alerts & Action Center</h3>
+                    <span class="badge badge-danger" style="font-size: 0.75rem;">4 Issues</span>
+                  </div>
+                  <div id="alerts-action-center" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--clr-danger-bg, rgba(239,68,68,0.08)); border-radius: 8px; border-left: 3px solid var(--clr-danger);">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clr-danger)" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                      <div style="flex:1;"><strong style="font-size:0.85rem;">3 delivery orders waiting for rider assignment</strong></div>
+                      <button class="btn btn-outline" style="font-size:0.75rem; padding:0.25rem 0.6rem;" onclick="document.querySelector('.nav-item[data-target=\'view-delivery\']').click()">Assign →</button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(245,158,11,0.08); border-radius: 8px; border-left: 3px solid var(--clr-warning);">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clr-warning)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                      <div style="flex:1;"><strong style="font-size:0.85rem;">Chicken Breast is below reorder level (3kg remaining)</strong></div>
+                      <button class="btn btn-outline" style="font-size:0.75rem; padding:0.25rem 0.6rem;" onclick="document.querySelector('.nav-item[data-target=\'view-inventory\']').click()">View →</button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(59,130,246,0.08); border-radius: 8px; border-left: 3px solid var(--clr-info);">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clr-info)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                      <div style="flex:1;"><strong style="font-size:0.85rem;">2 reservations require confirmation for tonight</strong></div>
+                      <button class="btn btn-outline" style="font-size:0.75rem; padding:0.25rem 0.6rem;" onclick="document.querySelector('.nav-item[data-target=\'view-reservations\']').click()">Review →</button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(239,68,68,0.05); border-radius: 8px; border-left: 3px solid var(--clr-danger);">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clr-danger)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      <div style="flex:1;"><strong style="font-size:0.85rem;">Friday Discount promotion expires in 2 hours</strong></div>
+                      <button class="btn btn-outline" style="font-size:0.75rem; padding:0.25rem 0.6rem;" onclick="document.querySelector('.nav-item[data-target=\'view-marketing\']').click()">Extend →</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tables Row -->
+                <div class="dashboard-grid">
+                    <div class="card col-span-12">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Recent Orders</h3>
+                            <button class="btn btn-outline" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;" onclick="document.querySelector('.nav-item[data-target=\'view-orders\']').click()">View All</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Type</th>
+                                        <th>Source</th>
+                                        <th>Customer</th>
+                                        <th>Table/Area</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-orders-body">
+                                    <!-- Populated by JS (includes type, source, table/area) -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card col-span-12">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Best-Selling Products</h3>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 500;">Tower Burger</td>
+                                        <td>284</td>
+                                        <td>Rs. 184,316</td>
+                                        <td><span style="color: var(--clr-success); font-weight: 600;">+14%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 500;">Large Pizza</td>
+                                        <td>192</td>
+                                        <td>Rs. 287,808</td>
+                                        <td><span style="color: var(--clr-success); font-weight: 600;">+8%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 500;">Loaded Fries</td>
+                                        <td>175</td>
+                                        <td>Rs. 96,075</td>
+                                        <td><span style="color: var(--clr-danger); font-weight: 600;">-3%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 500;">Chicken Karahi</td>
+                                        <td>84</td>
+                                        <td>Rs. 142,716</td>
+                                        <td><span style="color: var(--clr-success); font-weight: 600;">+22%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <a href="#" style="color: var(--clr-primary); font-size: 0.85rem; font-weight: 600;" onclick="event.preventDefault(); document.querySelector('.nav-item[data-target=\'view-analytics\']').click()">View Full Analytics &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Branches -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                  <div class="chart-header" style="margin-bottom: 1rem;">
+                    <h3 class="chart-title">Top Branches</h3>
+                    <button class="btn btn-outline" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;" onclick="document.querySelector('.nav-item[data-target=\'view-branches\']').click()">View All →</button>
+                  </div>
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead><tr><th>Branch</th><th>Revenue</th><th>Orders</th><th>Growth</th></tr></thead>
+                      <tbody>
+                        <tr><td style="font-weight:600;">58 Main Shadman Market Rd, Shadman 1, Lahore</td><td>Rs. 284,500</td><td>142</td><td><span style="color:var(--clr-success); font-weight:600;">+18%</span></td></tr>
+                        <tr><td style="font-weight:600;">8A Commercial, Pak Arab, Lahore</td><td>Rs. 198,200</td><td>98</td><td><span style="color:var(--clr-success); font-weight:600;">+11%</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                    </div> <!-- END ADVANCED DASHBOARD CONTENT -->
+                </div> <!-- END VIEW DASHBOARD -->
+
+                <!-- VIEW: ORDERS -->
+                <div id="view-orders" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h1 class="page-title">Orders Management</h1>
+                            <p class="page-subtitle">View, filter, and manage all incoming orders across branches.</p>
+                        </div>
+                        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items: center;">
+                            <button class="btn btn-primary advanced-only" onclick="openGenericModal('order')">+ New Order</button>
+                            <button class="btn btn-outline" onclick="showToast('Exporting orders...', 'info')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Export</button>
+                            <button class="btn btn-outline" onclick="window.Store.notify(); showToast('Orders refreshed', 'success')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>Refresh</button>
+                        </div>
+                    </div>
+
+                    
+                    <div class="inner-tabs" style="margin-bottom: 1.5rem;" id="order-type-tabs">
+                        <button class="inner-tab active" data-order-type="All" onclick="filterOrdersByType('All', this)">All Orders</button>
+                        <button class="inner-tab" data-order-type="Dine-in" onclick="filterOrdersByType('Dine-in', this)">Dine-in</button>
+                        <button class="inner-tab" data-order-type="Takeaway" onclick="filterOrdersByType('Takeaway', this)">Takeaway</button>
+                        <button class="inner-tab" data-order-type="Delivery" onclick="filterOrdersByType('Delivery', this)">Delivery</button>
+                        <button class="inner-tab" data-order-type="Cancelled" onclick="filterOrdersByType('Cancelled', this)">Cancelled</button>
+                    </div>
+
+                    <div class="orders-stats-grid advanced-only" id="orders-stats-container">
+                        <div class="order-stat-card" style="--osc-accent: var(--clr-primary);">
+                            <div class="order-stat-label">Total</div>
+                            <div class="order-stat-value" id="stat-total">0</div>
+                            <div class="order-stat-sub">Orders</div>
+                        </div>
+                        <div class="order-stat-card" style="--osc-accent: var(--clr-info);">
+                            <div class="order-stat-label">New</div>
+                            <div class="order-stat-value" id="stat-new">0</div>
+                            <div class="order-stat-sub">Orders</div>
+                        </div>
+                        <div class="order-stat-card" style="--osc-accent: var(--clr-warning);">
+                            <div class="order-stat-label">Preparing</div>
+                            <div class="order-stat-value" id="stat-preparing">0</div>
+                            <div class="order-stat-sub">Kitchen</div>
+                        </div>
+                        <div class="order-stat-card" style="--osc-accent: #8b5cf6;">
+                            <div class="order-stat-label">Ready</div>
+                            <div class="order-stat-value" id="stat-ready">0</div>
+                            <div class="order-stat-sub">For Pickup</div>
+                        </div>
+                        <div class="order-stat-card" style="--osc-accent: #0ea5e9;">
+                            <div class="order-stat-label">Delivery</div>
+                            <div class="order-stat-value" id="stat-delivery">0</div>
+                            <div class="order-stat-sub">On the way</div>
+                        </div>
+                        <div class="order-stat-card" style="--osc-accent: var(--clr-success);">
+                            <div class="order-stat-label">Completed</div>
+                            <div class="order-stat-value" id="stat-completed">0</div>
+                            <div class="order-stat-sub">Delivered</div>
+                        </div>
+                        <div class="order-stat-card" style="--osc-accent: var(--clr-danger);">
+                            <div class="order-stat-label">Cancelled</div>
+                            <div class="order-stat-value" id="stat-cancelled">0</div>
+                            <div class="order-stat-sub">Issues</div>
+                        </div>
+                        <div class="order-stat-card" style="--osc-accent: var(--clr-text-primary);">
+                            <div class="order-stat-label">Revenue</div>
+                            <div class="order-stat-value" id="stat-revenue" style="font-size: 1.1rem; line-height: 1.45;">0</div>
+                            <div class="order-stat-sub">Total Value</div>
+                        </div>
+                    </div>
+
+                    <div id="orders-filter-bar">
+                        <div class="filters-bar" style="margin-bottom: 0;">
+                            <input type="text" id="filter-search" placeholder="Search by Order ID or Name..." style="flex: 1; min-width: 200px;" onkeyup="renderFullOrdersTable()">
+                            <select id="filter-status" onchange="renderFullOrdersTable()">
+                                <option value="All">All Statuses</option>
+                                <option value="New">New</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Preparing">Preparing</option>
+                                <option value="Ready">Ready</option>
+                                <option value="Assigned">Assigned</option>
+                                <option value="Out for Delivery">Out for Delivery</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Refunded">Refunded</option>
+                            </select>
+                            <select id="filter-type" onchange="renderFullOrdersTable()">
+                                <option value="All">All Types</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Takeaway">Takeaway</option>
+                                <option value="Dine-in">Dine-in</option>
+                            </select>
+                            <select id="filter-source" class="advanced-only" onchange="renderFullOrdersTable()">
+                                <option value="All">All Sources</option>
+                                <option value="Website">Website</option>
+                                <option value="Mobile App">Mobile App</option>
+                                <option value="POS">POS</option>
+                                <option value="QR">QR</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Phone">Phone</option>
+                                <option value="Marketplace">Marketplace</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="full-orders-body" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- VIEW: POS -->
+                <div id="view-pos" class="view-section">
+                    <div class="pos-layout">
+                        <!-- POS Categories -->
+                        <div class="pos-categories" id="pos-categories-container">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <!-- POS Products -->
+                        <div class="pos-products" id="pos-products-container">
+                            <!-- Populated by JS -->
+                        </div>
+
+
+
+                        <!-- POS Cart -->
+                        <div class="pos-cart">
+                            <div class="drawer-header" style="padding: 1rem; display: flex; flex-direction: column; align-items: stretch; gap: 0.75rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <h3 style="margin:0; font-size: 1.15rem; font-weight: 800; color: var(--clr-text-primary);">Current Order</h3>
+                                    <button class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size:0.75rem; border-radius: 6px; border-color: var(--clr-border); color: var(--clr-text-secondary);" onclick="clearPOSCart()">Clear</button>
+                                </div>
+                                <div class="pos-type-toggle">
+                                    <button class="pos-type-btn active" onclick="setPOSOrderType('Dine-in', this)">Dine-in</button>
+                                    <button class="pos-type-btn" onclick="setPOSOrderType('Takeaway', this)">Takeaway</button>
+                                    <button class="pos-type-btn" onclick="setPOSOrderType('Delivery', this)">Delivery</button>
+                                </div>
+                                <div id="pos-dynamic-form" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem;"></div>
+                            </div>
+                            <div class="pos-cart-items" id="pos-cart-items-container">
+                                <!-- Populated by JS -->
+                                <div style="text-align: center; color: var(--clr-text-muted); margin-top: 2rem;">Cart is empty</div>
+                            </div>
+                            <div class="drawer-footer" style="padding: 1rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--clr-text-secondary);">
+                                    <span>Subtotal</span>
+                                    <span id="pos-subtotal">Rs. 0</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--clr-text-secondary);">
+                                    <span>Discount</span>
+                                    <span id="pos-discount" style="color:var(--clr-success);">Rs. 0</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--clr-text-secondary);">
+                                    <span>Tax (16%)</span>
+                                    <span id="pos-tax">Rs. 0</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-weight: 700; font-size: 1.25rem;">
+                                    <span>Total</span>
+                                    <span id="pos-total">Rs. 0</span>
+                                </div>
+                                <div style="display:flex; gap:0.5rem; margin-bottom:0.75rem;">
+                                    <button class="btn btn-outline" style="flex:1; font-size:0.8rem; padding:0.5rem;" onclick="showToast('Order held. You can resume it from Orders.', 'info')">Hold</button>
+                                    <button class="btn btn-outline" style="flex:1; font-size:0.8rem; padding:0.5rem;" onclick="showToast('KOT sent to printer.', 'success')">Print KOT</button>
+                                    <button class="btn btn-outline" style="flex:1; font-size:0.8rem; padding:0.5rem;" onclick="showToast('Bill printed.', 'success')">Print Bill</button>
+                                </div>
+                                <div style="display:flex; gap:0.5rem; margin-bottom:0.75rem;">
+                                    <button class="btn btn-outline" style="flex:1; font-size:0.8rem; padding:0.5rem;" onclick="openApplyDiscountModal()">Apply Discount</button>
+                                    <button class="btn btn-outline" style="flex:1; font-size:0.8rem; padding:0.5rem;" onclick="openSplitBillModalPOS()">Split Bill</button>
+                                </div>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-kitchen" style="flex:1; justify-content: center;" onclick="openKitchenConfirmModal()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.35rem;"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                                        Kitchen
+                                    </button>
+                                    <button class="btn btn-primary" style="flex:1.5; justify-content: center;" onclick="openPOSPaymentModal()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.35rem;"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                                        Pay & Complete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW POS -->
+
+                <!-- VIEW: KDS -->
+                <div id="view-kds" class="view-section">
+                    <div class="kds-header-bar">
+                        <div>
+                            <h1 class="page-title" style="margin: 0;">Kitchen Display System</h1>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:0.75rem;">
+                            <span class="badge badge-info" style="font-size: 0.85rem;">Auto-refreshing</span>
+                            <button class="btn btn-outline" id="kds-sound-btn" style="padding:0.4rem 0.75rem; font-size:0.8rem;" onclick="toggleKDSSound(this)">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                Sound On
+                            </button>
+                            <select style="padding:0.4rem 0.6rem; border:1px solid var(--clr-border); border-radius:6px; font-size:0.8rem; background:var(--clr-surface); color:var(--clr-text-primary);" id="kds-station-filter">
+                                <option value="all">All Stations</option>
+                                <option value="hot">Hot Kitchen</option>
+                                <option value="cold">Cold Kitchen</option>
+                                <option value="grill">Grill</option>
+                                <option value="drinks">Drinks</option>
+                            </select>
+                            <button class="btn-fullview" id="kds-fullview-btn" onclick="toggleKDSFullView()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                                Full View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="kds-layout" id="kds-board" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                        <!-- Columns Populated by JS -->
+                        <div class="kds-column" id="kds-col-new">
+                            <div class="kds-column-header">New <span>0</span></div>
+                            <div class="kds-column-body"></div>
+                        </div>
+                        <div class="kds-column" id="kds-col-preparing">
+                            <div class="kds-column-header">Preparing <span>0</span></div>
+                            <div class="kds-column-body"></div>
+                        </div>
+                        <div class="kds-column" id="kds-col-ready">
+                            <div class="kds-column-header">Ready <span>0</span></div>
+                            <div class="kds-column-body"></div>
+                        </div>
+                        <div class="kds-column" id="kds-col-completed">
+                            <div class="kds-column-header" style="opacity:0.7;">Completed <span>0</span></div>
+                            <div class="kds-column-body"></div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW KDS -->
+
+                <!-- VIEW: MENU -->
+                <div id="view-menu" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h1 class="page-title">Menu Management</h1>
+                            <p class="page-subtitle">Manage products, categories, modifiers, and availability.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openGenericModal('product')">+ Add Product</button>
+                    </div>
+                    
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <div class="filters-bar" style="margin-bottom: 1rem;">
+                            <input type="text" placeholder="Search products..." style="flex: 1; min-width: 200px;">
+                            <select id="menu-category-filter">
+                                <option value="All">All Categories</option>
+                            </select>
+                            <select>
+                                <option value="All">All Branches</option>
+                                <option value="b1">58 Main Shadman Market Rd, Shadman 1, Lahore</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Availability (Time/Branch)</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="menu-products-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW MENU -->
+
+                <!-- VIEW: CONTENT & MEDIA MANAGEMENT (Phase 8) -->
+                <div id="view-content" class="view-section">
+                    <div class="page-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h1 class="page-title">Content &amp; Media Management</h1>
+                            <p class="page-subtitle">Manage website content, offers, gallery, and business information.</p>
+                        </div>
+                    </div>
+
+                    <div class="inner-tabs" style="margin-bottom: 1.5rem;">
+                        <button class="inner-tab active" data-tab="ct-offers">Offer Banners</button>
+                        <button class="inner-tab" data-tab="ct-gallery">Gallery</button>
+                        <button class="inner-tab" data-tab="ct-contact">Contact Info</button>
+                        <button class="inner-tab" data-tab="ct-hours">Opening Hours</button>
+                    </div>
+
+                    <!-- Offer Banners Tab -->
+                    <div class="inv-tab-content active" id="ct-offers">
+                        <div class="card">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                                <div>
+                                    <div style="font-weight:700; font-size:1rem;">Offer Images</div>
+                                    <div style="font-size:0.82rem; color:var(--clr-text-secondary); margin-top:2px;">These appear as promotional banners on the website.</div>
+                                </div>
+                                <label class="btn btn-primary" style="cursor:pointer; font-size:0.85rem; padding:0.5rem 1rem;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.35rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Add Image
+                                    <input type="file" accept="image/*" style="display:none;" onchange="contentAddOffer(this)">
+                                </label>
+                            </div>
+                            <div class="content-media-grid" id="ct-offers-grid">
+                                <!-- Populated by content.js -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Tab -->
+                    <div class="inv-tab-content" id="ct-gallery">
+                        <div class="card">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                                <div>
+                                    <div style="font-weight:700; font-size:1rem;">Gallery Images</div>
+                                    <div style="font-size:0.82rem; color:var(--clr-text-secondary); margin-top:2px;">Displayed in the restaurant gallery section.</div>
+                                </div>
+                                <label class="btn btn-primary" style="cursor:pointer; font-size:0.85rem; padding:0.5rem 1rem;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.35rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Add Photo
+                                    <input type="file" accept="image/*" multiple style="display:none;" onchange="contentAddGallery(this)">
+                                </label>
+                            </div>
+                            <div class="content-media-grid" id="ct-gallery-grid">
+                                <!-- Populated by content.js -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info Tab -->
+                    <div class="inv-tab-content" id="ct-contact">
+                        <div class="card">
+                            <div style="font-weight:700; font-size:1rem; margin-bottom:1.25rem;">Business Contact Information</div>
+                            <!-- Active Branch Banner -->
+                            <div class="ct-branch-banner" id="ct-branch-banner" style="display:none;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span>Active Branch: <strong id="ct-active-branch-name">58 Main Shadman Market Rd, Shadman 1, Lahore</strong></span>
+                                <button class="btn btn-outline" style="padding:0.3rem 0.75rem;font-size:0.78rem;" onclick="openBranchSwitchModal()">Switch Branch</button>
+                            </div>
+
+                            <div class="content-form-grid">
+                                <div class="content-form-group">
+                                    <label>Restaurant Name</label>
+                                    <input type="text" id="ct-name" placeholder="e.g. bigbites Restaurant">
+                                </div>
+                                <div class="content-form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" id="ct-phone" placeholder="+92 3002442483">
+                                </div>
+                                <div class="content-form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" id="ct-email" placeholder="hello@bigbites.com">
+                                </div>
+                                <div class="content-form-group">
+                                    <label>WhatsApp Number</label>
+                                    <input type="tel" id="ct-whatsapp" placeholder="+92 3002442483">
+                                </div>
+                                <div class="content-form-group" style="grid-column: 1 / -1;">
+                                    <label>Address / Location</label>
+                                    <textarea id="ct-address" rows="2" placeholder="Full restaurant address..."></textarea>
+                                </div>
+                                <div class="content-form-group" style="grid-column: 1 / -1;">
+                                    <label>Google Maps Embed URL</label>
+                                    <input type="url" id="ct-map" placeholder="https://maps.google.com/...">
+                                </div>
+                            </div>
+                            <div class="content-save-bar">
+                                <button class="btn btn-outline" onclick="contentLoadContact()">Reset</button>
+                                <button class="btn btn-primary" onclick="contentSaveContact()">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opening Hours Tab -->
+                    <div class="inv-tab-content" id="ct-hours">
+                        <div class="card">
+                            <div style="font-weight:700; font-size:1rem; margin-bottom:1.25rem;">Opening Hours</div>
+                            <div id="ct-hours-rows" style="display:flex; flex-direction:column; gap:0.75rem;">
+                                <!-- Populated by content.js -->
+                            </div>
+                            <div class="content-save-bar">
+                                <button class="btn btn-outline" onclick="contentLoadHours()">Reset</button>
+                                <button class="btn btn-primary" onclick="contentSaveHours()">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW CONTENT -->
+
+
+                <!-- VIEW: INVENTORY & SUPPLY -->
+                <div id="view-inventory" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">Inventory & Supply Chain</h1>
+                        <p class="page-subtitle">Track stock, manage suppliers, recipes, and record waste.</p>
+                    </div>
+
+                    <div class="inner-tabs" style="margin-bottom: 1.5rem;">
+                        <button class="inner-tab active" data-tab="inv-stock">Current Stock</button>
+                        <button class="inner-tab" data-tab="inv-recipes">Recipe Mapping</button>
+                        <button class="inner-tab" data-tab="inv-suppliers">Suppliers & POs</button>
+                        <button class="inner-tab" data-tab="inv-waste">Waste Management</button>
+                    </div>
+
+                    <!-- Tab Content: Stock -->
+                    <div id="inv-stock" class="inv-tab-content active">
+                        <div class="card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Ingredient Stock</h3>
+                                <button class="btn btn-primary" style="font-size: 0.8rem;" onclick="openGenericModal('receive-stock')">+ Receive Stock</button>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Ingredient</th>
+                                            <th>SKU</th>
+                                            <th>Current Qty</th>
+                                            <th>Unit Cost</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inv-stock-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Content: Recipes -->
+                    <div id="inv-recipes" class="inv-tab-content">
+                        <div class="card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Recipe Mapping (Cost Calculator)</h3>
+                            </div>
+                            <p style="color: var(--clr-text-secondary); margin-bottom: 1rem;">Map raw ingredients to menu items to track theoretical food cost and automatic deduction from stock.</p>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Menu Item</th>
+                                            <th>Mapped Ingredients</th>
+                                            <th>Theoretical Cost</th>
+                                            <th>Selling Price</th>
+                                            <th>Food Cost %</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inv-recipe-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Suppliers -->
+                    <div id="inv-suppliers" class="inv-tab-content">
+                        <div class="card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Active Suppliers</h3>
+                                <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="openGenericModal('supplier')">+ New Supplier</button>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Supplier Name</th>
+                                            <th>Contact</th>
+                                            <th>Categories Supplied</th>
+                                            <th>Pending Balance</th>
+                                            <th>Last Delivery</th>
+                                            <th>Recent POs</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inv-supplier-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Waste -->
+                    <div id="inv-waste" class="inv-tab-content">
+                        <div class="card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Waste Log</h3>
+                                <button class="btn btn-danger" style="font-size: 0.8rem;" onclick="openGenericModal('waste')">+ Record Waste</button>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Item/Ingredient</th>
+                                            <th>Quantity</th>
+                                            <th>Reason</th>
+                                            <th>Value Lost</th>
+                                            <th>Logged By</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inv-waste-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW INVENTORY -->
+
+    <!-- DISPATCH MODAL -->
+    <div class="modal-overlay" id="dispatch-modal" onclick="if(event.target===this)closeDispatchModal()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9000; overflow-y:auto; padding:2rem 1rem;">
+        <div style="max-width:500px; margin:0 auto; background:var(--clr-surface); border-radius:12px; overflow:hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <div style="padding:1.25rem 1.5rem; border-bottom:1px solid var(--clr-border); display:flex; justify-content:space-between; align-items:center; background:var(--clr-bg-app);">
+                <h3 style="margin:0; font-size:1.1rem; display:flex; align-items:center; gap:0.5rem;" id="dispatch-title">Dispatch Delivery</h3>
+                <button onclick="closeDispatchModal()" style="background:none; border:none; color:var(--clr-text-muted); cursor:pointer;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div style="padding:1.5rem;" id="dispatch-body">
+                <!-- Populated by JS -->
+            </div>
+            <div style="padding:1.25rem 1.5rem; border-top:1px solid var(--clr-border); background:var(--clr-bg-app); display:flex; gap:1rem;" id="dispatch-actions">
+                <!-- Actions -->
+            </div>
+        </div>
+    </div>
+
+    <!-- GENERIC MODAL OVERLAY -->
+                <!-- VIEW: DELIVERY -->
+                <div id="view-delivery" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">Delivery & Fleet</h1>
+                        <p class="page-subtitle">Manage riders, active deliveries, and geographical zones.</p>
+                    </div>
+
+                    <!-- Delivery KPI Cards -->
+                    <div class="dashboard-grid" style="margin-bottom: 1.5rem;">
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;">
+                            <div class="kpi-header"><span>Pending</span></div>
+                            <div class="kpi-value" id="del-kpi-pending">0</div>
+                        </div>
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;">
+                            <div class="kpi-header"><span>Ready for Dispatch</span></div>
+                            <div class="kpi-value" id="del-kpi-ready" style="color:var(--clr-warning);">0</div>
+                        </div>
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;">
+                            <div class="kpi-header"><span>Active Deliveries</span></div>
+                            <div class="kpi-value" id="del-kpi-active" style="color:var(--clr-primary);">0</div>
+                        </div>
+                        <div class="card kpi-card" style="grid-column: span 3 / span 3;">
+                            <div class="kpi-header"><span>Delivered Today</span></div>
+                            <div class="kpi-value" id="del-kpi-delivered" style="color:var(--clr-success);">0</div>
+                        </div>
+                        <div class="card kpi-card" style="grid-column: span 3 / span 3;">
+                            <div class="kpi-header"><span>Cancelled</span></div>
+                            <div class="kpi-value" id="del-kpi-cancelled" style="color:var(--clr-danger);">0</div>
+                        </div>
+                    </div>
+
+                    <div class="inner-tabs" style="margin-bottom: 1.5rem;" id="delivery-tabs">
+                        <button class="inner-tab active" data-tab="del-overview">Overview</button>
+                        <button class="inner-tab" data-tab="del-active">Active Deliveries</button>
+                        <button class="inner-tab" data-tab="del-dispatch">Ready for Dispatch</button>
+                        <button class="inner-tab" data-tab="del-riders">Riders</button>
+                        <button class="inner-tab " data-tab="del-zones">Zones</button>
+                        <button class="inner-tab " data-tab="del-map">Live Map</button>
+                        <button class="inner-tab " data-tab="del-partners">Partners</button>
+                        <button class="inner-tab " data-tab="del-analytics">Analytics</button>
+                    </div>
+
+                    <!-- Overview (Default) -->
+                    <div class="inv-tab-content active" id="del-overview">
+                        <div class="dashboard-grid">
+                            <div class="card col-span-6">
+                                <div class="chart-header">
+                                    <h3 class="chart-title">Active Fleet (Riders)</h3>
+                                    <button class="btn btn-outline" style="font-size: 0.75rem;" onclick="openGenericModal('rider')">+ Add Rider</button>
+                                </div>
+                                <div class="table-wrapper">
+                                    <table class="data-table">
+                                        <thead><tr><th>Rider</th><th>Status</th><th>Active Jobs</th><th>Completed</th><th>Action</th></tr></thead>
+                                        <tbody id="delivery-riders-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card col-span-6">
+                                <div class="chart-header">
+                                    <h3 class="chart-title">Pending Dispatch</h3>
+                                </div>
+                                <div class="table-wrapper">
+                                    <table class="data-table">
+                                        <thead><tr><th>Order</th><th>Customer</th><th>Assign To</th></tr></thead>
+                                        <tbody id="delivery-dispatch-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Tab Placeholders -->
+                    <div class="inv-tab-content" id="del-active">
+                        <div class="card">
+                            <h3 style="margin-bottom:1rem;">Active Deliveries</h3>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Order ID</th><th>Customer</th><th>Zone/Address</th><th>Rider</th><th>Status</th><th>Elapsed Time</th><th>Action</th></tr></thead>
+                                    <tbody id="del-active-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inv-tab-content" id="del-dispatch">
+                        <div class="card">
+                            <h3 style="margin-bottom:1rem;">Ready for Dispatch</h3>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Order ID</th><th>Customer</th><th>Zone/Address</th><th>Ready Since</th><th>Action</th></tr></thead>
+                                    <tbody id="del-dispatch-list-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inv-tab-content" id="del-riders">
+                        <div class="card">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                                <h3>Rider Management</h3>
+                                <button class="btn btn-outline" style="font-size:0.75rem;" onclick="openGenericModal('rider')">+ Add Rider</button>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Rider Name</th><th>Phone</th><th>Status</th><th>Vehicle</th><th>Active Jobs</th><th>Completed Today</th><th>Action</th></tr></thead>
+                                    <tbody id="del-riders-list-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inv-tab-content" id="del-zones">
+                        <div class="card">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                                <h3>Delivery Zones</h3>
+                                <button class="btn btn-outline" style="font-size:0.75rem;">+ Add Zone</button>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Zone Name</th><th>Status</th><th>Delivery Fee</th><th>Min Order</th><th>Est. Time</th><th>Action</th></tr></thead>
+                                    <tbody id="del-zones-body">
+                                        <tr><td></td><td><span class="badge badge-success">Active</span></td><td>Rs. 150</td><td>Rs. 1000</td><td>35-45 min</td><td><button class="btn btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Edit</button></td></tr>
+                                        <tr><td>Clifton Block 4</td><td><span class="badge badge-success">Active</span></td><td>Rs. 100</td><td>Rs. 800</td><td>20-30 min</td><td><button class="btn btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Edit</button></td></tr>
+                                        <tr><td>58 Main Shadman Market Rd, Shadman 1, Lahore</td><td><span class="badge badge-warning">High Traffic</span></td><td>Rs. 200</td><td>Rs. 1500</td><td>45-60 min</td><td><button class="btn btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Edit</button></td></tr>
+                                        <tr><td>Bahria Town</td><td><span class="badge badge-danger">Inactive</span></td><td>Rs. 300</td><td>Rs. 2000</td><td>60+ min</td><td><button class="btn btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Edit</button></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inv-tab-content" id="del-map">
+                        <div class="map-placeholder card" style="text-align: center; padding: 4rem; position:relative; overflow:hidden;">
+                            <!-- Fake Map Image or styling -->
+                            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:url('../assets/images/placeholder.avif') center/cover; opacity:0.1; z-index:0;"></div>
+                            <div style="position:relative; z-index:1;">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="1.5" style="margin-bottom: 1rem;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <h3 style="color: var(--clr-text-primary); margin-bottom: 0.5rem;">Live Delivery Map (Simulation)</h3>
+                                <p style="color: var(--clr-text-secondary); font-size: 0.9rem;">2 Riders Active | 3 Destinations tracked</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inv-tab-content" id="del-partners">
+                        <div class="dashboard-grid">
+                            <div class="card" style="grid-column: span 4 / span 4; display:flex; align-items:center; gap:1rem;">
+                                <div style="width:50px; height:50px; background:#D70F64; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800;">FP</div>
+                                <div>
+                                    <h4 style="margin:0;">Foodpanda</h4>
+                                    <span class="badge badge-success" style="font-size:0.7rem; margin-top:4px; display:inline-block;">Connected</span>
+                                </div>
+                            </div>
+                            <div class="card" style="grid-column: span 4 / span 4; display:flex; align-items:center; gap:1rem;">
+                                <div style="width:50px; height:50px; background:#000000; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800;">U</div>
+                                <div>
+                                    <h4 style="margin:0;">UberEats</h4>
+                                    <span class="badge badge-success" style="font-size:0.7rem; margin-top:4px; display:inline-block;">Connected</span>
+                                </div>
+                            </div>
+                            <div class="card" style="grid-column: span 4 / span 4; display:flex; align-items:center; gap:1rem;">
+                                <div style="width:50px; height:50px; background:#47B749; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800;">C</div>
+                                <div>
+                                    <h4 style="margin:0;">Careem</h4>
+                                    <span class="badge badge-warning" style="font-size:0.7rem; margin-top:4px; display:inline-block;">Sync Issue</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inv-tab-content" id="del-analytics">
+                        <div class="dashboard-grid">
+                            <div class="card" style="grid-column:span 6/span 6;">
+                                <h3>Deliveries by Zone</h3>
+                                <canvas id="zoneChart" style="max-height:200px; margin-top:1rem;"></canvas>
+                            </div>
+                            <div class="card" style="grid-column:span 6/span 6;">
+                                <h3>Avg Delivery Time Trend</h3>
+                                <canvas id="timeChart" style="max-height:200px; margin-top:1rem;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> <!-- END VIEW DELIVERY -->
+
+                <!-- VIEW: RESERVATIONS & TABLES -->
+                <div id="view-reservations" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">Reservations & Floor Plan</h1>
+                        <p class="page-subtitle">Manage table bookings and view real-time restaurant occupancy.</p>
+                    </div>
+
+                    <div class="inner-tabs" style="margin-bottom: 1.5rem;">
+                        <button class="inner-tab active" data-tab="res-list">Reservations List</button>
+                        <button class="inner-tab " data-tab="res-floor">Table Management (Floor Plan)</button>
+                    </div>
+
+                    <div id="res-list" class="inv-tab-content active">
+                        <div class="card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Upcoming Reservations</h3>
+                                <button class="btn btn-primary" style="font-size: 0.8rem;" onclick="openGenericModal('booking')">+ New Booking</button>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Customer</th><th>Phone</th><th>Branch</th><th>Date & Time</th><th>Guests</th><th>Table</th><th>Status</th><th>Actions</th></tr></thead>
+                                    <tbody id="res-list-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="res-floor" class="inv-tab-content">
+                        <div style="display:flex; gap:1.5rem; align-items:flex-start;">
+                            <div class="card" style="flex:1;">
+                                <div class="chart-header">
+                                    <h3 class="chart-title">Live Floor Plan</h3>
+                                    <div style="display: flex; gap: 1rem; font-size: 0.85rem;">
+                                        <span style="color: var(--clr-success);"><b style="display:inline-block; width:10px; height:10px; background:var(--clr-success); border-radius:50%; margin-right:4px;"></b>Available</span>
+                                        <span style="color: var(--clr-danger);"><b style="display:inline-block; width:10px; height:10px; background:var(--clr-danger); border-radius:50%; margin-right:4px;"></b>Occupied</span>
+                                        <span style="color: var(--clr-warning);"><b style="display:inline-block; width:10px; height:10px; background:var(--clr-warning); border-radius:50%; margin-right:4px;"></b>Reserved</span>
+                                        <span style="color: var(--clr-info);"><b style="display:inline-block; width:10px; height:10px; background:var(--clr-info); border-radius:50%; margin-right:4px;"></b>Cleaning</span>
+                                        <span style="color: var(--clr-text-muted);"><b style="display:inline-block; width:10px; height:10px; background:var(--clr-text-muted); border-radius:50%; margin-right:4px;"></b>Blocked</span>
+                                    </div>
+                                </div>
+                            <div class="floor-plan-container" id="floor-plan-container">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                        <div class="card" style="width:320px; flex-shrink:0; display:none;" id="table-detail-panel">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                                <h3 class="chart-title" id="td-title">Table Details</h3>
+                                <button onclick="document.getElementById('table-detail-panel').style.display='none'" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">&times;</button>
+                            </div>
+                            <div id="td-content">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div> <!-- END VIEW RESERVATIONS -->
+
+                <!-- VIEW: BRANCHES -->
+                <div id="view-branches" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h1 class="page-title">Multi-Branch Management</h1>
+                            <p class="page-subtitle">Overview of all active restaurant locations.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openGenericModal('branch')">+ Add Branch</button>
+                    </div>
+                    <div class="dashboard-grid" id="branches-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div> <!-- END VIEW BRANCHES -->
+
+                <!-- VIEW: CUSTOMERS -->
+                <div id="view-customers" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h1 class="page-title">Customer CRM</h1>
+                            <p class="page-subtitle">Manage customer profiles and view segmentation.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;"><div class="kpi-header"><span>Total Customers</span></div><div class="kpi-value">12,480</div></div>
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;"><div class="kpi-header"><span>VIP Segments</span></div><div class="kpi-value" style="color: var(--clr-primary);">842</div></div>
+                        <div class="card kpi-card" style="grid-column: span 3 / span 3;"><div class="kpi-header"><span>At-Risk Customers</span></div><div class="kpi-value" style="color: var(--clr-danger);">1,204</div></div>
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;"><div class="kpi-header"><span>Avg Order Value</span></div><div class="kpi-value">Rs. 1,850</div></div>
+                        <div class="card kpi-card" style="grid-column: span 3 / span 3;"><div class="kpi-header"><span>Avg Lifetime Value</span></div><div class="kpi-value">Rs. 18,500</div></div>
+                    </div>
+
+                    <div style="display:flex; gap:1.5rem; align-items:flex-start;">
+                        <div class="card" style="flex:1;">
+                            <div class="filters-bar" style="margin-bottom: 1rem;">
+                                <input type="text" placeholder="Search customer name or phone..." style="flex: 1; min-width: 200px;">
+                                <select id="crm-segment-filter">
+                                    <option value="All">All Segments</option>
+                                    <option value="VIP">VIPs</option>
+                                    <option value="Loyal">Loyal</option>
+                                    <option value="New">First-Time</option>
+                                    <option value="Churned">Churned</option>
+                                    <option value="At-Risk">At-Risk</option>
+                                </select>
+                                <select id="crm-sort-filter">
+                                    <option value="recent">Most Recent</option>
+                                    <option value="spend">Highest Spend</option>
+                                    <option value="orders">Most Orders</option>
+                                </select>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer</th>
+                                            <th>Contact</th>
+                                            <th>Orders</th>
+                                            <th>Average Order</th>
+                                            <th>Lifetime Spend</th>
+                                            <th>Segment</th>
+                                            <th>Last Order</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="crm-customers-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card" style="width:320px; flex-shrink:0; display:none;" id="customer-profile-panel">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                                <h3 class="chart-title" id="cp-title">Profile</h3>
+                                <button onclick="document.getElementById('customer-profile-panel').style.display='none'" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">&times;</button>
+                            </div>
+                            <div id="cp-content">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW CUSTOMERS -->
+
+                <!-- VIEW: LOYALTY & REVIEWS -->
+                <div id="view-loyalty" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">Loyalty & Reviews</h1>
+                        <p class="page-subtitle">Track rewards program engagement and customer feedback.</p>
+                    </div>
+
+                    <div class="inner-tabs" style="margin-bottom: 1.5rem;" id="loyalty-tabs">
+                        <button class="inner-tab active" data-tab="loyalty-dash">Loyalty Program</button>
+                        <button class="inner-tab" data-tab="loyalty-tiers">Tiers & Rules</button>
+                        <button class="inner-tab" data-tab="loyalty-rewards">Rewards Catalog</button>
+                        <button class="inner-tab" data-tab="loyalty-reviews">Customer Reviews</button>
+                    </div>
+
+                    <div id="loyalty-dash" class="inv-tab-content active">
+                        <div class="dashboard-grid">
+                            <div class="card col-span-4"><div class="kpi-header">Active Members</div><div class="kpi-value">4,192</div></div>
+                            <div class="card col-span-4"><div class="kpi-header">Points Issued (Mtd)</div><div class="kpi-value">124,500</div></div>
+                            <div class="card col-span-4"><div class="kpi-header">Rewards Redeemed</div><div class="kpi-value">Rs. 45,200</div></div>
+                        </div>
+                        <div class="card mt-3">
+                            <h3 class="chart-title" style="margin-bottom: 1rem;">Top Loyalty Members</h3>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Member</th><th>Tier</th><th>Available Points</th><th>Total Redeemed</th></tr></thead>
+                                    <tbody id="loyalty-members-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="loyalty-tiers" class="inv-tab-content"><div class="card"><h3>Tiers Management</h3><p>Configure Gold, Silver, Bronze levels.</p></div></div>
+                    <div id="loyalty-rewards" class="inv-tab-content"><div class="card"><h3>Rewards Catalog</h3><p>Manage redeemable items and their point costs.</p></div></div>
+
+                    <div id="loyalty-reviews" class="inv-tab-content">
+                        <div class="dashboard-grid" style="margin-bottom: 1.5rem;">
+                            <div class="card col-span-4" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                                <div style="font-size:3rem; font-weight:800;">4.6</div>
+                                <div style="color:var(--clr-warning); font-size:1.5rem;">★★★★★</div>
+                                <div style="font-size:0.85rem; color:var(--clr-text-secondary); margin-top:0.5rem;">Based on 842 reviews</div>
+                            </div>
+                            <div class="card col-span-8">
+                                <h3 class="chart-title">Rating Distribution</h3>
+                                <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:1rem;">
+                                    <div style="display:flex; align-items:center; gap:0.5rem;"><span style="width:30px;">5 ★</span><div style="flex:1; height:8px; background:var(--clr-bg-app); border-radius:4px;"><div style="width:65%; height:100%; background:var(--clr-success); border-radius:4px;"></div></div><span>65%</span></div>
+                                    <div style="display:flex; align-items:center; gap:0.5rem;"><span style="width:30px;">4 ★</span><div style="flex:1; height:8px; background:var(--clr-bg-app); border-radius:4px;"><div style="width:20%; height:100%; background:var(--clr-info); border-radius:4px;"></div></div><span>20%</span></div>
+                                    <div style="display:flex; align-items:center; gap:0.5rem;"><span style="width:30px;">3 ★</span><div style="flex:1; height:8px; background:var(--clr-bg-app); border-radius:4px;"><div style="width:10%; height:100%; background:var(--clr-warning); border-radius:4px;"></div></div><span>10%</span></div>
+                                    <div style="display:flex; align-items:center; gap:0.5rem;"><span style="width:30px;">2 ★</span><div style="flex:1; height:8px; background:var(--clr-bg-app); border-radius:4px;"><div style="width:3%; height:100%; background:var(--clr-danger); border-radius:4px;"></div></div><span>3%</span></div>
+                                    <div style="display:flex; align-items:center; gap:0.5rem;"><span style="width:30px;">1 ★</span><div style="flex:1; height:8px; background:var(--clr-bg-app); border-radius:4px;"><div style="width:2%; height:100%; background:var(--clr-danger); border-radius:4px;"></div></div><span>2%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Recent Feedback</h3>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Rating</th><th>Customer</th><th>Comment</th><th>Order/Item</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+                                    <tbody id="loyalty-reviews-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW LOYALTY -->
+
+                <!-- VIEW: MARKETING -->
+                <div id="view-marketing" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h1 class="page-title">Promotions & Marketing</h1>
+                            <p class="page-subtitle">Create offers and track campaign ROI across channels.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openCampaignModal()">+ Create Campaign</button>
+                    </div>
+
+                    <div class="inner-tabs" style="margin-bottom: 1.5rem;" id="marketing-tabs">
+                        <button class="inner-tab active" data-tab="mkt-campaigns">Campaigns ROI</button>
+                        <button class="inner-tab" data-tab="mkt-promos">Promotions & Coupons</button>
+                        <button class="inner-tab" data-tab="mkt-audiences">Audiences & Segments</button>
+                    </div>
+
+                    <div id="mkt-campaigns" class="inv-tab-content active">
+                        <div class="card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Active Campaigns ROI</h3>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Campaign Name</th>
+                                            <th>Channel</th>
+                                            <th>Audience</th>
+                                            <th>Status</th>
+                                            <th>Conversions</th>
+                                            <th>Revenue</th>
+                                            <th>ROI</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="marketing-campaigns-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="mkt-promos" class="inv-tab-content"><div class="card"><h3>Promotions</h3><p>Manage Buy-1-Get-1, Percentage discounts, etc.</p></div></div>
+                    <div id="mkt-audiences" class="inv-tab-content"><div class="card"><h3>Audiences</h3><p>Define custom rules for marketing lists.</p></div></div>
+                </div> <!-- END VIEW MARKETING -->
+
+                <!-- VIEW: HR & STAFF -->
+                <div id="view-hr" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">HR & Staff Management</h1>
+                        <p class="page-subtitle">Manage employee shifts, attendance, and payroll.</p>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card col-span-4"><div class="kpi-header">Active Staff on Shift</div><div class="kpi-value">14</div></div>
+                        <div class="card col-span-4"><div class="kpi-header">Upcoming Shifts</div><div class="kpi-value">6</div></div>
+                        <div class="card col-span-4"><div class="kpi-header">Pending Payroll</div><div class="kpi-value">Rs. 450,000</div></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Current Roster</h3>
+                            <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="openGenericModal('employee')">+ Add Employee</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead><tr><th>Name</th><th>Role</th><th>Shift</th><th>Attendance Status</th><th>Action</th></tr></thead>
+                                <tbody id="hr-staff-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW HR -->
+
+                <!-- VIEW: FINANCE & P&L -->
+                <div id="view-finance" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h1 class="page-title">Financial Accounting (P&L)</h1>
+                            <p class="page-subtitle">Track revenue, COGS, labor, and overhead for profitability.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openExpenseModal()">+ Log Expense</button>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Net Sales (Mtd)</span></div>
+                            <div class="kpi-value" style="color:var(--clr-primary);">Rs. 4,520,000</div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>COGS</span></div>
+                            <div class="kpi-value" style="color:var(--clr-danger);">Rs. 1,420,000</div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Gross Profit</span></div>
+                            <div class="kpi-value" style="color:var(--clr-info);">Rs. 3,100,000</div>
+                        </div>
+                        <div class="card kpi-card col-span-3" style="background: var(--clr-success-bg); border-color: var(--clr-success);">
+                            <div class="kpi-header" style="color: var(--clr-success);"><span>Net Profit (Mtd)</span></div>
+                            <div class="kpi-value">Rs. 850,000 <span style="font-size:1rem;">(18.8%)</span></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card" style="grid-column: span 8 / span 8;">
+                            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Profit & Loss Statement (Summary)</h3>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Category</th><th>Amount (Rs.)</th><th>% of Revenue</th></tr></thead>
+                                    <tbody id="finance-pl-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="card" style="grid-column: span 4 / span 4;">
+                            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Refunds & Discounts Ledger</h3>
+                            <div style="background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                                    <span style="font-size:0.85rem; font-weight:600;">Authorized Refunds</span>
+                                    <span style="font-size:0.85rem; font-weight:700; color:var(--clr-danger);">Rs. 12,450</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                                    <span style="font-size:0.85rem; font-weight:600;">Campaign Discounts</span>
+                                    <span style="font-size:0.85rem; font-weight:700; color:var(--clr-danger);">Rs. 45,200</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="font-size:0.85rem; font-weight:600;">Staff Allowances</span>
+                                    <span style="font-size:0.85rem; font-weight:700; color:var(--clr-danger);">Rs. 5,000</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline" style="width: 100%;" onclick="showToast('Ledger export generated.', 'info')">Export Detailed Ledger</button>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW FINANCE -->
+
+                <!-- VIEW: ANALYTICS -->
+                <div id="view-analytics" class="view-section">
+                    <div class="page-header" style="margin-bottom: 1.5rem;">
+                        <h1 class="page-title">Deep Analytics</h1>
+                        <p class="page-subtitle">Analyze trends, sales, and comprehensive business performance.</p>
+                    </div>
+
+                    <!-- Analytics Filter Bar -->
+                    <div class="analytics-filters card" style="display: flex; gap: 1rem; margin-bottom: 2rem; padding: 1rem; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: var(--clr-text-secondary);">Date Range:</label>
+                            <select id="analytics-date-filter" style="padding: 0.4rem 0.75rem; border: 1px solid var(--clr-border); border-radius: 4px; background: var(--clr-bg-app);">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="year">This Year</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: var(--clr-text-secondary);">Branch:</label>
+                            <select id="analytics-branch-filter" style="padding: 0.4rem 0.75rem; border: 1px solid var(--clr-border); border-radius: 4px; background: var(--clr-bg-app);">
+                                <option value="all">All Branches</option>
+                                <option value="b1">58 Main Shadman Market Rd, Shadman 1, Lahore</option>
+                                
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: var(--clr-text-secondary);">Order Type:</label>
+                            <select id="analytics-order-type" style="padding: 0.4rem 0.75rem; border: 1px solid var(--clr-border); border-radius: 4px; background: var(--clr-bg-app);">
+                                <option value="all">All</option>
+                                <option value="dine-in">Dine-in</option>
+                                <option value="delivery">Delivery</option>
+                                <option value="pickup">Pickup</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: var(--clr-text-secondary);">Category:</label>
+                            <select id="analytics-category-filter" style="padding: 0.4rem 0.75rem; border: 1px solid var(--clr-border); border-radius: 4px; background: var(--clr-bg-app);">
+                                <option value="all">All Categories</option>
+                                <option value="burgers">Burgers</option>
+                                <option value="pizza">Pizza</option>
+                                <option value="drinks">Drinks</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                            <button class="btn btn-primary" onclick="updateAnalyticsDashboard()" style="font-size: 0.85rem; padding: 0.4rem 1rem;">Apply Filters</button>
+                            <button class="btn btn-outline" onclick="showToast('Exporting Analytics to PDF...', 'info')" style="font-size: 0.85rem; padding: 0.4rem 1rem;">Export PDF</button>
+                            <button class="btn btn-outline" onclick="showToast('Exporting Analytics to CSV...', 'info')" style="font-size: 0.85rem; padding: 0.4rem 1rem;">Export CSV</button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Cards Row 1: Revenue & Sales -->
+                    <div class="dashboard-grid" style="margin-bottom: 1.5rem;">
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Total Revenue</span></div>
+                            <div class="kpi-value" id="kpi-total-revenue">Rs. 4,520,000</div>
+                            <div class="kpi-trend"><span class="trend-up">+12%</span> <span class="trend-text">vs last period</span></div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Total Orders</span></div>
+                            <div class="kpi-value" id="kpi-total-orders">4,120</div>
+                            <div class="kpi-trend"><span class="trend-up">+8%</span> <span class="trend-text">vs last period</span></div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Avg Order Value</span></div>
+                            <div class="kpi-value" id="kpi-aov">Rs. 1,097</div>
+                            <div class="kpi-trend"><span class="trend-up">+3.5%</span> <span class="trend-text">vs last period</span></div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Net Sales</span></div>
+                            <div class="kpi-value" id="kpi-net-sales">Rs. 3,850,000</div>
+                            <div class="kpi-trend"><span class="trend-up">+14%</span> <span class="trend-text">vs last period</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- KPI Cards Row 2: Customers & Operations -->
+                    <div class="dashboard-grid" style="margin-bottom: 1.5rem;">
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Total Customers</span></div>
+                            <div class="kpi-value" id="kpi-customers">3,245</div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>New vs Returning</span></div>
+                            <div class="kpi-value" style="font-size: 1.25rem;" id="kpi-new-returning">32% / 68%</div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Reservations</span></div>
+                            <div class="kpi-value" id="kpi-reservations">142</div>
+                        </div>
+                        <div class="card kpi-card col-span-3">
+                            <div class="kpi-header"><span>Delivery Orders</span></div>
+                            <div class="kpi-value" id="kpi-delivery">1,850</div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Cards Row 3: Performance & Health -->
+                    <div class="dashboard-grid" style="margin-bottom: 2rem;">
+                        <div class="card kpi-card col-span-4">
+                            <div class="kpi-header"><span>Pickup Orders</span></div>
+                            <div class="kpi-value" id="kpi-pickup">840</div>
+                        </div>
+                        <div class="card kpi-card col-span-4">
+                            <div class="kpi-header"><span>Top Item</span></div>
+                            <div class="kpi-value" style="font-size: 1.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="kpi-top-item">Tower Burger</div>
+                        </div>
+                        <div class="card kpi-card col-span-4">
+                            <div class="kpi-header"><span>Low-Stock</span></div>
+                            <div class="kpi-value" style="color: var(--clr-danger);" id="kpi-low-stock">4 Items</div>
+                        </div>
+                        <div class="card kpi-card col-span-4">
+                            <div class="kpi-header"><span>Avg Rating</span></div>
+                            <div class="kpi-value" style="color: var(--clr-warning);" id="kpi-rating">4.6 ★</div>
+                        </div>
+                        <div class="card kpi-card col-span-4">
+                            <div class="kpi-header"><span>Loyalty</span></div>
+                            <div class="kpi-value" style="color: var(--clr-success);" id="kpi-loyalty">+84 Signups</div>
+                        </div>
+                        <div class="card kpi-card col-span-4">
+                            <div class="kpi-header"><span>Top Branch</span></div>
+                            <div class="kpi-value" style="font-size: 1.25rem;" id="kpi-branch">Karachi</div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div class="dashboard-grid">
+                        <!-- Chart 15 & 16 (New) -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Peak Hours Heatmap (Sales)</h3></div>
+                            <div class="chart-container" style="height: 240px; display: flex; align-items:center; justify-content:center; background: url('../assets/images/placeholder.avif') center/cover; position:relative;">
+                                <div style="position:absolute; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center;">
+                                    <div style="color:white; font-weight:600; text-align:center;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:0.5rem;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                                        <br>Peak: Friday 7 PM - 9 PM
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">AI Sales Forecasting</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartSalesForecast"></canvas></div>
+                        </div>
+                        <!-- Chart 1 & 2 -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Revenue & Sales Trends</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartRevenueSales"></canvas></div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Orders Over Time</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartOrdersTime"></canvas></div>
+                        </div>
+                        
+                        <!-- Chart 3 & 4 -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Sales by Category</h3></div>
+                            <div class="chart-container" style="height: 240px; display: flex; justify-content: center;"><canvas id="chartSalesCategory"></canvas></div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Orders by Type</h3></div>
+                            <div class="chart-container" style="height: 240px; display: flex; justify-content: center;"><canvas id="chartOrdersType"></canvas></div>
+                        </div>
+
+                        <!-- Chart 5 & 6 -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Top-Selling Menu Items</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartTopItems"></canvas></div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Revenue by Branch</h3></div>
+                            <div class="chart-container" style="height: 240px; display: flex; justify-content: center;"><canvas id="chartBranchRevenue"></canvas></div>
+                        </div>
+
+                        <!-- Chart 7 & 8 -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Customer Growth & Retention</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartCustomerGrowth"></canvas></div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Reservation Trends</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartReservations"></canvas></div>
+                        </div>
+
+                        <!-- Chart 9 & 10 -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Inventory/Waste Trends</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartWaste"></canvas></div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Payment Method Breakdown</h3></div>
+                            <div class="chart-container" style="height: 240px; display: flex; justify-content: center;"><canvas id="chartPayments"></canvas></div>
+                        </div>
+
+                        <!-- Chart 11 & 12 -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Reviews & Rating Trends</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartRatings"></canvas></div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Marketing/Promotion Performance</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartMarketing"></canvas></div>
+                        </div>
+                        <!-- Chart 13 & 14 (New) -->
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Orders by Source</h3></div>
+                            <div class="chart-container" style="height: 240px; display: flex; justify-content: center;"><canvas id="chartOrdersSource"></canvas></div>
+                        </div>
+                        <div class="card col-span-6">
+                            <div class="chart-header"><h3 class="chart-title">Delivery Trends (Time & Volume)</h3></div>
+                            <div class="chart-container" style="height: 240px;"><canvas id="chartDeliveryTrends"></canvas></div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Business Insights -->
+                    <div class="card" style="margin-top: 1.5rem; background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1)); border-color: rgba(139,92,246,0.2);">
+                        <div class="chart-header" style="margin-bottom: 1rem;">
+                            <h3 class="chart-title" style="display: flex; align-items: center; gap: 0.5rem; color: #6d28d9;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                                AI Business Insights
+                            </h3>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div style="background: var(--clr-surface); padding: 1rem; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                <strong>High Churn Risk:</strong> 124 VIP customers haven't ordered in the last 45 days. Consider launching a targeted SMS campaign.
+                            </div>
+                            <div style="background: var(--clr-surface); padding: 1rem; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                <strong>Delivery Optimization:</strong> Average delivery time increased by 4 mins during 7 PM - 9 PM. Assigning 2 more riders could improve retention.
+                            </div>
+                            <div style="background: var(--clr-surface); padding: 1rem; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                <strong>Inventory Alert:</strong> 'Beef Patty' stock depletes 20% faster on weekends. Adjust auto-reorder threshold.
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW ANALYTICS -->
+
+                <!-- VIEW: REPORTS -->
+                <div id="view-reports" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">Custom Reports</h1>
+                        <p class="page-subtitle">Generate and export financial, operational, and audit reports.</p>
+                    </div>
+
+                    <div class="card">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                            <select id="report-type" style="padding: 0.5rem; border: 1px solid var(--clr-border);">
+                                <option>Sales Report</option>
+                                <option>Tax Audit</option>
+                                <option>Inventory Waste</option>
+                                <option>Labor Cost Analysis</option>
+                                <option>Discount & Promotions</option>
+                                <option>End of Day Z-Report</option>
+                            </select>
+                            <select id="report-branch" style="padding: 0.5rem; border: 1px solid var(--clr-border);">
+                                <option value="all">All Branches</option>
+                                <option value="b1">58 Main Shadman Market Rd, Shadman 1, Lahore</option>
+                                
+                            </select>
+                            <input type="date" id="report-date" style="padding: 0.5rem; border: 1px solid var(--clr-border);">
+                            <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+                        </div>
+                        <div class="map-placeholder" id="report-result" style="background: var(--clr-surface); border: 1px dashed var(--clr-border); padding: 4rem 1rem; text-align: center; display: none;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2" style="margin-bottom: 1rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            <h3 style="margin-bottom: 0.5rem;">Report Ready for Export</h3>
+                            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+                                <button class="btn btn-outline" style="border-color: var(--clr-success); color: var(--clr-success);" onclick="showToast('CSV Export Downloaded Successfully', 'success')">Export CSV</button>
+                                <button class="btn btn-outline" style="border-color: var(--clr-danger); color: var(--clr-danger);" onclick="showToast('PDF Export Downloaded Successfully', 'success')">Export PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW REPORTS -->
+
+                <!-- VIEW: SETTINGS -->
+                <div id="view-settings" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">System Settings</h1>
+                        <p class="page-subtitle">Configure business details, tax rates, and appearance.</p>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card col-span-6">
+                            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Business Information</h3>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 0.25rem;">Restaurant Name</label>
+                                    <input type="text" value="bigbites (Demo)" style="width: 100%; padding: 0.5rem; border: 1px solid var(--clr-border); border-radius: 4px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 0.25rem;">Currency</label>
+                                    <input type="text" value="Rs." style="width: 100%; padding: 0.5rem; border: 1px solid var(--clr-border); border-radius: 4px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 0.25rem;">Default Tax Rate (%)</label>
+                                    <input type="number" value="16" style="width: 100%; padding: 0.5rem; border: 1px solid var(--clr-border); border-radius: 4px;">
+                                </div>
+                                <button class="btn btn-primary" style="align-self: flex-start; margin-top: 1rem;" onclick="showToast('Settings saved successfully!', 'success')">Save Changes</button>
+                            </div>
+                        </div>
+
+                        <div class="card col-span-6">
+                                                        <h3 class="chart-title" style="margin-bottom: 1.5rem;">Appearance & Localization</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; border: 2px solid var(--clr-primary); padding: 1.25rem; border-radius: 12px; background: rgba(251, 104, 21, 0.05); box-shadow: 0 4px 12px rgba(251, 104, 21, 0.1); margin-bottom: 1rem;">
+                                <div>
+                                    <h4 style="margin: 0 0 0.25rem 0; color: var(--clr-primary); display: flex; align-items: center; gap: 0.5rem;">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                                        Dashboard Mode
+                                    </h4>
+                                    <p style="margin: 0; font-size: 0.85rem; color: var(--clr-text-secondary); max-width: 400px;">Simple mode provides an easier restaurant workflow while Advanced mode exposes the complete management system.</p>
+                                </div>
+                                <div>
+                                    <select id="dashboard-mode-select" style="padding: 0.5rem; border: 2px solid var(--clr-primary); border-radius: 6px; font-weight: 600; color: var(--clr-text-primary); background: var(--clr-surface); outline: none; cursor: pointer;" onchange="window.switchDashboardMode(this.value)">
+                                        <option value="simple">Simple Dashboard</option>
+                                        <option value="advanced">Advanced Dashboard</option>
+                                    </select>
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', () => {
+                                            const mode = localStorage.getItem('bigbites_dashboard_mode') || 'simple';
+                                            const sel = document.getElementById('dashboard-mode-select');
+                                            if(sel) sel.value = mode;
+                                            if(mode === 'simple') document.body.classList.add('simple-mode');
+                                        });
+                                        window.switchDashboardMode = function(mode) {
+                                            localStorage.setItem('bigbites_dashboard_mode', mode);
+                                            if(mode === 'simple') {
+                                                document.body.classList.add('simple-mode');
+                                            } else {
+                                                document.body.classList.remove('simple-mode');
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--clr-border); padding-bottom: 1rem; margin-bottom: 1rem;">
+                                <div>
+                                    <h4 style="margin: 0 0 0.25rem 0;">Dark Mode</h4>
+                                    <p style="margin: 0; font-size: 0.85rem; color: var(--clr-text-secondary);">Switch dashboard to dark theme.</p>
+                                </div>
+                                <div>
+                                    <label class="switch" style="position: relative; display: inline-block; width: 40px; height: 24px;">
+                                        <input type="checkbox" id="settings-theme-toggle" style="opacity: 0; width: 0; height: 0;">
+                                        <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px;">
+                                            <span style="position: absolute; content: ''; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="margin: 0 0 0.25rem 0;">Language</h4>
+                                    <p style="margin: 0; font-size: 0.85rem; color: var(--clr-text-secondary);">Default interface language.</p>
+                                </div>
+                                <div>
+                                    <select style="padding: 0.4rem; border: 1px solid var(--clr-border); border-radius: 4px;">
+                                        <option>English</option>
+                                        <option>Urdu</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Orders Settings -->
+                        <div class="card col-span-12">
+                            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Orders & KDS Configuration</h3>
+                            <div class="dashboard-grid">
+                                <div class="col-span-4" style="background: var(--clr-bg-app); padding: 1rem; border-radius: 8px;">
+                                    <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">Auto-Accept Orders</h4>
+                                    <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--clr-text-secondary);">Automatically accept POS and web orders.</p>
+                                    <label class="switch" style="position: relative; display: inline-block; width: 40px; height: 24px;">
+                                        <input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+                                        <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--clr-primary); transition: .4s; border-radius: 24px;">
+                                            <span style="position: absolute; content: ''; height: 16px; width: 16px; right: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="col-span-4" style="background: var(--clr-bg-app); padding: 1rem; border-radius: 8px;">
+                                    <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">KDS Alert Sounds</h4>
+                                    <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--clr-text-secondary);">Play sound for new kitchen tickets.</p>
+                                    <label class="switch" style="position: relative; display: inline-block; width: 40px; height: 24px;">
+                                        <input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+                                        <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--clr-primary); transition: .4s; border-radius: 24px;">
+                                            <span style="position: absolute; content: ''; height: 16px; width: 16px; right: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="col-span-4" style="background: var(--clr-bg-app); padding: 1rem; border-radius: 8px;">
+                                    <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem;">Print KOT Automatically</h4>
+                                    <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--clr-text-secondary);">Print ticket upon order accept.</p>
+                                    <label class="switch" style="position: relative; display: inline-block; width: 40px; height: 24px;">
+                                        <input type="checkbox" id="dark-mode-toggle" style="opacity: 0; width: 0; height: 0;">
+                                        <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px;">
+                                            <span style="position: absolute; content: ''; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications & Security -->
+                        <div class="card col-span-6">
+                            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Alerts & Notifications</h3>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <label style="display:flex; align-items:center; gap:0.5rem;"><input type="checkbox" checked> Daily Summary Email</label>
+                                <label style="display:flex; align-items:center; gap:0.5rem;"><input type="checkbox" checked> Low Stock Alerts (SMS)</label>
+                                <label style="display:flex; align-items:center; gap:0.5rem;"><input type="checkbox" checked> New Review Alerts</label>
+                                <label style="display:flex; align-items:center; gap:0.5rem;"><input type="checkbox"> Failed Payment Alerts</label>
+                            </div>
+                        </div>
+                        <div class="card col-span-6">
+                            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Security & Access</h3>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div>
+                                    <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem;">Two-Factor Authentication</h4>
+                                    <p style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: var(--clr-text-secondary);">Require 2FA for Admin login.</p>
+                                    <button class="btn btn-outline" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">Enable 2FA</button>
+                                </div>
+                                <div style="border-top: 1px solid var(--clr-border); padding-top: 1rem;">
+                                    <h4 style="margin: 0 0 0.25rem 0; font-size: 0.95rem;">Active Sessions</h4>
+                                    <p style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: var(--clr-text-secondary);">You are logged in from 2 devices.</p>
+                                    <button class="btn btn-outline" style="color: var(--clr-danger); border-color: var(--clr-danger); font-size: 0.8rem; padding: 0.3rem 0.6rem;">Log Out All Devices</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END VIEW SETTINGS -->
+
+                <!-- VIEW: QR MENU -->
+                <div id="view-qrmenu" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">QR Menu Builder</h1>
+                        <p class="page-subtitle">Generate dynamic QR codes for dine-in tables.</p>
+                    </div>
+                    <div class="card">
+                        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 class="chart-title" style="margin-bottom: 1rem;">Generate Table QR</h3>
+                                <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <select style="padding: 0.5rem; border: 1px solid var(--clr-border); border-radius: 4px;">
+                                        <option>Table 1</option>
+                                        <option>Table 2</option>
+                                        <option>Table 3</option>
+                                        <option>Table 4</option>
+                                    </select>
+                                    <select style="padding: 0.5rem; border: 1px solid var(--clr-border); border-radius: 4px;">
+                                        <option>Modern Theme</option>
+                                        <option>Classic Theme</option>
+                                        <option>Dark Theme</option>
+                                    </select>
+                                    <button class="btn btn-primary">Generate QR Code</button>
+                                </div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--clr-bg-app); border-radius: 8px; padding: 2rem; border: 1px dashed var(--clr-border);">
+                                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg>
+                                <p style="margin-top: 1rem; color: var(--clr-text-secondary);">Select a table to generate QR</p>
+                                <button class="btn btn-outline" style="margin-top: 0.5rem;">Download PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: WEBSITE BUILDER -->
+                <div id="view-website" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">Website Builder</h1>
+                        <p class="page-subtitle">Customize your online ordering storefront.</p>
+                    </div>
+                    <div class="card">
+                        <div style="display: flex; gap: 1rem; border-bottom: 1px solid var(--clr-border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <button class="btn btn-primary">Theme Editor</button>
+                            <button class="btn btn-outline">Domain Settings</button>
+                            <button class="btn btn-outline">SEO & Meta</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 1rem; background: var(--clr-bg-app); border-radius: 8px; border: 1px dashed var(--clr-border); text-align: center;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="1.5" style="margin-bottom: 1rem;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                            <h3 style="margin-bottom: 0.5rem;">Live Preview Available</h3>
+                            <p style="color: var(--clr-text-secondary); max-width: 400px;">Your website is currently live at <strong>urbanflame.bigbites.app</strong></p>
+                            <button class="btn btn-primary" style="margin-top: 1rem;">Open Visual Editor</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: INTEGRATIONS -->
+                <div id="view-integrations" class="view-section">
+                    <div class="page-header" style="margin-bottom: 2rem;">
+                        <h1 class="page-title">Integrations</h1>
+                        <p class="page-subtitle">Connect bigbites with your favorite tools and delivery platforms.</p>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="card col-span-4" style="text-align: center;">
+                            <h3 style="margin-bottom: 0.5rem;">Foodpanda</h3>
+                            <p style="font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 1rem;">Sync orders & menu directly.</p>
+                            <span class="badge badge-success" style="margin-bottom: 1rem; display: inline-block;">Connected</span>
+                            <button class="btn btn-outline" style="width: 100%;">Configure</button>
+                        </div>
+                        <div class="card col-span-4" style="text-align: center;">
+                            <h3 style="margin-bottom: 0.5rem;">Careem NOW</h3>
+                            <p style="font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 1rem;">Sync orders & menu directly.</p>
+                            <button class="btn btn-primary" style="width: 100%;">Connect</button>
+                        </div>
+                        <div class="card col-span-4" style="text-align: center;">
+                            <h3 style="margin-bottom: 0.5rem;">QuickBooks</h3>
+                            <p style="font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 1rem;">Automated accounting sync.</p>
+                            <span class="badge badge-success" style="margin-bottom: 1rem; display: inline-block;">Connected</span>
+                            <button class="btn btn-outline" style="width: 100%;">Configure</button>
+                        </div>
+                        <div class="card col-span-4" style="text-align: center;">
+                            <h3 style="margin-bottom: 0.5rem;">Mailchimp</h3>
+                            <p style="font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 1rem;">Email marketing automation.</p>
+                            <button class="btn btn-primary" style="width: 100%;">Connect</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Generic Modal -->
+    <div class="modal-overlay" id="generic-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 10005; justify-content: center; align-items: center;" onclick="if(event.target === this) closeGenericModal()">
+        <div class="modal-content" style="background: var(--clr-surface); width: 600px; max-width: 95%; max-height: 90vh; overflow-y: auto; border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 id="generic-modal-title" style="margin: 0;">Modal Title</h3>
+                <button onclick="closeGenericModal()" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--clr-text-secondary);">&times;</button>
+            </div>
+            <div id="generic-modal-body" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+                <!-- Injected form fields -->
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <button class="btn btn-outline" onclick="closeGenericModal()">Cancel</button>
+                <button class="btn btn-primary" id="generic-modal-save">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Preference Modal -->
+    <div class="modal-overlay" id="desktop-pref-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;" onclick="if(event.target === this) this.style.display = 'none';">
+        <div class="modal-content" style="background: var(--clr-surface); width: 320px; max-width: 90%; border-radius: var(--border-radius); padding: 2rem 1.5rem; box-shadow: var(--shadow-md); text-align: center;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="1.5" style="margin-bottom: 1rem;">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.25rem;">Best on Desktop</h3>
+            <p style="margin: 0 0 1.5rem 0; font-size: 0.9rem; color: var(--clr-text-secondary); line-height: 1.4;">
+                This dashboard is packed with features. For the full experience and best layout, please view it on a desktop screen.
+            </p>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="document.getElementById('desktop-pref-modal').style.display = 'none';">
+                Continue Anyway
+            </button>
+        </div>
+    </div>
+
+    <!-- Global Drawer (Order Details) -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+    <div class="drawer-panel" id="order-drawer">
+        <div class="drawer-header">
+            <h2 style="font-size: 1.25rem; font-weight: 600; margin: 0;" id="drawer-title">Order Details</h2>
+            <button onclick="closeDrawer()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="drawer-body" id="drawer-content">
+            <!-- Populated by JS -->
+        </div>
+        <div class="drawer-footer" style="display: flex; gap: 1rem;" id="drawer-actions">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <!-- Mobile Floating Badge (Open on Desktop) - no juggle animation -->
+    <div class="mobile-floating-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.35rem;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        Open on desktop
+    </div>
+
+    <!-- About Panel Floating Button -->
+    <button class="about-panel-btn" id="about-panel-btn" onclick="openAboutPanelModal()" aria-label="About this panel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        About Panel
+    </button>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         KITCHEN CONFIRMATION MODAL (Phase 4)
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="kitchen-modal-overlay" id="kitchen-confirm-modal" onclick="if(event.target === this) closeKitchenConfirmModal()">
+        <div class="kitchen-modal-sheet" style="max-height: 90vh; overflow-y: auto;">
+            <div class="kitchen-modal-header">
+                <div class="km-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                </div>
+                <h3>Confirm Order</h3>
+                <button class="km-close" onclick="closeKitchenConfirmModal()" aria-label="Close">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="kitchen-modal-body" id="kitchen-modal-body">
+                <!-- Populated by JS -->
+            </div>
+            <div class="kitchen-modal-footer">
+                <button class="btn btn-outline" onclick="closeKitchenConfirmModal()">Cancel</button>
+                <button class="btn btn-kitchen" onclick="confirmSendToKitchen()" style="padding:0.6rem 1.5rem; font-size:0.9rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.35rem;"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+                    Confirm &amp; Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="js/orders.js?v=4"></script>
+    <script defer src="js/pos.js"></script>
+    <script defer src="js/kds.js"></script>
+    <script defer src="js/menu.js"></script>
+    <script defer src="js/inventory.js"></script>
+    <script defer src="js/logistics.js"></script>
+    <script defer src="js/crm.js"></script>
+    <script defer src="js/admin.js"></script>
+    <script defer src="js/content.js"></script>
+
+    <!-- ═══════════════════════════════════════════════
+         ABOUT PANEL MODAL
+    ═══════════════════════════════════════════════ -->
+    <div class="adm-about-overlay" id="about-panel-modal" onclick="if(event.target===this)closeAboutPanelModal()">
+        <div class="adm-about-modal">
+            <div class="adm-about-header">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2" style="margin-right:0.5rem;vertical-align:middle;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    About This Admin Panel
+                </h2>
+                <button class="adm-about-close" onclick="closeAboutPanelModal()" aria-label="Close">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="adm-about-body">
+                <p class="adm-about-intro">
+                    This is a <strong>full-featured Restaurant Management Dashboard</strong> — a centralized command center built for modern food businesses. It streamlines every aspect of your operations, from taking orders at the counter to tracking deliveries and managing your team.
+                </p>
+
+                <div class="adm-section-title">Dashboard Capabilities</div>
+                <div class="adm-feature-grid">
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+                        <div class="adm-feature-name">Order Management</div>
+                        <div class="adm-feature-desc">Track dine-in, takeaway, and delivery orders in real-time across all branches.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></div>
+                        <div class="adm-feature-name">Point of Sale (POS)</div>
+                        <div class="adm-feature-desc">A fast, touch-friendly POS terminal for walk-in orders with full cart management.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg></div>
+                        <div class="adm-feature-name">Kitchen Display (KDS)</div>
+                        <div class="adm-feature-desc">Live kitchen board showing order tickets by status — New, Preparing, Ready.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg></div>
+                        <div class="adm-feature-name">Inventory & Supply</div>
+                        <div class="adm-feature-desc">Track ingredient stock levels, suppliers, recipe costs, and waste logs.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
+                        <div class="adm-feature-name">Content & Media</div>
+                        <div class="adm-feature-desc">Manage website banners, gallery, contact info, and opening hours from one place.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+                        <div class="adm-feature-name">Analytics & Reports</div>
+                        <div class="adm-feature-desc">Revenue charts, sales by channel, best-sellers, and period-over-period comparisons.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg></div>
+                        <div class="adm-feature-name">CRM & Loyalty</div>
+                        <div class="adm-feature-desc">Customer profiles, order history, loyalty points, and review management.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>
+                        <div class="adm-feature-name">Delivery Logistics</div>
+                        <div class="adm-feature-desc">Assign riders, track deliveries live, and manage reservations and floor plans.</div>
+                    </div>
+                    <div class="adm-feature-card">
+                        <div class="adm-feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <div class="adm-feature-name">Finance & P&L</div>
+                        <div class="adm-feature-desc">Revenue tracking, expenses, payroll, and profit & loss summaries per branch.</div>
+                    </div>
+                </div>
+
+                <div class="adm-section-title">Built for Your Restaurant</div>
+                <div class="adm-custom-card">
+                    <p>Every restaurant is different. This panel is <strong>fully customizable</strong> — your business receives only the modules and features that are relevant to how you operate. Unnecessary sections can be hidden, renamed, or replaced with restaurant-specific workflows.</p>
+                    <p>From <strong>branding and color themes</strong> to <strong>user roles and permissions</strong>, every element of this dashboard can be tailored. Whether you run a single outlet or a multi-branch chain, the panel scales to fit your exact needs.</p>
+                    <div class="adm-tags">
+                        <span class="adm-tag">Custom Branding</span>
+                        <span class="adm-tag">Role-based Access</span>
+                        <span class="adm-tag">Multi-branch</span>
+                        <span class="adm-tag">Module Control</span>
+                        <span class="adm-tag">Workflow Automation</span>
+                        <span class="adm-tag">White-label Ready</span>
+                    </div>
+                </div>
+            </div>
+            <div class="adm-about-footer">
+                <button class="btn btn-primary" onclick="closeAboutPanelModal()" style="padding:0.6rem 1.75rem;">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER DETAIL MODAL -->
+    <div class="modal-overlay" id="order-detail-modal" onclick="if(event.target===this)closeOrderDetailModal()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9000; overflow-y:auto; padding:2rem 1rem;">
+      <div style="max-width:680px; margin:0 auto; background:var(--clr-surface); border-radius:12px; overflow:hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+        <div style="padding:1.25rem 1.5rem; border-bottom:1px solid var(--clr-border); display:flex; justify-content:space-between; align-items:center; background:var(--clr-bg-app);">
+          <div>
+            <h3 style="margin:0; font-size:1.1rem; font-weight:700;" id="order-detail-title">Order #</h3>
+            <div style="margin-top:0.35rem; display:flex; gap:0.5rem;" id="order-detail-badges"></div>
+          </div>
+          <button onclick="closeOrderDetailModal()" style="background:none; border:none; cursor:pointer; color:var(--clr-text-secondary); font-size:1.4rem; line-height:1;">&times;</button>
+        </div>
+        <div style="padding:1.5rem;" id="order-detail-body">
+          <!-- Populated by JS -->
+        </div>
+        <div style="padding:1rem 1.5rem; border-top:1px solid var(--clr-border); display:flex; gap:0.75rem; flex-wrap:wrap; background:var(--clr-bg-app);" id="order-detail-actions">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ═══════════════════════════════════════════════
+         BRANCH SWITCH MODAL
+    ═══════════════════════════════════════════════ -->
+    <div class="branch-switch-modal-overlay" id="branch-switch-modal" onclick="if(event.target===this)closeBranchSwitchModal()">
+        <div class="branch-switch-modal">
+            <h3>Switch Branch</h3>
+            <p>Select a branch and enter the branch PIN to proceed.</p>
+            <select id="bsm-branch-select"></select>
+            <input type="password" id="bsm-pin" placeholder="Enter Branch PIN" maxlength="6" autocomplete="off" onkeydown="if(event.key==='Enter')confirmBranchSwitch()">
+            <p id="bsm-error">Incorrect PIN. Please try again.</p>
+            <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+                <button class="btn btn-outline" style="flex:1;justify-content:center;" onclick="closeBranchSwitchModal()">Cancel</button>
+                <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="confirmBranchSwitch()" id="bsm-confirm-btn">Confirm Switch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCEL CONFIRM MODAL -->
+    <div class="generic-modal-overlay" id="cancel-confirm-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;" onclick="if(event.target===this) window.closeCancelConfirmModal()">
+        <div class="generic-modal" style="background:var(--clr-bg-card); padding:2rem; border-radius:12px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+            <h3 style="margin-top:0; margin-bottom:1rem; font-size:1.25rem;">Cancel Order</h3>
+            <p style="margin-bottom:1.5rem; color:var(--clr-text-secondary);">Are you sure you want to cancel this order? This action cannot be undone.</p>
+            <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+                <button class="btn btn-outline" onclick="window.closeCancelConfirmModal()">No, Keep It</button>
+                <button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger); background:var(--clr-danger-bg);" id="btn-confirm-cancel">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+

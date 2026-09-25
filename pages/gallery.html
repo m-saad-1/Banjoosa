@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>if(localStorage.getItem('bigbites_theme') === 'dark') document.documentElement.classList.add('dark-mode');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - bigbites</title>
+    <link rel="icon" type="image/avif" href="../assets/images/logo.avif">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional"></noscript>
+    <link rel="preload" as="style" href="../assets/css/style.bundle.min.css?v=26">
+<link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=26">
+    <!-- Component Loader -->
+    <script defer src="../assets/js/config.js"></script>
+    <script defer src="../assets/js/loader.min.js?v=26"></script>
+
+<style id="inline-loader-css">
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--clr-background, #fdfbf7);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+  opacity: 1;
+  visibility: visible;
+}
+.page-loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.loader-logo.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.loader-bar-track {
+  width: 150px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--clr-primary, #E31B23);
+  border-radius: 4px;
+  animation: loader-fill 2s ease-in-out infinite;
+}
+@keyframes loader-fill {
+  0% { width: 0%; transform: translateX(-100%); }
+  50% { width: 100%; transform: translateX(0); }
+  100% { width: 0%; transform: translateX(100%); }
+}
+.page-loader.complete .loader-bar-fill {
+  animation: none;
+  width: 100%;
+  transition: width 0.2s ease;
+}
+html.dark-mode .page-loader {
+  background: #121212 !important;
+}
+html.dark-mode .loader-bar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+.loader-spinner { display: none; }
+.page-loader.spinner-mode { gap: 0; }
+.page-loader.spinner-mode .loader-bar-track,
+.page-loader.spinner-mode .loader-logo { display: none; }
+.page-loader.spinner-mode .loader-spinner {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 69, 184, 0.2);
+  border-top-color: var(--clr-primary, #E31B23);
+  border-radius: 50%;
+  animation: loader-spin 0.8s linear infinite;
+}
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="bigbites" width="80" height="80" decoding="async"/>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  <div class="loader-spinner"></div>
+</div>
+
+    <div id="navbar-placeholder" style="height: 70px; width: 100%; flex-shrink: 0;"></div>
+<main>
+        <section class="gallery-section" style="padding: 2.5rem 0; background-color: var(--clr-background); min-height: 70vh;">
+            <div class="container">
+                <div class="section-header" style="margin-bottom: 2.5rem;">
+                    <h2>Our Gallery</h2>
+                    <p style="color: var(--clr-text-secondary, #666); font-size: 1.05rem;">Discover our space and see our most ordered dishes.</p>
+                </div>
+                
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Populated dynamically; static fallback below if no dashboard data -->
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-1.avif" alt="Gallery Image 1" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-2.avif" alt="Gallery Image 2" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-3.avif" alt="Gallery Image 3" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-4.avif" alt="Gallery Image 4" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-5.avif" alt="Gallery Image 5" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-6.avif" alt="Gallery Image 6" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-7.avif" alt="Gallery Image 7" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-8.avif" alt="Gallery Image 8" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-9.avif" alt="Gallery Image 9" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-10.avif" alt="Gallery Image 10" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-11.avif" alt="Gallery Image 11" class="lightbox-trigger" width="300" height="300"></div>
+                    <div class="gallery-item"><img loading="lazy" decoding="async" src="../assets/gallery/gallery-12.avif" alt="Gallery Image 12" class="lightbox-trigger" width="300" height="300"></div>
+                </div>
+
+                <script>
+                (function() {
+                    try {
+                        const defaults = [
+                            { id: 'g1', url: '../assets/gallery/gallery-1.avif', name: 'Gallery Image 1' },
+                            { id: 'g2', url: '../assets/gallery/gallery-2.avif', name: 'Gallery Image 2' },
+                            { id: 'g3', url: '../assets/gallery/gallery-3.avif', name: 'Gallery Image 3' },
+                            { id: 'g4', url: '../assets/gallery/gallery-4.avif', name: 'Gallery Image 4' },
+                            { id: 'g5', url: '../assets/gallery/gallery-5.avif', name: 'Gallery Image 5' },
+                            { id: 'g6', url: '../assets/gallery/gallery-6.avif', name: 'Gallery Image 6' },
+                            { id: 'g7', url: '../assets/gallery/gallery-7.avif', name: 'Gallery Image 7' },
+                            { id: 'g8', url: '../assets/gallery/gallery-8.avif', name: 'Gallery Image 8' },
+                            { id: 'g9', url: '../assets/gallery/gallery-9.avif', name: 'Gallery Image 9' },
+                            { id: 'g10', url: '../assets/gallery/gallery-10.avif', name: 'Gallery Image 10' },
+                            { id: 'g11', url: '../assets/gallery/gallery-11.avif', name: 'Gallery Image 11' },
+                            { id: 'g12', url: '../assets/gallery/gallery-12.avif', name: 'Gallery Image 12' }
+                        ];
+
+                        let items = defaults;
+                        const stored = localStorage.getItem('bigbites_gallery');
+                        if (stored) {
+                            const parsed = JSON.parse(stored);
+                            if (Array.isArray(parsed) && parsed.length > 0) {
+                                items = parsed;
+                                // Automatically inject new defaults that are missing from old browser cache
+                                defaults.forEach(def => {
+                                    if (!items.find(p => p.id === def.id)) {
+                                        items.push(def);
+                                    }
+                                });
+                                // Update storage silently so it stays synced
+                                localStorage.setItem('bigbites_gallery', JSON.stringify(items));
+                            }
+                        }
+
+                        const grid = document.getElementById('gallery-grid');
+                        if (!grid) return;
+                        grid.innerHTML = items.map(function(img) {
+                            return '<div class="gallery-item"><img loading="lazy" decoding="async" src="' + img.url + '" alt="' + (img.name || 'Gallery Image') + '" class="lightbox-trigger" width="300" height="300"></div>';
+                        }).join('');
+                    } catch(e) { /* silently fall back to static images */ }
+                })();
+                </script>
+
+
+                <div style="text-align: center; margin-top: 2.5rem; padding: 3rem 2rem; background: rgba(211, 47, 47, 0.05); border-radius: var(--border-radius-lg); border: 1px dashed rgba(211, 47, 47, 0.3);">
+                    <h3 style="font-size: 2rem; margin-bottom: 0.5rem; color: var(--clr-text-primary);">More Moments</h3>
+                    <p style="color: var(--clr-text-secondary, #666); font-size: 1.1rem; margin-bottom: 2rem;">Follow our day to day on Instagram!</p>
+                    <a href="https://www.instagram.com/bigbites/" target="_blank" class="btn btn-primary" style="background: var(--clr-primary); background-image: none; border-radius: 50px; font-weight: 600; padding: 0.8rem 1.5rem; box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3); font-size: 0.9rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; white-space: nowrap; max-width: 100%;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        Follow on Insta
+                    </a>
+                </div>
+            </section>
+    </main>
+    <script defer src="../assets/js/menu-data.js"></script>
+    <script defer src="../assets/js/search.js?v=2"></script>
+<script defer src="../assets/js/script.bundle.min.js?v=26"></script>
+
+</body>
+</html>
+
+
+
+
