@@ -166,8 +166,8 @@ function initCategorySticky() {
 <style>@media(min-width:769px){#change-location-btn{max-width:220px!important;}}</style>
   <div class="container">
     <div class="nav-left" style="display: flex; align-items: center; gap: 0.2rem; margin-right: clamp(0.5rem, 1vw, 1rem); max-width: calc(100% - 145px);">
-      <a href="${v("index.html")}" class="logo" style="flex-shrink: 0;">
-        <img decoding="async" src="${r}" alt="bigbites Logo" class="header-logo" width="130" height="80" style="height: 80px; width: 130px; object-fit: contain; transform: none; margin-right: -10px;">
+      <a href="${v("index.html")}" class="logo" style="flex-shrink: 0; display: block; overflow: visible;">
+        <img decoding="async" src="${r}" alt="bigbites Logo" class="header-logo" width="180" height="110" style="height: 110px; width: 180px; object-fit: contain; transform: scale(1.4); transform-origin: center left; margin-right: 20px;">
       </a>
       <div id="change-location-btn" style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; flex: 1; min-width: 0; max-width: 200px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
