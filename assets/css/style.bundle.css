@@ -5107,7 +5107,7 @@ html.dark-mode .hamburger-lines .line {
 html.dark-mode .loc-option-item:hover,
 html.dark-mode .loc-option-item.loc-option-selected {
   background-color: #8b45b826 !important;
-  color: var(--clr-primary) !important;
+  color: #ffffff !important;
 }
 html.dark-mode .loc-trigger-bar {
   background: #2a2a2a !important;
