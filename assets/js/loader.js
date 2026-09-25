@@ -1307,67 +1307,11 @@ ${s}`,
     (F(), R(), N(), Y(), G(), V(), X(), U(), K(), Q(), J(), Z(), W());
     const e = document.getElementById("page-loader");
     if (e) {
-      const o = document.getElementById("hero-primary-img"),
-        t = document.getElementById("loader-logo-img");
-      if (!o)
-        (e.classList.add("spinner-mode"),
-          requestAnimationFrame(() => {
-            (e.classList.add("complete", "fade-out"),
-              setTimeout(() => e.remove(), 500));
-          }));
-      else {
-        let h = function () {
-            if (!p || !d) return;
-            e.classList.add("complete");
-            const b = o.closest(".hero-image-frame");
-            (b && b.classList.add("loaded"),
-              setTimeout(() => {
-                (e.classList.add("fade-out"),
-                  setTimeout(() => e.remove(), 500));
-              }, 200));
-          },
-          p = !1,
-          d = !1;
-        (t
-          ? (t.classList.add("visible"),
-            t.complete && t.naturalWidth > 0
-              ? (p = !0)
-              : (t.addEventListener(
-                  "load",
-                  () => {
-                    ((p = !0), h());
-                  },
-                  { once: !0 },
-                ),
-                t.addEventListener(
-                  "error",
-                  () => {
-                    ((p = !0), h());
-                  },
-                  { once: !0 },
-                )))
-          : (p = !0),
-          o.complete && o.naturalWidth > 0
-            ? (d = !0)
-            : (o.addEventListener(
-                "load",
-                () => {
-                  ((d = !0), h());
-                },
-                { once: !0 },
-              ),
-              o.addEventListener(
-                "error",
-                () => {
-                  ((d = !0), h());
-                },
-                { once: !0 },
-              )),
-          setTimeout(() => {
-            e.classList.contains("fade-out") || ((p = d = !0), h());
-          }, 2500),
-          h());
-      }
+      e.classList.add("spinner-mode");
+      requestAnimationFrame(() => {
+        e.classList.add("complete", "fade-out");
+        setTimeout(() => e.remove(), 300);
+      });
     }
     const n = document.getElementById("footer");
     if (n) {
