@@ -1,59 +1,47 @@
-﻿
-Improve image delivery Est savings of 349 KiB
-Reducing the download time of images can improve the perceived load time of the page and LCP. Learn more about optimizing image sizeLCPFCPUnscored
-URL
-Resource Size
-Est Savings
-vercel.app 1st party
-414.0 KiB	349.0 KiB
-div#category-circles-home > a.category-circle-btn > div.circle-img > img.is-loaded
-<img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/burger-3.avif" width="228" class="is-loaded">
-…images/burger-3.avif(bigbitespk.vercel.app)
-111.8 KiB
-100.4 KiB
-This image file is larger than it needs to be (1254x1254) for its displayed dimensions (399x399). Use responsive images to reduce the image download size.
-100.4 KiB
-div#category-circles-home > a.category-circle-btn > div.circle-img > img.is-loaded
-<img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/cheese-fries.avif" width="228" class="is-loaded">
-…images/cheese-fries.avif(bigbitespk.vercel.app)
-100.3 KiB
-90.1 KiB
-This image file is larger than it needs to be (1254x1254) for its displayed dimensions (399x399). Use responsive images to reduce the image download size.
-90.1 KiB
-div#category-circles-home > a.category-circle-btn > div.circle-img > img.is-loaded
-<img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/roll-1.avif" width="228" class="is-loaded">
-…images/roll-1.avif(bigbitespk.vercel.app)
-96.8 KiB
-87.0 KiB
-This image file is larger than it needs to be (1254x1254) for its displayed dimensions (399x399). Use responsive images to reduce the image download size.
-87.0 KiB
-bigbites Hero 1
-<img id="hero-primary-img" alt="bigbites Hero 1" class="hero-full-img is-loaded" decoding="async" fetchpriority="high" loading="eager" height="400" src="./assets/images/hero.avif" srcset="./assets/images/hero.avif 400w, ./assets/images/hero.avif 800w, ./assets/i…" sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1200px" style="width: 20%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800">
-…images/hero.avif(bigbitespk.vercel.app)
-105.2 KiB
-71.4 KiB
-This image file is larger than it needs to be (1828x860) for its displayed dimensions (721x700). Use responsive images to reduce the image download size.
-71.4 KiB
-Layout shift culprits
-Layout shifts occur when elements move absent any user interaction. Investigate the causes of layout shifts, such as elements being added, removed, or their fonts changing as the page loads.CLSUnscored
-Element
-Layout shift score
-Total
-1.564
-bigbites - The Real Flavor Combos Burgers Pizzas Rolls Fries Drinks Top Picks V…
-<main>
-0.915
-bigbites Logo
-<img decoding="async" src="./assets/images/logo.avif" alt="bigbites Logo" class="header-logo is-loaded">
-Unsized image element
+﻿# Agent Task: bigbitespk.vercel.app Performance Fixes
+
+This site shares the same template/codebase as crustpk.vercel.app. Several issues here are ones already solved on that site — port the fix over rather than re-deriving it. One issue (the hero carousel CLS) is new.
+
+## 1. Oversized/uncompressed images — 148.8 KiB to save
+
+| Asset | Issue | Fix |
+|---|---|---|
+| `hero.avif` | 998×500 shipped for 832×347 display, plus poor compression | Resize to ~1664×694 (2x retina), recompress AVIF, add `srcset`/`sizes` — same fix already applied to crustpk's hero image |
+| `burger-3.avif`, `cheese-fries.avif`, `roll-1.avif` (category-circle icons) | All shipping 400×400 for a 116×116 display, plus poor compression | Resize to ~232×232, recompress, add `srcset` — identical bug already fixed on crustpk's category icons; copy that fix |
+| `app-install.avif` | Compression only (no resize needed) | Recompress at a lower AVIF quality setting |
+
+## 2. CLS = 0.639, 100% from the hero carousel container (new issue)
+
+```
 bigbites Hero 3
-<div class="hero-image-frame loaded" id="hero-carousel-container" style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y;">
-0.649
-…v24/pxiByp8kv….woff2(fonts.gstatic.com)
-Web font
-Forced reflow
-A forced reflow occurs when JavaScript queries geometric properties (such as offsetWidth) after styles have been invalidated by a change to the DOM state. This can result in poor performance. Learn more about forced reflows and possible mitigations.Unscored
-Source
-Total reflow time
-[unattributed]
-52 ms
+<div class="hero-image-frame loaded" id="hero-carousel-container" style="...width: 100%...">
+0.639
+```
+
+The carousel container itself is resizing after load — almost certainly because its height isn't reserved until a slide image finishes loading and the JS then sets/adjusts the container's dimensions.
+
+- [ ] Give `#hero-carousel-container` a fixed `aspect-ratio` (matching the hero image's real ratio, e.g. `aspect-ratio: 1200/500`) or an explicit `height` in CSS **before** any JS runs, so the space is reserved from first paint regardless of when the carousel JS initializes.
+- [ ] Don't let the carousel script set `height`/`width` on this container dynamically after images load — that's what's causing the shift.
+
+## 3. LCP element is lazy-loaded (same bug class as crustpk's "Combo 1" issue)
+
+```
+LCP resources should not use loading=lazy   ← FAILING
+Offer Image  <img ... loading="lazy" ... id="offer-modal-img" src="./assets/images/offer-1.avif" ...>
+```
+
+The LCP element on this run is the **offer modal's image** — which is suspicious on its own: a modal image shouldn't normally be the largest visible content unless the modal is opening automatically on load (this is the exact same auto-popup pattern chased down on crustpk).
+
+- [ ] Check whether this offer modal auto-opens on page load. If yes, that's the real thing to fix — an unprompted modal covering the screen on load isn't just a perf issue, it's the reason this image is even competing for LCP.
+- [ ] If the auto-open is intentional, remove `loading="lazy"` and add `fetchpriority="high"` to this image, matching the hero's treatment.
+- [ ] If it's not intentional (or hurts conversion), reconsider triggering it on a delay/interaction instead of on load — this also sidesteps the LCP problem entirely, since a hidden modal's image can't be the LCP candidate.
+
+## 4. Unused CSS — 15.2 KiB of 25.9 KiB (59%)
+
+- [ ] Same purge treatment as crustpk: run `style.bundle.min.css` through PurgeCSS against this page's actual rendered HTML.
+
+## Definition of done
+- [ ] Image savings realized (~149 KiB)
+- [ ] CLS < 0.1 (currently 0.639)
+- [ ] LCP element (whichever it turns out to be) not lazy-loaded
+- [ ] Unused CSS under ~5 KiB
