@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   function H(e) {
     typeof e == "string" && (e = e.replace(",", "."));
     let t = parseFloat(e);
@@ -105,6 +105,7 @@
             e.appendChild(s)),
           (s.style.display = "block"),
           (s.src = d),
+          (s.innerHTML = `<track kind="captions" src="${d.replace('.mp4', '.vtt')}" srclang="en" label="English">`),
           s.play())
         : (s && ((s.style.display = "none"), s.pause()),
           t && ((t.style.display = "block"), (t.src = d)));

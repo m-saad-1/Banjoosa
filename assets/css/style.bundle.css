@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
   --clr-surface-dark: #1e1e1e;
@@ -85,7 +85,7 @@ h6 {
   background: linear-gradient(135deg,
       var(--clr-primary),
       var(--clr-primary-dark));
-  color: var(--clr-text-primary);
+  color: #ffffff !important;
 }
 
 .btn-primary:hover {
