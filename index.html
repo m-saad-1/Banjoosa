@@ -38,9 +38,7 @@
   <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27">
 
   <!-- Hero LCP preload: sizes covers all mobile widths, not just portrait -->
-  <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload"
-    imagesrcset="./assets/images/hero-portrait.avif 750w, ./assets/images/hero.avif 1664w"
-    imagesizes="(max-width: 768px) 750px, 100vw" />
+  <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
   <script defer="" src="./assets/js/loader.min.js?v=27"></script>
@@ -186,12 +184,14 @@
        after first paint is what produces CLS = 0.484.
        Specificity of #top-picks-section .menu-grid beats .menu .menu-grid,
        so this locks the grid in place before any bundle CSS can touch it. */
-    #top-picks-section .menu-grid {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
-      align-items: stretch !important;
-      /* Pre-reserve vertical space so the section height is stable at first paint */
-      min-height: 600px;
+    @media (min-width: 769px) {
+      #top-picks-section .menu-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+        align-items: stretch !important;
+        /* Pre-reserve vertical space so the section height is stable at first paint */
+        min-height: 600px;
+      }
     }
 
     /* On mobile the grid is 2-col; pre-reserve less height */
@@ -226,8 +226,6 @@
                sizes: mobile uses 750px candidate, desktop uses full width 1664w candidate. -->
           <img id="hero-primary-img" alt="banjoosa Hero 1" class="hero-full-img" decoding="async" fetchpriority="high"
             loading="eager" width="1664" height="694" src="./assets/images/hero.avif"
-            srcset="./assets/images/hero-portrait.avif 750w, ./assets/images/hero.avif 1664w"
-            sizes="(max-width: 768px) 750px, 100vw"
             style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none; aspect-ratio: 2.4 / 1; object-fit: cover;" />
           <img alt="banjoosa Hero 2" class="hero-full-img" decoding="async" loading="lazy" width="850" height="354"
             src="./assets/images/offer-1.avif"
