@@ -166,13 +166,34 @@
       }
     }
 
-    /* --- CLS fix: reserve card-image height on ALL breakpoints, not just mobile ---
-       Without this, desktop card images have no pre-reserved space, causing the grid
-       to shift once they load (CLS = 0.482 → target < 0.1). The mobile @media block
-       above already sets aspect-ratio: 1/1 via !important, this handles desktop. */
+    /* --- CLS fix Round 1: reserve card-image height on ALL breakpoints ---
+       The mobile @media block above already sets aspect-ratio: 1/1 via !important.
+       This handles desktop. */
     #top-picks-section .product-card .card-image {
       aspect-ratio: 1 / 1;
       overflow: hidden;
+    }
+
+    /* --- CLS fix Round 2 (root cause): force .menu-grid to stay display:grid ---
+       At desktop (≥769px) the bundle CSS has: .menu .menu-grid { display: contents }
+       This fires on the homepage too (section.menu) and COLLAPSES the grid.
+       A later !important rule reinstates display:grid — but the two-step resolution
+       after first paint is what produces CLS = 0.484.
+       Specificity of #top-picks-section .menu-grid beats .menu .menu-grid,
+       so this locks the grid in place before any bundle CSS can touch it. */
+    #top-picks-section .menu-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+      align-items: stretch !important;
+      /* Pre-reserve vertical space so the section height is stable at first paint */
+      min-height: 600px;
+    }
+
+    /* On mobile the grid is 2-col; pre-reserve less height */
+    @media (max-width: 768px) {
+      #top-picks-section .menu-grid {
+        min-height: 800px;
+      }
     }
   </style>
 
