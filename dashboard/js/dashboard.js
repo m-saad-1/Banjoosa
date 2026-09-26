@@ -192,7 +192,7 @@ function initSalesChart() {
             datasets: [{
                 label: 'Revenue (Rs.)',
                 data: [120000, 190000, 150000, 210000, 280000, 320000, 290000],
-                borderColor: '#E31B23',
+                borderColor: '#B32121',
                 backgroundColor: 'rgba(233, 41, 14, 0.1)',
                 borderWidth: 2,
                 fill: true,
@@ -230,7 +230,7 @@ function initChannelChart() {
             labels: ['Website', 'POS', 'WhatsApp', 'Mobile App'],
             datasets: [{
                 data: [0, 0, 0, 0],
-                backgroundColor: ['#E31B23', '#10B981', '#111111', '#F59E0B'],
+                backgroundColor: ['#B32121', '#10B981', '#111111', '#F59E0B'],
                 borderWidth: 0,
                 cutout: '75%'
             }]
@@ -308,10 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const shouldBeDark = e.target.checked;
             if (shouldBeDark) {
                 document.documentElement.classList.add('dark-mode');
-                localStorage.setItem('bigbites_theme', 'dark');
+                localStorage.setItem('banjoosa_theme', 'dark');
             } else {
                 document.documentElement.classList.remove('dark-mode');
-                localStorage.setItem('bigbites_theme', 'light');
+                localStorage.setItem('banjoosa_theme', 'light');
             }
             // Sync all toggles
             darkModeToggles.forEach(t => { t.checked = shouldBeDark; });
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Apply theme on load if it was set
-    const savedTheme = localStorage.getItem('bigbites_theme');
+    const savedTheme = localStorage.getItem('banjoosa_theme');
     if (savedTheme === 'light') {
         document.documentElement.classList.remove('dark-mode');
         darkModeToggles.forEach(t => t.checked = false);

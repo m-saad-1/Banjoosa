@@ -159,7 +159,7 @@ function renderDelivery(state) {
         window.zoneChartInstance = new Chart(zoneChartCtx, {
             type: 'doughnut',
             data: {
-                labels: ['', 'Clifton Block 4', '58 Main Shadman Market Rd, Shadman 1, Lahore', 'Bahria Town'],
+                labels: ['', 'Clifton Block 4', 'Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830', 'Bahria Town'],
                 datasets: [{
                     data: [45, 25, 20, 10],
                     backgroundColor: ['#4f46e5', '#0ea5e9', '#8b5cf6', '#10b981'],

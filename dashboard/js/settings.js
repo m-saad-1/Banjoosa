@@ -10,7 +10,7 @@ window.saveBusinessInfo = function() {
     const tax      = (document.getElementById('biz-tax')      || {}).value || '16';
 
     const info = { name, currency, tax };
-    localStorage.setItem('bigbites_business_info', JSON.stringify(info));
+    localStorage.setItem('banjoosa_business_info', JSON.stringify(info));
 
     // Apply to live UI
     window.applyBusinessInfo(info);
@@ -46,7 +46,7 @@ window.applyBusinessInfo = function(info) {
 // 2. Dashboard Mode (Simple / Advanced)
 // -------------------------------------------------------
 window.switchDashboardMode = function(mode) {
-    localStorage.setItem('bigbites_dashboard_mode', mode);
+    localStorage.setItem('banjoosa_dashboard_mode', mode);
     if (mode === 'simple') {
         document.body.classList.add('simple-mode');
     } else {
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Restore Business Info ---
     try {
-        const saved = localStorage.getItem('bigbites_business_info');
+        const saved = localStorage.getItem('banjoosa_business_info');
         if (saved) {
             const info = JSON.parse(saved);
             const nameEl     = document.getElementById('biz-name');
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) { console.error('Error restoring business info', e); }
 
     // --- Restore Dashboard Mode select state ---
-    const mode = localStorage.getItem('bigbites_dashboard_mode') || 'simple';
+    const mode = localStorage.getItem('banjoosa_dashboard_mode') || 'simple';
     const modeSelect = document.getElementById('dashboard-mode-select');
     if (modeSelect) modeSelect.value = mode;
     // body.simple-mode class already applied by inline <body> script � do not re-apply

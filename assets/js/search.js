@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   bigbites - Smart Search
+   banjoosa - Smart Search
    Reads menu items from the DOM, shows results in a floating overlay.
    Does NOT alter or scroll the underlying page.
    ========================================================================== */
@@ -162,18 +162,18 @@
       .search-result-card:hover .src-img-wrap img { transform: scale(1.05); }
       .src-badge {
         position: absolute; top: 0.5rem; left: 0.5rem;
-        background: var(--clr-primary, #E31B23); color: #fff;
+        background: var(--clr-primary, #B32121); color: #fff;
         font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.5rem;
         border-radius: 50px; letter-spacing: 0.5px; text-transform: uppercase;
       }
       .src-content { padding: 0.65rem 0.75rem 0.75rem; flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
-      .src-category { font-size: 0.65rem; font-weight: 600; color: var(--clr-primary, #E31B23); text-transform: uppercase; letter-spacing: 0.5px; }
+      .src-category { font-size: 0.65rem; font-weight: 600; color: var(--clr-primary, #B32121); text-transform: uppercase; letter-spacing: 0.5px; }
       .src-name { font-weight: 700; font-size: 0.9rem; color: var(--clr-text-primary, #111); line-height: 1.3; margin: 0; }
       .src-desc { font-size: 0.75rem; color: #777; line-height: 1.4; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
       .src-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 0.5rem; }
       .src-price { font-weight: 700; font-size: 0.95rem; color: var(--clr-text-primary, #111); }
       .src-add-btn {
-        background: var(--clr-primary, #E31B23); color: #fff; border: none;
+        background: var(--clr-primary, #B32121); color: #fff; border: none;
         border-radius: 50px; padding: 0.3rem 0.75rem; font-size: 0.8rem;
         font-weight: 600; cursor: pointer; transition: opacity 0.2s; font-family: inherit;
       }
@@ -259,8 +259,8 @@
           category: catName
         });
       });
-    } else if (window.BIGBITES_MENU && window.BIGBITES_MENU.length > 0) {
-      staticMenu = window.BIGBITES_MENU;
+    } else if (window.BANJOOSA_MENU && window.BANJOOSA_MENU.length > 0) {
+      staticMenu = window.BANJOOSA_MENU;
     }
 
     staticMenu.forEach(item => {

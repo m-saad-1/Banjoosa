@@ -65,7 +65,7 @@ window.contentDeleteOffer = function(id) {
 };
 
 /* --- Gallery Images --- */
-const GALLERY_STORAGE_KEY = 'bigbites_gallery';
+const GALLERY_STORAGE_KEY = 'banjoosa_gallery';
 
 let mockGallery = (function() {
     const defaults = [
@@ -152,10 +152,10 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-    name: "bigbites Restaurant",
-    phone: "+92 3002442483",
-    email: "contact@bigbites.com",
-    whatsapp: "+92 3002442483",
+    name: "banjoosa Restaurant",
+    phone: "+92 319 6990909",
+    email: "contact@banjoosa.com",
+    whatsapp: "+92 319 6990909",
     address: "123 Food Street, Karachi, Pakistan",
     map: "https://maps.google.com/?q=karachi"
 };

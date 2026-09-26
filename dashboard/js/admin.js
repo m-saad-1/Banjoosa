@@ -216,7 +216,7 @@ function initAnalyticsCharts() {
         plugins: { legend: { position: 'right' } }
     };
 
-    const brandColor = '#E31B23';
+    const brandColor = '#B32121';
     const accentColor = '#3b82f6';
     const successColor = '#10b981';
     const warningColor = '#f59e0b';
@@ -302,7 +302,7 @@ function initAnalyticsCharts() {
     analyticsCharts.branchRevenue = new Chart(document.getElementById('chartBranchRevenue'), {
         type: 'doughnut',
         data: {
-            labels: ['58 Main Shadman Market Rd, Shadman 1, Lahore', '58 Main Shadman Market Rd, Shadman 1, Lahore', ''],
+            labels: ['Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830', 'Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830', ''],
             datasets: [{
                 data: [55, 30, 15],
                 backgroundColor: [brandColor, accentColor, warningColor]

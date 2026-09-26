@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   bigbites - Centralized Site Configuration
+   banjoosa - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,14 +7,14 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'bigbites',
+    name: 'banjoosa',
     tagline: 'Premium Burgers & Fast Food',
-    instagram: 'https://www.instagram.com/bigbites/',
-    phone: '+92 3002442483',
-    phonePretty: '+92 3002442483',
-    whatsapp: 'https://wa.me/923001013556',
-    email: 'info@bigbites.com',
-    copyright: '© 2026 bigbites. All rights reserved.',
+    instagram: 'https://www.instagram.com/banjoosa/',
+    phone: '+92 319 6990909',
+    phonePretty: '+92 319 6990909',
+    whatsapp: 'https://wa.me/923196990909',
+    email: 'info@banjoosa.com',
+    copyright: '© 2026 banjoosa. All rights reserved.',
   },
 
 
@@ -37,11 +37,11 @@ const BB_CONFIG = {
 
     /* Pizzas (named) */
     chickenPizza:    'assets/images/chicken-pizza.avif',
-    'crownbigbitesPizza': 'assets/images/crown-bigbites-pizza.avif',
+    'crownbanjoosaPizza': 'assets/images/crown-banjoosa-pizza.avif',
     mughaliPizza:    'assets/images/mughali-pizza.avif',
     specialPizza:    'assets/images/special-pizza.avif',
     tandooriPizza:   'assets/images/tandoori-pizza.avif',
-    'thinbigbitesPizza':  'assets/images/thin-bigbites-pizza.avif',
+    'thinbanjoosaPizza':  'assets/images/thin-banjoosa-pizza.avif',
 
     /* Combos */
     deal:   'assets/images/combo-1.avif',

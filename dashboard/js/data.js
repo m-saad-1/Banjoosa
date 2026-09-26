@@ -1,10 +1,10 @@
-﻿// Centralized Demo Data State for bigbites Dashboard
+﻿// Centralized Demo Data State for banjoosa Dashboard
 // Simulating a realistic restaurant: "Urban Flame Kitchen"
 
 const Store = {
     state: {
-        ...window.bigbitesDemoData,
-        currentBranch: "58 Main Shadman Market Rd, Shadman 1, Lahore",
+        ...window.banjoosaDemoData,
+        currentBranch: "Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830",
         dateRange: "Today"
     },
 
@@ -21,7 +21,7 @@ const Store = {
     
     saveAdminOrders() {
         try {
-            localStorage.setItem("bigbites_admin_orders", JSON.stringify(this.state.orders));
+            localStorage.setItem("banjoosa_admin_orders", JSON.stringify(this.state.orders));
         } catch (e) {
             console.error("Error saving admin orders", e);
         }

@@ -1,9 +1,9 @@
 /* ==========================================================================
-   bigbites - Static Menu Data
+   banjoosa - Static Menu Data
    Used by search.js on pages that don't have product cards in the DOM.
    ========================================================================== */
 
-window.BIGBITES_MENU = [
+window.BANJOOSA_MENU = [
   // Combos
   { name: 'Combo 2',      desc: '1x Chicken Pizza, 8x Chicken Wings, 1x 7UP, 2x Dips', price: 'Rs 1799', img: 'assets/images/combo-2.avif', category: 'Combos' },
   { name: 'Combo 3',      desc: '1x Cheeseburger, 6x Chicken Nuggets, 1x Fries, 1x Cheese Dip, 1x Small NEXT Cola', price: 'Rs 1299', img: 'assets/images/combo-3.avif', category: 'Combos' },
@@ -12,7 +12,7 @@ window.BIGBITES_MENU = [
   { name: 'Spicy Jalapeno Chicken',    desc: 'Spicy chicken patty with jalapenos.',                        price: 'Rs 750',  img: 'assets/images/burger-3.avif',     category: 'Burgers' },
   { name: 'Smash Burger',              desc: 'Thin smashed beef patty with pickles & sauce.',              price: 'Rs 700',  img: 'assets/images/burger-4.avif',    category: 'Burgers' },
   { name: 'BBQ Burger',                desc: 'Smoky BBQ sauce with caramelized onions.',                   price: 'Rs 800',  img: 'assets/images/burger-5.avif',    category: 'Burgers' },
-  { name: 'Mushroom & Cheese Burger',  desc: 'Sautéed mushrooms with melted cheese.',                      price: 'Rs 850',  img: 'assets/images/burger-6.avif',    category: 'Burgers' },
+  { name: 'Mushroom & Cheese Burger',  desc: 'Sautï¿½ed mushrooms with melted cheese.',                      price: 'Rs 850',  img: 'assets/images/burger-6.avif',    category: 'Burgers' },
   { name: 'Tower Burger',              desc: 'Triple-stacked patties with all the toppings.',              price: 'Rs 950',  img: 'assets/images/burger-7.avif',    category: 'Burgers' },
     // Pizzas
   { name: 'Chicken Fajita Pizza',  desc: 'Spiced fajita chicken with fresh veggies.',            price: 'Rs 1350', img: 'assets/images/pizza-1.avif',             category: 'Pizzas' },

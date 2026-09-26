@@ -77,7 +77,7 @@ function initCategorySticky() {
 })();
 (function () {
   "use strict";
-  localStorage.getItem("bigbites_theme") !== "light"
+  localStorage.getItem("banjoosa_theme") !== "light"
     ? document.documentElement.classList.add("dark-mode")
     : document.documentElement.classList.remove("dark-mode");
   function v(e) {
@@ -167,7 +167,7 @@ function initCategorySticky() {
   <div class="container">
     <div class="nav-left" style="display: flex; align-items: center; gap: 0.25rem; margin-right: clamp(0.75rem, 2vw, 2rem); max-width: calc(100% - 145px);">
       <a href="${v("index.html")}" class="logo" style="flex-shrink: 0;">
-        <img decoding="async" src="${r}" alt="bigbites Logo" class="header-logo" width="40" height="40">
+        <img decoding="async" src="${r}" alt="banjoosa Logo" class="header-logo" width="40" height="40">
       </a>
       <div id="change-location-btn" style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; flex: 1; min-width: 0; max-width: 200px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -325,7 +325,7 @@ function initCategorySticky() {
           <li><span>Email:</span> ${e.brand.email}</li>
           <li><span>Location:</span> 
             <ul style="padding-left: 1rem; margin-top: 0.2rem; display: block; list-style-type: disc;">
-              <li>58 Main Shadman Market Rd, Shadman 1, Lahore</li>
+              <li>Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830</li>
             </ul>
           </li>
           <li style="margin-top: 0.5rem;"><span>Opening Hours:</span>
@@ -535,7 +535,7 @@ ${s}`,
         "Johar Town, Lahore",
         "Clifton Block 5, Karachi",
         "Defence Phase 6, Karachi",
-        "58 Main Shadman Market Rd, Shadman 1, Lahore, Karachi",
+        "Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830, Karachi",
         "8A Commercial, Pak Arab, Lahore, Karachi",
         "Saddar, Rawalpindi",
         "Bahria Town Phase 4, Rawalpindi",
@@ -547,8 +547,8 @@ ${s}`,
         "Civil Lines, Faisalabad",
       ],
       n = [
-        "bigbites \u2013 58 Main Shadman Market Rd, Shadman 1, Lahore",
-        "bigbites \u2013 8A Commercial, Pak Arab, Lahore",
+        "banjoosa \u2013 Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830",
+        "banjoosa \u2013 8A Commercial, Pak Arab, Lahore",
       ],
       r = (c, o) =>
         c
@@ -1020,7 +1020,7 @@ ${s}`,
         <div class="chatbot-title">
           <span class="chatbot-avatar">\u{1F916}</span>
           <div>
-            <h4>bigbites Assistant</h4>
+            <h4>banjoosa Assistant</h4>
             <span class="online-status">Online now</span>
           </div>
         </div>
@@ -1029,7 +1029,7 @@ ${s}`,
     </div>
     <div class="chatbot-messages">
       <div class="chat-message bot">
-        <div class="msg-content">Hello, welcome to bigbites! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
+        <div class="msg-content">Hello, welcome to banjoosa! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
       </div>
     </div>
     <div class="chatbot-suggestions">
@@ -1232,7 +1232,7 @@ ${s}`,
     
     <div class="adm-body" style="padding: 1.5rem; overflow-y: auto; flex-grow: 1;">
       <p style="margin-bottom: 1rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 1.05rem;">
-        A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>bigbites</strong>.
+        A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>banjoosa</strong>.
       </p>
       <p style="margin-bottom: 1.5rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 0.95rem;">
         The menu, orders, and data shown are sample data only. Your actual system will be fully rebuilt around your real branding, menu, branches, and workflows.
@@ -1374,14 +1374,14 @@ ${s}`,
         "background-color 0.4s ease, color 0.4s ease",
       );
       const o = document.documentElement.classList.toggle("dark-mode");
-      (localStorage.setItem("bigbites_theme", o ? "dark" : "light"),
+      (localStorage.setItem("banjoosa_theme", o ? "dark" : "light"),
         s(),
         setTimeout(() => {
           document.documentElement.style.removeProperty("transition");
         }, 400));
     };
     (window.addEventListener("storage", (o) => {
-      o.key === "bigbites_theme" &&
+      o.key === "banjoosa_theme" &&
         (o.newValue === "dark"
           ? document.documentElement.classList.add("dark-mode")
           : document.documentElement.classList.remove("dark-mode"),
@@ -1523,7 +1523,7 @@ ${s}`,
         "Hurry! Only 2 'Ultimate Duo Combo' deals left in stock.",
         "Someone just ordered the Tower Burger!",
         "Ali just saved Rs 600 on the Family Feast Combo!",
-        "Hot deal! 3 people are viewing the Crown bigbites Pizza.",
+        "Hot deal! 3 people are viewing the Crown banjoosa Pizza.",
         "Ayesha just ordered a Double Beef Smash.",
         "Usman just claimed the Crispy Combo deal!",
         "Only 1 Mega Feast Combo remaining at this price!",

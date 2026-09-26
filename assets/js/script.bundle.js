@@ -327,9 +327,9 @@
               "Cash on Delivery":
                 "Please keep the exact change ready at the time of delivery.",
               Easypaisa:
-                "Transfer the total amount to Easypaisa account: +92 3002442483. Include your order ID in the reference.",
+                "Transfer the total amount to Easypaisa account: +92 319 6990909. Include your order ID in the reference.",
               JazzCash:
-                "Transfer the total amount to JazzCash account: +92 3002442483. Include your order ID in the reference.",
+                "Transfer the total amount to JazzCash account: +92 319 6990909. Include your order ID in the reference.",
               Wallet:
                 "Your order total will be seamlessly deducted from your available Wallet balance.",
             },
@@ -466,10 +466,10 @@
                     "You can view our complete menu by <a href='menu.html' style='color:var(--clr-primary);text-decoration:underline;'>clicking here</a>.")
                 : p.includes("located")
                   ? (c =
-                      "We are located at 58 Main Shadman Market Rd, Shadman 1, Lahore, 58 Main Shadman Market Rd, Shadman 1, Lahore, 58 Main Shadman Market Rd, Shadman 1, Lahore, 58 Main Shadman Market Rd, Shadman 1, Lahore, 58 Main Shadman Market Rd, Shadman 1, Lahore. Come visit us!")
+                      "We are located at Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830, Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830, Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830, Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830, Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830. Come visit us!")
                   : p.includes("Contact")
                     ? (c =
-                        "You can reach us at +92 3002442483 or email us at info@bigbites.com.")
+                        "You can reach us at +92 319 6990909 or email us at info@banjoosa.com.")
                     : p.includes("Hours")
                       ? (c =
                           "We are open Monday to Sunday from 10:00 AM to 12:00 AM.")
@@ -873,8 +873,8 @@
             (k.textContent = S.prepTime
               ? "Prep: " + S.prepTime
               : "Prep: 15-20 mins"));
-      } else if (window.BIGBITES_MENU) {
-        let menuS = window.BIGBITES_MENU.find(
+      } else if (window.BANJOOSA_MENU) {
+        let menuS = window.BANJOOSA_MENU.find(
           (M) => M.name.toLowerCase() === U.trim().toLowerCase(),
         );
         if (menuS) {
@@ -1237,7 +1237,7 @@
       "Hurry! Only 2 'Mega Feast Combo' deals left.",
       "Sara just got 20% off on the Family Feast Combo.",
       "Ahmed just claimed the Crispy Combo deal!",
-      "Hot deal! 3 people are viewing Crown BigBites Pizza.",
+      "Hot deal! 3 people are viewing Crown Banjoosa Pizza.",
       "Only 1 Combo 4 remaining at this price!",
       "Ali just ordered the BBQ Burger.",
       "Ayesha just saved Rs 600 on Combo 3!",
@@ -2168,7 +2168,7 @@
               #modal-btn-confirm {
                 flex: 2;
                 background: #ffffff !important;
-                color: var(--clr-primary, #E31B23) !important;
+                color: var(--clr-primary, #B32121) !important;
                 border: 2px solid #ffffff !important;
                 border-radius: 50px;
                 padding: 0.8rem 1rem;
@@ -2177,7 +2177,7 @@
               }
               #modal-btn-confirm:hover {
                 background: #f8f8f8 !important;
-                color: var(--clr-primary, #E31B23) !important;
+                color: var(--clr-primary, #B32121) !important;
                 transform: translateY(-2px);
               }
               #modal-btn-confirm:active {
@@ -2197,12 +2197,12 @@
               html.dark-mode #order-confirm-modal .modal-right-pane > div:nth-child(3) { border-top-color: rgba(255,255,255,0.08) !important; }
               html.dark-mode #modal-btn-confirm {
                 background: #ffffff !important;
-                color: var(--clr-primary, #E31B23) !important;
+                color: var(--clr-primary, #B32121) !important;
                 border-color: #ffffff !important;
               }
               html.dark-mode #modal-btn-confirm:hover {
                 background: #f0f0f0 !important;
-                color: var(--clr-primary, #E31B23) !important;
+                color: var(--clr-primary, #B32121) !important;
               }
             </style>
         `;

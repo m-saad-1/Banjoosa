@@ -1,9 +1,9 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    Design System & CSS Variables
    ========================================================================== */
 :root {
   /* Colors */
-  --clr-primary: #E31B23;
+  --clr-primary: #B32121;
   --clr-primary-hover: #c41e0a;
   --clr-accent: #111111;
 
@@ -343,6 +343,7 @@ button {
 }
 
 .branch-selector {
+  display: none !important;
   border: 1px solid var(--clr-border);
   border-radius: 8px;
   padding: 0.48rem 2.5rem 0.48rem 0.85rem;

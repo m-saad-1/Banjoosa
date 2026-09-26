@@ -1,11 +1,11 @@
-window.bigbitesDemoData = {
+window.banjoosaDemoData = {
         restaurant: {
             name: "Urban Flame Kitchen",
             currency: "Rs.",
             taxRate: 0.16, // 16% GST
         },
         branches: [
-            { id: "b1", name: "58 Main Shadman Market Rd, Shadman 1, Lahore", status: "Open", todayRevenue: 124500 },
+            { id: "b1", name: "Building 97, Sector H Commercial, Phase 1, DHA, Lahore, Pakistan 54830", status: "Open", todayRevenue: 124500 },
             { id: "b2", name: "8A Commercial, Pak Arab, Lahore", status: "Open", todayRevenue: 87200 }
         ],
         categories: [
@@ -32,7 +32,7 @@ window.bigbitesDemoData = {
             { id: "p7", name: "Spicy Jalapeno Chicken", desc: "Spicy chicken patty with jalapenos.", price: 750, categoryId: "c2", status: "Available", image: "../assets/images/burger-3.avif" },
             { id: "p8", name: "Smash Burger", desc: "Thin smashed beef patty with pickles & sauce.", price: 700, categoryId: "c2", status: "Available", image: "../assets/images/burger-4.avif" },
             { id: "p9", name: "BBQ Burger", desc: "Smoky BBQ sauce with caramelized onions.", price: 800, categoryId: "c2", status: "Available", image: "../assets/images/burger-5.avif" },
-            { id: "p12", name: "Mushroom & Cheese Burger", desc: "Sautéed mushrooms with melted cheese.", price: 850, categoryId: "c2", status: "Available", image: "../assets/images/burger-6.avif" },
+            { id: "p12", name: "Mushroom & Cheese Burger", desc: "Sautï¿½ed mushrooms with melted cheese.", price: 850, categoryId: "c2", status: "Available", image: "../assets/images/burger-6.avif" },
             { id: "p13", name: "Tower Burger", desc: "Triple-stacked patties with all the toppings.", price: 950, categoryId: "c2", status: "Available", image: "../assets/images/burger-7.avif" },
             // Pizzas
                         { id: "p14", name: "BBQ Chicken Pizza", desc: "Grilled chicken with smoky BBQ sauce and onions.", price: 1400, categoryId: "c3", status: "Available", image: "../assets/images/pizza-5.avif" },
@@ -68,15 +68,15 @@ window.bigbitesDemoData = {
             const timeStr = (ms) => new Date(ms).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             // Try loading from admin persistence first
             try {
-                const adminStored = localStorage.getItem("bigbites_admin_orders");
+                const adminStored = localStorage.getItem("banjoosa_admin_orders");
                 if (adminStored) {
                     const parsed = JSON.parse(adminStored);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         return parsed;
                     }
                 }
-            } catch(e) { console.error("Error parsing bigbites_admin_orders", e); }
-            // Fresh demo orders — each has a real numeric timestamp
+            } catch(e) { console.error("Error parsing banjoosa_admin_orders", e); }
+            // Fresh demo orders ï¿½ each has a real numeric timestamp
             const ts25 = msAgo(25); // Delayed
             const ts18 = msAgo(18); // Delayed
             const ts12 = msAgo(12); // Recent
@@ -124,7 +124,7 @@ window.bigbitesDemoData = {
             return demoOrders;
         })(),
         customers: [
-            { id: "u1", name: "Ahmed Khan", phone: "+92 3002442483", orders: 24, lifetimeSpend: 48500, lastOrder: "2 days ago" },
+            { id: "u1", name: "Ahmed Khan", phone: "+92 319 6990909", orders: 24, lifetimeSpend: 48500, lastOrder: "2 days ago" },
             { id: "u2", name: "Sara Ali", phone: "0333-9876543", orders: 3, lifetimeSpend: 4200, lastOrder: "Today" }
         ],
         riders: [
@@ -145,7 +145,7 @@ window.bigbitesDemoData = {
             { productId: "p30", name: "Mountain Dew", ingredients: ["1x 330ml Can"], cost: 65.00, price: 150 }
         ],
         suppliers: [
-            { id: "s1", name: "National Poultry Farms", contact: "+92 3002442483", categories: "Meat, Chicken", balance: 45000, lastDelivery: "Yesterday", recentPOs: "#PO-1042", status: "Active" },
+            { id: "s1", name: "National Poultry Farms", contact: "+92 319 6990909", categories: "Meat, Chicken", balance: 45000, lastDelivery: "Yesterday", recentPOs: "#PO-1042", status: "Active" },
             { id: "s2", name: "Dawn Bread Co.", contact: "0333-4445556", categories: "Bakery", balance: 0, lastDelivery: "Today", recentPOs: "#PO-1043", status: "Active" },
             { id: "s3", name: "Metro Cash & Carry", contact: "0321-7778889", categories: "Dairy, Oil, Groceries", balance: 12500, lastDelivery: "3 days ago", recentPOs: "#PO-1039", status: "Active" },
             { id: "s4", name: "Fresh Veggies Ltd.", contact: "0345-1234567", categories: "Produce, Vegetables", balance: 5000, lastDelivery: "Today", recentPOs: "#PO-1044", status: "Active" }
@@ -169,7 +169,7 @@ window.bigbitesDemoData = {
             { id: "T6", status: "Occupied", capacity: 8, customer: "Ahmed Khan", amount: "Rs. 5600" }
         ],
         crm: [
-            { id: "c1", name: "Ahmed Khan", phone: "+92 3002442483", orders: 45, lifetimeSpend: 62500, segment: "VIP", lastOrder: "2 days ago", tier: "Gold", points: 2450 },
+            { id: "c1", name: "Ahmed Khan", phone: "+92 319 6990909", orders: 45, lifetimeSpend: 62500, segment: "VIP", lastOrder: "2 days ago", tier: "Gold", points: 2450 },
             { id: "c2", name: "Sarah Ali", phone: "0321-9876543", orders: 2, lifetimeSpend: 2100, segment: "New", lastOrder: "Today", tier: "Bronze", points: 120 },
             { id: "c3", name: "Usman Tariq", phone: "0333-5556667", orders: 18, lifetimeSpend: 15400, segment: "At-Risk", lastOrder: "45 days ago", tier: "Silver", points: 800 }
         ],
