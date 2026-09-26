@@ -29,14 +29,16 @@
     .header { position: fixed; top: 0; width: 100%; height: 70px; background: var(--clr-surface); z-index: 1000; display: flex; align-items: center; }
 
   </style>
-  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=26">
-  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=26" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=26"></noscript>
+  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=27">
+  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27"></noscript>
 
-  <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload" />
+  <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload"
+    imagesrcset="./assets/images/hero-portrait.avif 750w, ./assets/images/hero.avif 1664w"
+    imagesizes="(max-width: 768px) and (orientation: portrait) 750px, 100vw" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
-  <script defer="" src="./assets/js/loader.min.js?v=26"></script>
+  <script defer="" src="./assets/js/loader.min.js?v=27"></script>
   <!-- Homepage Top Picks: cards styled exactly like search result cards on mobile -->
   <style>
     @media (max-width: 768px) {
@@ -163,6 +165,15 @@
         opacity: 0.85 !important;
       }
     }
+
+    /* --- CLS fix: reserve card-image height on ALL breakpoints, not just mobile ---
+       Without this, desktop card images have no pre-reserved space, causing the grid
+       to shift once they load (CLS = 0.482 → target < 0.1). The mobile @media block
+       above already sets aspect-ratio: 1/1 via !important, this handles desktop. */
+    #top-picks-section .product-card .card-image {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+    }
   </style>
 
 </head>
@@ -187,6 +198,8 @@
           style="display: flex; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
           <img id="hero-primary-img" alt="bigbites Hero 1" class="hero-full-img" decoding="async" fetchpriority="high"
             loading="eager" height="500" src="./assets/images/hero.avif"
+            srcset="./assets/images/hero-portrait.avif 750w, ./assets/images/hero.avif 1664w"
+            sizes="(max-width: 768px) and (orientation: portrait) 750px, 100vw"
             style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1200" />
           <img alt="bigbites Hero 2" class="hero-full-img" decoding="async" loading="lazy" height="400"
             src="./assets/images/offer-1.avif"
