@@ -27,15 +27,20 @@
     html.dark-mode { --clr-background: #121212; --clr-surface: #1e1e1e; --clr-text-primary: #fdfbf7; }
     body, html { margin: 0; padding: 0; background-color: var(--clr-background); color: var(--clr-text-primary); font-family: "Inter", sans-serif; }
     .header { position: fixed; top: 0; width: 100%; height: 70px; background: var(--clr-surface); z-index: 1000; display: flex; align-items: center; }
-
+    /* Hero CLS guard: lock the carousel container to exact aspect-ratio BEFORE bundle CSS loads.
+       The bundle sets .hero-full-img { aspect-ratio: 2/1 } but the container is 2.4/1 —
+       this mismatch causes the carousel JS to shift height after first paint (CLS 0.639). */
+    #hero-carousel-container { aspect-ratio: 2.4 / 1; min-height: 200px; overflow: hidden; width: 100%; contain: layout; }
+    #hero-carousel-track { display: flex; width: 300%; }
+    #hero-primary-img { width: 33.3333%; flex-shrink: 0; aspect-ratio: 2.4 / 1; object-fit: cover; }
   </style>
-  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=27">
-  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27"></noscript>
+  <!-- Bundle CSS: load as render-blocking for LCP — avoids FOUC stall from print/onload swap -->
+  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27">
 
+  <!-- Hero LCP preload: sizes covers all mobile widths, not just portrait -->
   <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload"
     imagesrcset="./assets/images/hero-portrait.avif 750w, ./assets/images/hero.avif 1664w"
-    imagesizes="(max-width: 768px) and (orientation: portrait) 750px, 100vw" />
+    imagesizes="(max-width: 768px) 750px, 100vw" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
   <script defer="" src="./assets/js/loader.min.js?v=27"></script>
@@ -214,20 +219,22 @@
     <!-- Hero Section -->
     <section class="hero refined-hero" id="home">
       <div class="hero-image-frame" id="hero-carousel-container"
-        style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y; aspect-ratio: 2.4 / 1; min-height: 200px;">
+        style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y; aspect-ratio: 2.4 / 1; min-height: 200px; contain: layout;">
         <div class="hero-carousel-track" id="hero-carousel-track"
           style="display: flex; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
+          <!-- LCP image: aspect-ratio matches container exactly to prevent carousel-clone CLS.
+               sizes: mobile uses 750px candidate, desktop uses full width 1664w candidate. -->
           <img id="hero-primary-img" alt="bigbites Hero 1" class="hero-full-img" decoding="async" fetchpriority="high"
-            loading="eager" height="500" src="./assets/images/hero.avif"
+            loading="eager" width="1664" height="694" src="./assets/images/hero.avif"
             srcset="./assets/images/hero-portrait.avif 750w, ./assets/images/hero.avif 1664w"
-            sizes="(max-width: 768px) and (orientation: portrait) 750px, 100vw"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1200" />
-          <img alt="bigbites Hero 2" class="hero-full-img" decoding="async" loading="lazy" height="400"
+            sizes="(max-width: 768px) 750px, 100vw"
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none; aspect-ratio: 2.4 / 1; object-fit: cover;" />
+          <img alt="bigbites Hero 2" class="hero-full-img" decoding="async" loading="lazy" width="850" height="354"
             src="./assets/images/offer-1.avif"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="850" />
-          <img alt="bigbites Hero 3" class="hero-full-img" decoding="async" loading="lazy" height="400"
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none; aspect-ratio: 2.4 / 1; object-fit: cover;" />
+          <img alt="bigbites Hero 3" class="hero-full-img" decoding="async" loading="lazy" width="850" height="354"
             src="./assets/images/offer-2.avif"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="850" />
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none; aspect-ratio: 2.4 / 1; object-fit: cover;" />
         </div>
         <div class="carousel-indicators" id="hero-indicators"
           style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">

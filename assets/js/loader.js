@@ -1201,15 +1201,18 @@ ${s}`,
           (t.style.left = c.left + c.width / 2 - 10 + "px"),
           (t.style.top = c.top + c.height / 2 - 10 + "px"),
           document.body.appendChild(t),
-          t.offsetHeight,
+          // Double-rAF replaces t.offsetHeight forced reflow — achieves the same
+          // "flush styles before animating" without a synchronous layout recalculation.
           requestAnimationFrame(() => {
-            (t.style.left = o.left + o.width / 2 - 10 + "px"),
-            (t.style.top = o.top + o.height / 2 - 10 + "px"),
-            (t.style.transform = "scale(0.2)"),
-            (t.style.opacity = "0"),
-            setTimeout(() => {
-              (t.remove(), n.classList.add("bounce"));
-            }, 700);
+            requestAnimationFrame(() => {
+              (t.style.left = o.left + o.width / 2 - 10 + "px"),
+              (t.style.top = o.top + o.height / 2 - 10 + "px"),
+              (t.style.transform = "scale(0.2)"),
+              (t.style.opacity = "0"),
+              setTimeout(() => {
+                (t.remove(), n.classList.add("bounce"));
+              }, 700);
+            });
           }));
       };
     (n.addEventListener("click", i), r.addEventListener("click", s));
