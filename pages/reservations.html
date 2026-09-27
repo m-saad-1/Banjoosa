@@ -1,7 +1,19 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>if(localStorage.getItem('banjoosa_theme') === 'dark') document.documentElement.classList.add('dark-mode');</script>
+      <style id="critical-loader-css">
+    .page-loader{position:fixed;inset:0;background:var(--clr-background,#fdfbf7);z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;opacity:1;visibility:visible;transition:opacity 0.4s ease,visibility 0.4s ease;}
+    html.dark-mode .page-loader{background:#121212;}
+    .page-loader.fade-out{opacity:0;visibility:hidden;pointer-events:none;}
+    .loader-logo{width:90px;height:90px;object-fit:contain;animation:loader-logo-pulse 1.6s ease-in-out infinite;}
+    @keyframes loader-logo-pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.7;transform:scale(.93);}}
+    .loader-bar-track{width:140px;height:3px;background:rgba(0,0,0,.08);border-radius:4px;overflow:hidden;}
+    html.dark-mode .loader-bar-track{background:rgba(255,255,255,.1);}
+    .loader-bar-fill{height:100%;width:60%;background:var(--clr-primary,#B32121);border-radius:4px;animation:loader-sweep 1.4s ease-in-out infinite;}
+    @keyframes loader-sweep{0%{transform:translateX(-120%);}100%{transform:translateX(280%);}}
+    .loader-spinner{display:none;}
+  </style>
+<script>if(localStorage.getItem('banjoosa_theme') === 'dark') document.documentElement.classList.add('dark-mode');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservations - banjoosa</title>
@@ -13,12 +25,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional"></noscript>
-    <link rel="preload" as="style" href="../assets/css/style.bundle.min.css?v=26">
-<link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=26" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=26"></noscript>
+    <link rel="preload" as="style" href="../assets/css/style.bundle.min.css?v=29">
+<link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=29" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=29"></noscript>
     <!-- Component Loader -->
     <script defer src="../assets/js/config.js"></script>
-    <script defer src="../assets/js/loader.min.js?v=26"></script>
+    <script defer src="../assets/js/loader.min.js?v=29"></script>
 
 
 </head>
@@ -125,7 +137,7 @@
     </div>
     <script defer src="../assets/js/menu-data.js"></script>
     <script defer src="../assets/js/search.js?v=2"></script>
-<script defer src="../assets/js/script.bundle.min.js?v=26"></script>
+<script defer src="../assets/js/script.bundle.min.js?v=29"></script>
     <script>
         document.getElementById('bookingForm')?.addEventListener('submit', function(e) {
             e.preventDefault();

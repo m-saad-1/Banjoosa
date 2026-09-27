@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en">
 
@@ -23,10 +23,46 @@
     media="print" onload="this.media='all'" rel="stylesheet" />
 
   <style>
+    /* === Critical variables (before bundle loads) === */
     :root { --clr-background: #fdfbf7; --clr-primary: #B32121; --clr-surface: #ffffff; --clr-text-primary: #1e1e1e; }
     html.dark-mode { --clr-background: #121212; --clr-surface: #1e1e1e; --clr-text-primary: #fdfbf7; }
     body, html { margin: 0; padding: 0; background-color: var(--clr-background); color: var(--clr-text-primary); font-family: "Inter", sans-serif; }
     .header { position: fixed; top: 0; width: 100%; height: 70px; background: var(--clr-surface); z-index: 1000; display: flex; align-items: center; }
+
+    /* === CRITICAL LOADER CSS — inline so loader appears on first paint === */
+    .page-loader {
+      position: fixed; inset: 0;
+      background: var(--clr-background, #fdfbf7);
+      z-index: 999999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+      opacity: 1; visibility: visible;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    html.dark-mode .page-loader { background: #121212; }
+    .page-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-logo {
+      width: 90px; height: 90px; object-fit: contain;
+      animation: loader-logo-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes loader-logo-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.7; transform: scale(0.93); }
+    }
+    .loader-bar-track {
+      width: 140px; height: 3px; background: rgba(0,0,0,0.08);
+      border-radius: 4px; overflow: hidden;
+    }
+    html.dark-mode .loader-bar-track { background: rgba(255,255,255,0.1); }
+    .loader-bar-fill {
+      height: 100%; width: 60%; background: var(--clr-primary, #B32121);
+      border-radius: 4px; animation: loader-sweep 1.4s ease-in-out infinite;
+    }
+    @keyframes loader-sweep {
+      0%   { transform: translateX(-120%); }
+      100% { transform: translateX(280%); }
+    }
+    .loader-spinner { display: none; }
+
     /* Hero CLS guard: lock the carousel container to exact aspect-ratio BEFORE bundle CSS loads.
        The bundle sets .hero-full-img { aspect-ratio: 2/1 } but the container is 2.4/1 —
        this mismatch causes the carousel JS to shift height after first paint (CLS 0.639). */
@@ -35,13 +71,13 @@
     #hero-primary-img { width: 33.3333%; flex-shrink: 0; aspect-ratio: 2.4 / 1; object-fit: cover; }
   </style>
   <!-- Bundle CSS: load as render-blocking for LCP — avoids FOUC stall from print/onload swap -->
-  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27">
+  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=29">
 
   <!-- Hero LCP preload: sizes covers all mobile widths, not just portrait -->
   <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
-  <script defer="" src="./assets/js/loader.min.js?v=27"></script>
+  <script defer="" src="./assets/js/loader.min.js?v=29"></script>
   <!-- Homepage Top Picks: cards styled exactly like search result cards on mobile -->
   <style>
     @media (max-width: 768px) {
@@ -187,7 +223,7 @@
     @media (min-width: 769px) {
       #top-picks-section .menu-grid {
         display: grid !important;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+        grid-template-columns: repeat(4, 1fr) !important;
         align-items: stretch !important;
         /* Pre-reserve vertical space so the section height is stable at first paint */
         min-height: 600px;
@@ -881,7 +917,7 @@
   </div>
   <script defer src="./assets/js/menu-data.js"></script>
   <script defer src="./assets/js/search.js?v=2"></script>
-  <script defer="" src="./assets/js/script.bundle.min.js?v=26"></script>
+  <script defer="" src="./assets/js/script.bundle.min.js?v=29"></script>
 </body>
 
 </html>

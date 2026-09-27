@@ -1,53 +1,63 @@
-
 function initCategorySticky() {
   let e = document.getElementById("category-sticky-wrapper");
   if (!e) return;
   let t = document.querySelector(".navbar"),
-      o = 70;
+    o = 70;
   e.style.top = o + "px";
 
   let i = document.createElement("div");
   i.style.cssText = "height:1px;pointer-events:none;position:relative;";
   e.parentElement.insertBefore(i, e);
 
-  new IntersectionObserver(([s]) => e.classList.toggle("is-sticky", !s.isIntersecting), {
-    rootMargin: `-${o}px 0px 0px 0px`,
-    threshold: 0
-  }).observe(i);
+  new IntersectionObserver(
+    ([s]) => e.classList.toggle("is-sticky", !s.isIntersecting),
+    {
+      rootMargin: `-${o}px 0px 0px 0px`,
+      threshold: 0,
+    },
+  ).observe(i);
 
   let r = e.querySelectorAll(".category-circle-btn");
-  r.forEach(s => {
+  r.forEach((s) => {
     s.addEventListener("click", () => {
-      r.forEach(y => y.classList.remove("active"));
+      r.forEach((y) => y.classList.remove("active"));
       s.classList.add("active");
     });
   });
 
-  let n = document.querySelectorAll('[id="combos"],[id="burgers"],[id="pizzas"],[id="rolls"],[id="fries"],[id="drinks"]'),
-      d = new IntersectionObserver(s => {
-        s.forEach(y => {
+  let n = document.querySelectorAll(
+      '[id="combos"],[id="burgers"],[id="pizzas"],[id="rolls"],[id="fries"],[id="drinks"]',
+    ),
+    d = new IntersectionObserver(
+      (s) => {
+        s.forEach((y) => {
           if (y.isIntersecting) {
             let l = y.target.id;
-            r.forEach(h => {
+            r.forEach((h) => {
               let v = h.getAttribute("href") === `#${l}`;
               h.classList.toggle("active", v);
               if (v && window.innerWidth <= 768) {
                 let u = e.querySelector(".category-circles-wrapper");
-                u && requestAnimationFrame(() => {
-                  let E = h.offsetLeft,
+                u &&
+                  requestAnimationFrame(() => {
+                    let E = h.offsetLeft,
                       b = h.clientWidth,
                       a = u.clientWidth;
-                  u.scrollTo({ left: E - a / 2 + b / 2, behavior: "smooth" });
-                });
+                    u.scrollTo({ left: E - a / 2 + b / 2, behavior: "smooth" });
+                  });
               }
             });
           }
         });
-      }, {
+      },
+      {
         rootMargin: `-${o + 80}px 0px -60% 0px`,
-        threshold: 0
-      });
-  n.forEach(s => { s && d.observe(s); });
+        threshold: 0,
+      },
+    );
+  n.forEach((s) => {
+    s && d.observe(s);
+  });
 }
 
 (function () {
@@ -165,9 +175,9 @@ function initCategorySticky() {
 <header class="navbar">
 <style>@media(min-width:769px){#change-location-btn{max-width:220px!important;}}</style>
   <div class="container">
-    <div class="nav-left" style="display: flex; align-items: center; gap: 0.25rem; margin-right: clamp(0.75rem, 2vw, 2rem); max-width: calc(100% - 145px);">
-      <a href="${v("index.html")}" class="logo" style="flex-shrink: 0;">
-        <img decoding="async" src="${r}" alt="banjoosa Logo" class="header-logo" width="40" height="40">
+    <div class="nav-left" style="display: flex; align-items: center; gap: 1rem; margin-right: clamp(0.75rem, 2vw, 2rem); max-width: calc(100% - 145px);">
+      <a href="${v("index.html")}" class="logo" style="flex-shrink: 0; display: flex; align-items: center; height: 70px;">
+        <img decoding="async" src="${r}" alt="banjoosa Logo" class="header-logo" style="height: 100%; max-height: 70px; width: auto; object-fit: contain;">
       </a>
       <div id="change-location-btn" style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; flex: 1; min-width: 0; max-width: 200px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -718,13 +728,13 @@ ${s}`,
     };
     function B() {
       (e.classList.add("active"),
-        (void 0),
+        void 0,
         window._locSetMode(localStorage.getItem(y) || "delivery"));
       const l = localStorage.getItem(x);
       l && A(l);
     }
     function I() {
-      (e.classList.remove("active"), (void 0));
+      (e.classList.remove("active"), void 0);
     }
     function _(l) {
       localStorage.setItem(y, T);
@@ -1184,11 +1194,10 @@ ${s}`,
     const i = () => {
         typeof window._tl_openModal == "function"
           ? window._tl_openModal(e, "demo-modal")
-          : (e.classList.add("active"),
-            (void 0));
+          : (e.classList.add("active"), void 0);
       },
       s = () => {
-        (e.classList.remove("active"), (void 0));
+        (e.classList.remove("active"), void 0);
         const a = e.querySelector(".modal-sheet");
         if (!a) {
           n.classList.add("bounce");
@@ -1205,13 +1214,13 @@ ${s}`,
           // "flush styles before animating" without a synchronous layout recalculation.
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-              (t.style.left = o.left + o.width / 2 - 10 + "px"),
-              (t.style.top = o.top + o.height / 2 - 10 + "px"),
-              (t.style.transform = "scale(0.2)"),
-              (t.style.opacity = "0"),
-              setTimeout(() => {
-                (t.remove(), n.classList.add("bounce"));
-              }, 700);
+              ((t.style.left = o.left + o.width / 2 - 10 + "px"),
+                (t.style.top = o.top + o.height / 2 - 10 + "px"),
+                (t.style.transform = "scale(0.2)"),
+                (t.style.opacity = "0"),
+                setTimeout(() => {
+                  (t.remove(), n.classList.add("bounce"));
+                }, 700));
             });
           }));
       };
@@ -1290,13 +1299,12 @@ ${s}`,
     const s = () => {
         typeof window._tl_openModal == "function"
           ? window._tl_openModal(e, "about-demo-modal")
-          : (e.classList.add("active"),
-            (void 0));
+          : (e.classList.add("active"), void 0);
       },
       a = () => {
         (typeof window._tl_closeModal == "function"
           ? window._tl_closeModal(e)
-          : (e.classList.remove("active"), (void 0)),
+          : (e.classList.remove("active"), void 0),
           n.classList.add("bounce"));
       };
     (n.addEventListener("click", s),
@@ -1310,10 +1318,14 @@ ${s}`,
     (F(), R(), N(), Y(), G(), V(), X(), U(), K(), Q(), J(), Z(), W());
     const e = document.getElementById("page-loader");
     if (e) {
-      e.classList.add("spinner-mode");
+      // Small rAF delay lets the browser paint the injected navbar/footer first,
+      // so the page is styled before the loader disappears (no FOUC).
       requestAnimationFrame(() => {
-        e.classList.add("complete", "fade-out");
-        setTimeout(() => e.remove(), 300);
+        requestAnimationFrame(() => {
+          e.classList.add("fade-out");
+          // Remove from DOM after transition completes (matches 0.4s CSS transition)
+          setTimeout(() => e.remove(), 450);
+        });
       });
     }
     const n = document.getElementById("footer");
